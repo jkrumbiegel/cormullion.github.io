@@ -134,6 +134,10 @@ code.language-julia.hljs {
 	color: #deeedd;
 }
 
+.hljs-subst {
+	color: #ddddee;
+}
+
 .hljs-built_in {
 	color: #ededed;
 }
