@@ -85,9 +85,9 @@ code {
 }
 
 code.language-julia.hljs {
-	background-color: #444;
+	background-color: #232;
 	width: 900px;
-	color: #ddddf9;
+	color: #ede1fa;
 	font-family: JuliaMono-Regular !important;
 	font-size: 0.9em !important;
 	line-height: 1.3;
@@ -111,7 +111,7 @@ code.language-julia.hljs {
 
 .hljs-string {
 	font-family: JuliaMono-SemiBold;
-	color: #c7ddf2;
+	color: #f6f1cd;
 }
 
 .hljs-number {
@@ -121,17 +121,17 @@ code.language-julia.hljs {
 
 .hljs-literal {
 	font-family: JuliaMono-SemiBold;
-	color: #f67777;
+	color: #eaf9ba;
 }
 
 .hljs-meta {
 	font-family: JuliaMono-SemiBold;
-	color: #dedede;
+	color: #fef;
 }
 
 .hljs-variable {
 	font-family: JuliaMono-Bold;
-	color: #deeedd;
+	color: #dfe;
 }
 
 .hljs-subst {
