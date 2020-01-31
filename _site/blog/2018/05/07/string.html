@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.5.0 -->
+<title>String logo | cormullion</title>
+<meta name="generator" content="Jekyll v3.7.3" />
+<meta property="og:title" content="String logo" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="If I ever get round to presenting something at a future Julia Conference (not JuliaCon 2018, but perhaps JuliaCon 2019, who knows?), it will probably be something like this. Lots of graphics, and a little bit of Julia code." />
+<meta property="og:description" content="If I ever get round to presenting something at a future Julia Conference (not JuliaCon 2018, but perhaps JuliaCon 2019, who knows?), it will probably be something like this. Lots of graphics, and a little bit of Julia code." />
+<link rel="canonical" href="http://localhost:4000/blog/2018/05/07/string.html" />
+<meta property="og:url" content="http://localhost:4000/blog/2018/05/07/string.html" />
+<meta property="og:site_name" content="cormullion" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2018-05-07T01:00:00+01:00" />
+<script type="application/ld+json">
+{"url":"http://localhost:4000/blog/2018/05/07/string.html","headline":"String logo","dateModified":"2018-05-07T01:00:00+01:00","datePublished":"2018-05-07T01:00:00+01:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/blog/2018/05/07/string.html"},"description":"If I ever get round to presenting something at a future Julia Conference (not JuliaCon 2018, but perhaps JuliaCon 2019, who knows?), it will probably be something like this. Lots of graphics, and a little bit of Julia code.","@type":"BlogPosting","@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="cormullion" /></head>
+<body><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+
+<p class="homebutton"><a href="https://cormullion.github.io">home</a></p>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">String logo</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2018-05-07T01:00:00+01:00" itemprop="datePublished"> 7 May 2018
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <blockquote>
+  <p>If I ever get round to presenting something at a future Julia Conference (not JuliaCon 2018, but perhaps JuliaCon 2019, who knows?), it will probably be something like this. Lots of graphics, and a little bit of Julia code.</p>
+</blockquote>
+
+<p>So, Scott asked me on Twitter: why don’t I suggest some ideas for a logo for the JuliaString organization on Github?</p>
+
+<p><img src="/images/string/twitter-1.png" alt="tweet 1" /></p>
+
+<p>Yes, that’s the infamous <em>Scott P. (“Mr. String”) Jones</em>! Scott also mused on what he’d like to see in a logo: multiple concentric rings of text from all corners of the Unicode table, including Hindi, some Chinese, DNA strings, an annoying slogan, and a scattering of emojis for seasoning:</p>
+
+<p><img src="/images/string/twitter-3.png" alt="tweet 2" />
+<img src="/images/string/twitter-2.png" alt="tweet 3" /></p>
+
+<p>But flattery is still very acceptable currency in my neck of the woods, so I thought I’d have a go. I know little about logo design, but I’ve made a few. I think I know what I like. And I’ve got some graphics code which always needs testing.</p>
+
+<blockquote>
+  <p>Fun fact: The word <em>logomark</em> is sometimes used to distinguish a purely graphical symbol (think of the Apple logo) from a <em>logotype</em>, which is more commonly known as a <em>wordmark</em>, which uses letters or words (think of the IBM logo).</p>
+</blockquote>
+
+<p>I know that a logo should be a simple, distinctive, graphical construction recognisable at large and small scales, from the side of buildings to small computer icons 64 or 128 pixels across, and that it should preferably communicate well in both black and white and colour. It should also be witty, ingenious, and convey the essence of the thing it represents without being over-specific or over-restrictive. And it should also be—in a world with millions of existing logos—unique and unlike any other.</p>
+
+<p>That’s a tall order, and even the pros don’t manage it all the time.</p>
+
+<h3 id="how-long-is-a-piece-of-string">How long is a piece of string?</h3>
+
+<p>Unfortunately, when I start thinking about the word “string”, it conveys to me just one thing: a long thin strand of fibrous material most likely overlapping itself, and possibly subject to random entanglements that both mathematicians and non-mathematicians call <em>knots</em>. A piece of string. So, my first thought was that a logo representing string has to look like, er, string.</p>
+
+<p>This should be straightforward enough: I’ll photograph some string, enhance the image, put it inside a box. Job done!</p>
+
+<p>Oh, perhaps I should add the traditional Julian colours of purple, red, and green:</p>
+
+<p><img src="/images/string/photo-ops.png" alt="silly photos" class="center-image" /></p>
+
+<p>That didn’t take long!</p>
+
+<h3 id="but-seriously">But seriously…</h3>
+
+<p>Seriously, though, I should really show a bit of geometric enthusiasm for the task. Besides, I have to <em>abide by the Code</em> for tasks like this, which means producing it entirely in Julia, basically just an excuse for testing the usability and reliability of the packages I develop, and for playing with some pretty pictures.</p>
+
+<p><img src="/images/string/pirates-code.gif" alt="stick to the code" class="center-image" /></p>
+
+<p>Let’s start again, with a fresh cup of coffee to hand.</p>
+
+<p>My initial idea of geometrical string led me to the parametric equations for a small piece of string joined at the ends in a loop, overlapping three times, known as a trefoil knot.</p>
+
+<p><img src="/images/string/parametric-2d.png" alt="trefoil knot" /></p>
+
+<p>As the mathematicians say, this is the simplest <em>non-trivial</em> knot.</p>
+
+<p>These can be plotted with a long-ish one-liner. I’ve used Luxor’s <code class="highlighter-rouge">prettypoly()</code> function rather than <code class="highlighter-rouge">poly()</code> here, to see the individual points. (It applies a function at every vertex, using the <code class="highlighter-rouge">circle()</code> function by default.)</p>
+
+<figure class="highlight"><pre><code class="language-julia" data-lang="julia"><span class="n">using</span> <span class="n">Luxor</span>
+<span class="nd">@svg</span> <span class="n">begin</span>
+    <span class="n">prettypoly</span><span class="x">([</span><span class="n">Point</span><span class="x">(</span><span class="mi">130</span><span class="n">sin</span><span class="x">(</span><span class="n">t</span><span class="x">)</span> <span class="o">+</span> <span class="mi">90</span><span class="n">sin</span><span class="x">(</span><span class="mi">2</span><span class="n">t</span><span class="x">),</span>
+                      <span class="mi">130</span><span class="n">cos</span><span class="x">(</span><span class="n">t</span><span class="x">)</span> <span class="o">-</span> <span class="mi">90</span><span class="n">cos</span><span class="x">(</span><span class="mi">2</span><span class="n">t</span><span class="x">))</span>
+        <span class="k">for</span> <span class="n">t</span> <span class="k">in</span> <span class="mi">0</span><span class="x">:</span><span class="mf">0.05</span><span class="x">:</span><span class="mi">2</span><span class="nb">pi</span><span class="x">],</span> <span class="x">:</span><span class="n">stroke</span><span class="x">,</span> <span class="n">close</span><span class="o">=</span><span class="n">true</span><span class="x">)</span>
+<span class="k">end</span></code></pre></figure>
+
+<p><img src="/images/string/one-liner.png" alt="simple one liner" /></p>
+
+<p>The same comprehension can be inserted into an interactive Jupyter notebook cell. This allows me to explore some of the basic geometrical possibilities.</p>
+
+<p><img src="/images/string/strings-interact.gif" alt="interactive Jupyter string" /></p>
+
+<h3 id="over-and-under">Over and under</h3>
+
+<p>The results are pleasant, but a wee bit dull. Also, the places where the string goes over and under itself—the <em>overlaps</em> and <em>underlaps</em>—these are part of the unique string-y quality of string that I should be trying to show, and you can’t see them.</p>
+
+<p>Usually when you’re drawing a path in some graphics program, you can overlap your earlier traces again and again, but it’s not possible to go underneath earlier bits on the same path once you’ve already started drawing it. In the next example, perhaps after Point 18 we’d want to show the path dipping below Point 6, which was drawn earlier. Wherever you start from, you go “under→over→under”, or “over→under→over”.</p>
+
+<p><img src="/images/string/the-problem.png" alt="overlapping problem" class="center-image" /></p>
+
+<p>Also, typically, a single stroked path can be only a single colour, and a single opacity level.</p>
+
+<p>You can get only so far by drawing circles:</p>
+
+<p><img src="/images/string/incomplete-3-loop.png" alt="incomplete loop" class="center-image" /></p>
+
+<p>That right-hand end should be heading above the loop, the left-hand end below…</p>
+
+<figure class="highlight"><pre><code class="language-julia" data-lang="julia"><span class="n">using</span> <span class="n">Luxor</span>
+<span class="nd">@svg</span> <span class="n">begin</span>
+    <span class="n">background</span><span class="x">(</span><span class="s">"silver"</span><span class="x">)</span>
+    <span class="n">translate</span><span class="x">(</span><span class="mi">0</span><span class="x">,</span> <span class="mi">25</span><span class="x">)</span>
+    <span class="n">pts</span> <span class="o">=</span> <span class="x">[</span><span class="n">Point</span><span class="x">(</span><span class="mi">100</span><span class="n">sin</span><span class="x">(</span><span class="n">t</span><span class="x">)</span> <span class="o">+</span> <span class="mi">150</span><span class="n">sin</span><span class="x">(</span><span class="mi">2</span><span class="n">t</span><span class="x">),</span>
+             <span class="mi">100</span><span class="n">cos</span><span class="x">(</span><span class="n">t</span><span class="x">)</span> <span class="o">-</span> <span class="mi">150</span><span class="n">cos</span><span class="x">(</span><span class="mi">2</span><span class="n">t</span><span class="x">))</span>
+             <span class="k">for</span> <span class="n">t</span> <span class="k">in</span> <span class="nb">pi</span><span class="o">/</span><span class="mi">6</span><span class="x">:</span><span class="mf">0.0075</span><span class="x">:</span><span class="mi">2</span><span class="nb">pi</span> <span class="o">-</span> <span class="nb">pi</span><span class="o">/</span><span class="mi">6</span><span class="x">]</span>
+    <span class="n">setline</span><span class="x">(</span><span class="mf">0.75</span><span class="x">)</span>
+    <span class="n">setopacity</span><span class="x">(</span><span class="mf">0.8</span><span class="x">)</span>
+    <span class="k">for</span> <span class="n">t</span> <span class="k">in</span> <span class="n">pts</span>
+        <span class="n">sethue</span><span class="x">(</span><span class="s">"black"</span><span class="x">)</span>
+        <span class="n">circle</span><span class="x">(</span><span class="n">t</span><span class="x">,</span> <span class="mi">50</span><span class="x">,</span> <span class="x">:</span><span class="n">stroke</span><span class="x">)</span>
+        <span class="n">sethue</span><span class="x">(</span><span class="s">"ivory"</span><span class="x">)</span>
+        <span class="n">circle</span><span class="x">(</span><span class="n">t</span><span class="x">,</span> <span class="mi">50</span><span class="x">,</span> <span class="x">:</span><span class="n">fill</span><span class="x">)</span>
+    <span class="k">end</span>
+<span class="k">end</span></code></pre></figure>
+
+<p>I tried to devise some algorithms to draw overlapping and underlapping paths automatically. For example, as you start to draw a path, remember the location of each line segment, then, when you have to go underneath an earlier segment, make a note of it, then later go back and erase it and redraw it…. Well, I didn’t manage to complete any of these thought algorithms, but I’d love to know if anyone else has.</p>
+
+<h3 id="go-deeper">Go deeper</h3>
+
+<p>The problem was literally asking for a more in-depth approach. I added Z-coordinates to the X and Y. The parametric equations are now:</p>
+
+<p><img src="/images/string/parametric-3d.png" alt="parameteric 3D" /></p>
+
+<p>A quick modification uses the X and Y coordinates as before, and the Z coordinate determines the radius of the dots:</p>
+
+<figure class="highlight"><pre><code class="language-julia" data-lang="julia"><span class="nd">@svg</span> <span class="n">begin</span>
+    <span class="n">pts</span> <span class="o">=</span> <span class="x">[(</span><span class="mi">130</span><span class="n">sin</span><span class="x">(</span><span class="n">t</span><span class="x">)</span> <span class="o">+</span> <span class="mi">90</span><span class="n">sin</span><span class="x">(</span><span class="mi">2</span><span class="n">t</span><span class="x">),</span>
+            <span class="mi">130</span><span class="n">cos</span><span class="x">(</span><span class="n">t</span><span class="x">)</span> <span class="o">-</span> <span class="mi">90</span><span class="n">cos</span><span class="x">(</span><span class="mi">2</span><span class="n">t</span><span class="x">),</span>
+            <span class="o">-</span><span class="mi">90</span><span class="n">sin</span><span class="x">(</span><span class="mi">2</span><span class="n">t</span><span class="x">))</span>
+           <span class="k">for</span> <span class="n">t</span> <span class="k">in</span> <span class="mi">0</span><span class="x">:</span><span class="mf">0.025</span><span class="x">:</span><span class="mi">2</span><span class="nb">pi</span><span class="x">]</span>
+
+    <span class="k">for</span> <span class="n">t</span> <span class="k">in</span> <span class="n">pts</span>
+        <span class="n">circle</span><span class="x">(</span><span class="n">Point</span><span class="x">(</span><span class="n">t</span><span class="x">[</span><span class="mi">1</span><span class="x">],</span> <span class="n">t</span><span class="x">[</span><span class="mi">2</span><span class="x">]),</span> <span class="n">abs</span><span class="x">(</span><span class="n">t</span><span class="x">[</span><span class="mi">3</span><span class="x">]</span><span class="o">/</span><span class="mi">25</span><span class="x">),</span> <span class="x">:</span><span class="n">fill</span><span class="x">)</span>
+    <span class="k">end</span>
+<span class="k">end</span></code></pre></figure>
+
+<p><img src="/images/string/basic-three-d.png" alt="basic 3D image" class="center-image" /></p>
+
+<p>This should be familiar to most of us, it’s more or less the Adobe PDF logo:</p>
+
+<p><img src="/images/string/adobe-pdf-logo.png" alt="Adobe PDF logo" class="center-image" /></p>
+
+<blockquote>
+  <p>Fun fact: The software known as Adobe Acrobat was code-named Carousel during its development. I wonder if this logo had its origins with the idea of roundabouts…</p>
+</blockquote>
+
+<p>We’re only enhancing the illusion of depth, though, by changing the size of the disks in response to the Z-coordinate.</p>
+
+<h3 id="ciao-cairo">Ciao, Cairo?</h3>
+
+<p><a href="https://github.com/JuliaGraphics/Cairo.jl">Cairo.jl</a> doesn’t do 3D graphics (and neither does <a href="https://github.com/JuliaGraphics/Luxor.jl">Luxor.jl</a>, which depends on it), but I thought there was a bit more mileage left in this idea before I moved on. Once you start down a rabbit hole, you want to see what’s round the next bend; you probably know that “I’ll just give this ten more minutes…” feeling?</p>
+
+<blockquote>
+  <p>Fun fact: The name of the graphics system Cairo derives from its original name Xr (the X-Windows Renderer)) when the Greek letters for <code class="highlighter-rouge">X</code> and <code class="highlighter-rouge">r</code> (<code class="highlighter-rouge">chi</code> and <code class="highlighter-rouge">rho</code>) are pronounced.</p>
+</blockquote>
+
+<p>I made a Point3D type to store the XYZ coordinates of curves:</p>
+
+<figure class="highlight"><pre><code class="language-julia" data-lang="julia"><span class="n">mutable</span> <span class="n">struct</span> <span class="n">Point3D</span>
+   <span class="n">x</span><span class="o">::</span><span class="kt">Float64</span>
+   <span class="n">y</span><span class="o">::</span><span class="kt">Float64</span>
+   <span class="n">z</span><span class="o">::</span><span class="kt">Float64</span>
+<span class="k">end</span></code></pre></figure>
+
+<p>I want to be able to look at the curve from a defined angle, probably above, so I’ll have a Projection type to store things that define a 3d projection, like eye position and view center, and a way of choosing how much perspective foreshortening should be applied:</p>
+
+<figure class="highlight"><pre><code class="language-julia" data-lang="julia"><span class="n">mutable</span> <span class="n">struct</span> <span class="n">Projection</span>
+   <span class="n">U</span><span class="o">::</span><span class="n">Point3D</span>    
+   <span class="n">V</span><span class="o">::</span><span class="n">Point3D</span>    
+   <span class="n">W</span><span class="o">::</span><span class="n">Point3D</span>    
+   <span class="n">ue</span><span class="o">::</span><span class="kt">Float64</span>   
+   <span class="n">ve</span><span class="o">::</span><span class="kt">Float64</span>   
+   <span class="n">we</span><span class="o">::</span><span class="kt">Float64</span>   
+   <span class="n">perspective</span><span class="o">::</span><span class="kt">Float64</span>
+<span class="k">end</span></code></pre></figure>
+
+<p>And I needed a function to convert a <code class="highlighter-rouge">Point3D</code> to a <code class="highlighter-rouge">Point</code> via a <code class="highlighter-rouge">Projection</code>, using some arithmetic:</p>
+
+<figure class="highlight"><pre><code class="language-julia" data-lang="julia"><span class="k">function</span><span class="nf"> project</span><span class="x">(</span><span class="n">P</span><span class="o">::</span><span class="n">Point3D</span><span class="x">,</span> <span class="n">proj</span><span class="o">::</span><span class="n">Projection</span><span class="x">)</span>
+   <span class="n">r</span> <span class="o">=</span> <span class="n">proj</span><span class="o">.</span><span class="n">W</span><span class="o">.</span><span class="n">x</span> <span class="o">*</span> <span class="n">P</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">proj</span><span class="o">.</span><span class="n">W</span><span class="o">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">P</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">proj</span><span class="o">.</span><span class="n">W</span><span class="o">.</span><span class="n">z</span> <span class="o">*</span> <span class="n">P</span><span class="o">.</span><span class="n">z</span> <span class="o">-</span> <span class="n">proj</span><span class="o">.</span><span class="n">we</span>
+   <span class="k">if</span> <span class="n">r</span> <span class="o">&lt;</span> <span class="nb">eps</span><span class="x">()</span>
+       <span class="n">result</span> <span class="o">=</span> <span class="n">nothing</span> <span class="c"># behind you!</span>
+   <span class="k">else</span>
+       <span class="k">if</span> <span class="n">proj</span><span class="o">.</span><span class="n">perspective</span> <span class="o">==</span> <span class="mf">1.0</span>
+           <span class="n">depth</span> <span class="o">=</span> <span class="mi">1</span> <span class="c"># parallel projection</span>
+       <span class="k">else</span>
+           <span class="n">depth</span> <span class="o">=</span> <span class="n">proj</span><span class="o">.</span><span class="n">perspective</span> <span class="o">*</span> <span class="x">(</span><span class="mi">1</span><span class="o">/</span><span class="n">r</span><span class="x">)</span>
+       <span class="k">end</span>
+       <span class="n">uq</span> <span class="o">=</span> <span class="n">depth</span> <span class="o">*</span> <span class="x">(</span><span class="n">proj</span><span class="o">.</span><span class="n">U</span><span class="o">.</span><span class="n">x</span> <span class="o">*</span> <span class="n">P</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">proj</span><span class="o">.</span><span class="n">U</span><span class="o">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">P</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span>
+         <span class="n">proj</span><span class="o">.</span><span class="n">U</span><span class="o">.</span><span class="n">z</span> <span class="o">*</span> <span class="n">P</span><span class="o">.</span><span class="n">z</span> <span class="o">-</span> <span class="n">proj</span><span class="o">.</span><span class="n">ue</span><span class="x">)</span>
+       <span class="n">vq</span> <span class="o">=</span> <span class="n">depth</span> <span class="o">*</span> <span class="x">(</span><span class="n">proj</span><span class="o">.</span><span class="n">V</span><span class="o">.</span><span class="n">x</span> <span class="o">*</span> <span class="n">P</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">proj</span><span class="o">.</span><span class="n">V</span><span class="o">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">P</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span>
+         <span class="n">proj</span><span class="o">.</span><span class="n">V</span><span class="o">.</span><span class="n">z</span> <span class="o">*</span> <span class="n">P</span><span class="o">.</span><span class="n">z</span> <span class="o">-</span> <span class="n">proj</span><span class="o">.</span><span class="n">ve</span><span class="x">)</span>
+       <span class="n">result</span> <span class="o">=</span> <span class="n">Point</span><span class="x">(</span><span class="n">uq</span><span class="x">,</span> <span class="o">-</span><span class="n">vq</span><span class="x">)</span> <span class="c"># Y is down</span>
+   <span class="k">end</span>
+   <span class="k">return</span> <span class="n">result</span>
+<span class="k">end</span></code></pre></figure>
+
+<p>(And yes, this needs re-working to be more type stable. <code class="highlighter-rouge">@code_warntype</code> gives me a right telling off, with lots of red <code class="highlighter-rouge">result::Union{Luxor.Point, Void}</code>s!)</p>
+
+<h3 id="get-to-the-point3d">Get to the Point3D</h3>
+
+<p>I wrote a few more utilities, drank a few more cups of coffee, and eventually there’s a spinning shape on the screen:</p>
+
+<p><img src="/images/string/knotjulia-animation.gif" alt="animated 3D string" class="center-image" /></p>
+
+<p>The gray carpet is just a polygon of 3D points with zeros for Z values, each one pushed onto the Luxor drawing using this <code class="highlighter-rouge">project()</code> function. The animation is the usual <code class="highlighter-rouge">animate()</code> to GIF which sends a bunch of stills to <code class="highlighter-rouge">ffmpeg</code>.</p>
+
+<p>At least I can see where the overlaps and underlaps occur, and I can start working out how to drop back to 2 dimensions while preserving the over/underlapping information from the 3D world.</p>
+
+<h3 id="try-colour">Try colour</h3>
+
+<p>If the curve was split into three pieces, they could all be drawn “at the same time”, but in different colours. So for each point I collect the three z-coordinates and sort them into order with <code class="highlighter-rouge">sortperm()</code>, so the point with the lowest Z could be drawn first, at the bottom of the stack, and points with higher Zs drawn on top.</p>
+
+<p><img src="/images/string/part-string-animation-retimed.gif" alt="three, sir" class="center-image" /></p>
+
+<p>Fortuitously, most Julia logos also keep to the theme of three colours: purple, red, and green.</p>
+
+<p><img src="/images/string/simple-three-color-overlap.png" alt="simple three colour overlap" class="center-image" /></p>
+
+<p>I realise that 99% of the time it’s not worth checking the Z values—it’s only for those few occasions when the XY values are the same does the Z value matter. Perhaps I could predict mathematically where those points are? Well, let’s worry about performance later.</p>
+
+<p>There’s a hint of translucency in this one:</p>
+
+<p><img src="/images/string/julia-colored-three.png" alt="julia coloured three" class="center-image" /></p>
+
+<h3 id="sorted">Sorted</h3>
+
+<p>Better still, let’s generate all the points first, in <a href="http://grammarist.com/usage/one-fell-swoop/">one fell swoop</a>, then sort them by Z coordinate.</p>
+
+<figure class="highlight"><pre><code class="language-julia" data-lang="julia"><span class="o">...</span>
+<span class="n">points</span> <span class="o">=</span> <span class="n">Point3D</span><span class="x">[]</span>
+<span class="k">for</span> <span class="n">t</span> <span class="k">in</span> <span class="mi">0</span><span class="x">:</span><span class="mf">0.005</span><span class="x">:</span><span class="mi">2</span><span class="nb">pi</span>
+    <span class="n">push!</span><span class="x">(</span><span class="n">points</span><span class="x">,</span> <span class="n">pointonstring</span><span class="x">(</span><span class="n">t</span><span class="x">,</span> <span class="mi">110</span><span class="x">,</span> <span class="mi">180</span><span class="x">,</span> <span class="mi">5</span><span class="x">,</span> <span class="n">xy</span><span class="o">=</span><span class="mi">2</span><span class="x">,</span> <span class="n">z</span> <span class="o">=</span> <span class="mi">3</span><span class="x">))</span>
+<span class="k">end</span>
+<span class="n">sort!</span><span class="x">(</span><span class="n">points</span><span class="x">,</span> <span class="n">by</span> <span class="o">=</span> <span class="x">(</span><span class="n">a</span><span class="x">)</span> <span class="o">-&gt;</span> <span class="n">a</span><span class="o">.</span><span class="n">z</span><span class="x">)</span>
+<span class="o">...</span></code></pre></figure>
+
+<p><img src="/images/string/3d-ribbons.png" alt="3d ribbon" class="center-image" /></p>
+
+<p>An animation shows how the points furthest from the eye are drawn first, then the nearer ones hide them in turn:</p>
+
+<p><img src="/images/string/gradual-build-up.gif" alt="animated drawing" class="center-image" /></p>
+
+<h3 id="coloured-blends">Coloured blends</h3>
+
+<p>After trying to draw the three Julia-coloured strands separately, I tried changing the colour continuously along the length of the string. This is possible with the <code class="highlighter-rouge">get()</code> function from <a href="https://github.com/JuliaGraphics/ColorSchemes.jl">ColorSchemes.jl</a>, which lets you sample a set of colours at any point, not just where the colour stops occur. I created a Julia colour scheme, which goes from purple, to red, to green.</p>
+
+<p><img src="/images/string/julia-continuous-not-valid.png" alt="julia continuous not valid" class="center-image" /></p>
+
+<p>However, the exact geometry of the knot is lost when you try to do this. (Did you notice? I didn’t for a while). Still, it looks OK.</p>
+
+<h3 id="get-some-zs">Get some Zs</h3>
+
+<p>It’s hard to resist playing with the various parameters and colour schemes.</p>
+
+<p><img src="/images/string/six-fold.png" alt="six fold" class="center-image" /></p>
+
+<p>Changing the way the Z coordinates were generated led to some interesting permutations:</p>
+
+<p><img src="/images/string/group-shot-four-stringy.png" alt="four permutations" class="center-image" /></p>
+
+<p>I think there’s some stringiness here. This next one looks like a <em>hank</em> of woollen thread:</p>
+
+<p><img src="/images/string/woolly-strings-logo.png" alt="woolly strings" class="center-image" /></p>
+
+<p>The graphics look great in SVG (says I, inserting a big PNG at this point…):</p>
+
+<p><img src="/images/string/svg-ness.png" alt="svg circles version" class="center-image" /></p>
+
+<h3 id="fiddling-with-the-formula">Fiddling with the formula</h3>
+
+<p>Using Julia for playing around with designs means that the solution space defined by a few basic graphic ideas can be explored, once you have <em>parameterized all the things</em>. Letting these cycle through at random is one possible strategy, or you could just step through some pre-arranged sequence of numbers. For a language as powerful as Julia this isn’t very demanding stuff, computationally speaking, and the results are usually generated more or less instantly. (It takes a few seconds to make the animations, because this involves creating and joining 100s of individual frames.)</p>
+
+<p>Some of these are taxing my brain’s ability to parse 3D shapes… Are these valid?</p>
+
+<p><img src="/images/string/four-explorations.png" alt="four parameterized explorations" class="center-image" /></p>
+
+<h3 id="space-craft">Space craft</h3>
+
+<p>When you use trig functions to generate curves, you’re often stepping through the angles by a fixed amount. The intermediate points on resulting curves have different spacings—wider apart one minute, closer the next. This is usually OK, because the tighter corners at inflection points use more points — it can even add some useful visual cues. But sometimes you want equidistant intermediate points on curves, no matter where the curve is going.</p>
+
+<p><img src="/images/string/sine-sampling.png" alt="sine sampling" class="center-image" /></p>
+
+<p>The green version of the red curve above is made with the Luxor function <code class="highlighter-rouge">polyportion()</code>, which lets you find any position along a polygon’s length: so for any polygon, a range of <code class="highlighter-rouge">0.0:0.1:1.0</code> produces 11 equally spaced points along the polygon’s length. With Julia’s speed it doesn’t take long to scan a curve and return a new set of equidistant points. (For example it takes about 0.2 seconds to reinterpret a 12,000 point polygon as 4000 equidistant points.)</p>
+
+<p>This technique lets us represent curves in a more decorative or controlled way.</p>
+
+<p>Placing white circles at intervals adds a neat and fairly convincing perspective effect, even though there isn’t any 3D geometry going on here:</p>
+
+<p><img src="/images/string/rope-effect-four-loops.png" alt="rope effect four loops" class="center-image" /></p>
+
+<p>The colour schemes have slipped a bit here…</p>
+
+<p>In the next images, the string is starting to look like a necklace:</p>
+
+<p><img src="/images/string/two-necklaces.png" alt="two necklaces" class="center-image" /></p>
+
+<p>It’s not bad; the ‘beads’ could even carry a suggestion of elements in an ordered sequence, such as characters in strings…</p>
+
+<p><img src="/images/string/letters-in-string.png" alt="letters in string" class="center-image" /></p>
+
+<p>Unfortunately, I think this goes too far. It just doesn’t look very good, and of course it doesn’t work at all at small sizes:</p>
+
+<p><img src="/images/string/letters-in-string-small.png" alt="letters in string small" class="center-image" /></p>
+
+<p>Worryingly, I think Scott might like this one…</p>
+
+<p>An improvement would be to work out in advance where the curves overlap so as to align the circles (because they look horrible here). This might take some mathematical know-how. Perhaps I should hire a math wiz like <a href="http://www.stochasticlifestyle.com">Chris Rackauckas</a> as Technical Consultant…</p>
+
+<h3 id="asymmetry">Asymmetry</h3>
+
+<p>I think there’s always a desire for symmetry and graphical simplicity. The problem is that, by now, these simple geometric ideas are well-travelled paths. We haven’t yet hit Peak Logo, but there are already millions of the things, with more being generated every second, and many of the simple and elegant designs have already been taken. This problem is seen elsewhere, such as product names, top-level internet domains, start-up company names, and perhaps even names for programming languages.</p>
+
+<p>Exploring asymmetry and randomness can be a useful technique because it immediately relaxes a constraint that, up to now, has been limiting the possibilities. If nothing else, you can get some ideas for further investigation.</p>
+
+<p>These are quite jaunty, if a bit formulaic:</p>
+
+<p><img src="/images/string/vary-size-two.png" alt="vary size two" class="center-image" /></p>
+
+<figure class="highlight"><pre><code class="language-julia" data-lang="julia"><span class="n">cs</span> <span class="o">=</span> <span class="n">juliacolorscheme</span>
+<span class="n">pts</span> <span class="o">=</span> <span class="n">Point3D</span><span class="x">[]</span>
+<span class="k">for</span> <span class="n">t</span> <span class="k">in</span> <span class="mi">0</span><span class="x">:</span><span class="mf">0.005</span><span class="x">:</span><span class="mi">2</span><span class="nb">pi</span>
+    <span class="n">push!</span><span class="x">(</span><span class="n">pts</span><span class="x">,</span> <span class="n">pointonstring</span><span class="x">(</span><span class="n">t</span><span class="x">,</span> <span class="mi">50</span><span class="x">,</span> <span class="mi">90</span><span class="x">,</span> <span class="mf">2.5</span><span class="x">,</span> <span class="n">xy</span><span class="o">=</span><span class="mi">2</span><span class="x">,</span> <span class="n">z</span> <span class="o">=</span> <span class="mi">3</span><span class="x">))</span>
+<span class="k">end</span>
+<span class="n">sort!</span><span class="x">(</span><span class="n">pts</span><span class="x">,</span> <span class="n">by</span> <span class="o">=</span> <span class="x">(</span><span class="n">a</span><span class="x">)</span> <span class="o">-&gt;</span> <span class="n">a</span><span class="o">.</span><span class="n">z</span><span class="x">)</span>
+<span class="n">zmin</span><span class="x">,</span> <span class="n">zmax</span> <span class="o">=</span> <span class="n">extrema</span><span class="x">(</span><span class="n">getfield</span><span class="o">.</span><span class="x">(</span><span class="n">pts</span><span class="x">,</span> <span class="x">:</span><span class="n">z</span><span class="x">))</span>
+<span class="k">for</span> <span class="x">(</span><span class="n">n</span><span class="x">,</span> <span class="n">pt</span><span class="x">)</span> <span class="k">in</span> <span class="n">enumerate</span><span class="x">(</span><span class="n">pts</span><span class="x">)</span>
+    <span class="n">sethue</span><span class="x">(</span><span class="n">get</span><span class="x">(</span><span class="n">cs</span><span class="x">,</span> <span class="n">rescale</span><span class="x">(</span><span class="n">n</span><span class="x">,</span> <span class="mi">0</span><span class="x">,</span> <span class="n">length</span><span class="x">(</span><span class="n">pts</span><span class="x">),</span> <span class="mi">0</span><span class="x">,</span> <span class="mi">1</span><span class="x">)))</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">rescale</span><span class="x">(</span><span class="n">pt</span><span class="o">.</span><span class="n">z</span><span class="x">,</span> <span class="n">zmin</span><span class="x">,</span> <span class="n">zmax</span><span class="x">,</span> <span class="mi">0</span><span class="x">,</span> <span class="mi">20</span><span class="x">)</span>
+    <span class="n">circle</span><span class="x">(</span><span class="n">project</span><span class="x">(</span><span class="n">pt</span><span class="x">,</span> <span class="n">projection</span><span class="x">),</span> <span class="n">max</span><span class="x">(</span><span class="mf">3.0</span><span class="x">,</span> <span class="n">d</span><span class="x">),</span> <span class="x">:</span><span class="n">fill</span><span class="x">)</span>
+<span class="k">end</span></code></pre></figure>
+
+<p>Here it is when depth sorted and animated:</p>
+
+<p><img src="/images/string/paintingmovie.gif" alt="paintingmovie" class="center-image" /></p>
+
+<p>I’ll let the computer play with this for a while, with some of the parameters randomized (and remember to store the chosen settings somewhere, in case you find anything really cool!). Some will be useless, perhaps others will show potential:</p>
+
+<p><img src="/images/string/random-16-1.png" alt="random 16 1" class="center-image" /></p>
+
+<p><img src="/images/string/random-16-2.png" alt="random 16 2" class="center-image" /></p>
+
+<h3 id="end-of-the-line">End of the line</h3>
+
+<p>Eventually, I find something that I quite like:</p>
+
+<p><img src="/images/string/finished-version.png" alt="finished version" class="center-image" /></p>
+
+<p>It looks good—in SVG, at least. (PNGs may take up less room, but the level of detail sometimes disappoints, compared with the vector-y precision of SVG.) Either that, or I’ve just reached saturation point and my fatigued brain can no longer choose anything.</p>
+
+<p>Gradients and colour blends aren’t always ideal solutions; they’re either <a href="https://www.ceros.com/originals/gradient-making-comeback/">coming into</a> or <a href="https://www.nngroup.com/articles/flat-design/">going out of</a> fashion. The quality can depend on the final output method, of course, such as when printed or when reproduced. But for a simple logo on a GitHub web page, the gradients probably aren’t going to be a problem.</p>
+
+<p>This version doesn’t have the depth-sorting, mainly because it didn’t make much difference to the finished image. The top-level code that made it looks like this (there are some other utility functions being called here, such as <code class="highlighter-rouge">project()</code> and <code class="highlighter-rouge">newprojection()</code>):</p>
+
+<figure class="highlight"><pre><code class="language-julia" data-lang="julia"><span class="nd">@svg</span> <span class="n">begin</span>
+    <span class="n">squircle</span><span class="x">(</span><span class="n">O</span><span class="x">,</span> <span class="mi">125</span><span class="x">,</span> <span class="mi">125</span><span class="x">,</span> <span class="x">:</span><span class="n">clip</span><span class="x">,</span> <span class="n">rt</span><span class="o">=</span><span class="mf">0.15</span><span class="x">)</span>
+    <span class="n">sethue</span><span class="x">(</span><span class="s">"azure"</span><span class="x">)</span>
+    <span class="n">squircle</span><span class="x">(</span><span class="n">O</span><span class="x">,</span> <span class="mi">125</span><span class="x">,</span> <span class="mi">125</span><span class="x">,</span> <span class="x">:</span><span class="n">fillpreserve</span><span class="x">,</span> <span class="n">rt</span><span class="o">=</span><span class="mf">0.15</span><span class="x">)</span>
+    <span class="n">sethue</span><span class="x">(</span><span class="s">"black"</span><span class="x">)</span>
+    <span class="n">strokepath</span><span class="x">()</span>
+    <span class="n">eyepoint</span>    <span class="o">=</span> <span class="n">Point3D</span><span class="x">(</span><span class="mi">5</span><span class="x">,</span> <span class="mi">5</span><span class="x">,</span> <span class="mi">1000</span><span class="x">)</span>
+    <span class="n">centerpoint</span> <span class="o">=</span> <span class="n">Point3D</span><span class="x">(</span><span class="mi">0</span><span class="x">,</span> <span class="mi">0</span><span class="x">,</span> <span class="mi">0</span><span class="x">)</span>
+    <span class="n">uppoint</span>     <span class="o">=</span> <span class="n">Point3D</span><span class="x">(</span><span class="mi">0</span><span class="x">,</span> <span class="mi">0</span><span class="x">,</span> <span class="mi">1</span><span class="x">)</span>
+    <span class="n">projection</span>  <span class="o">=</span> <span class="n">newprojection</span><span class="x">(</span><span class="n">eyepoint</span><span class="x">,</span> <span class="n">centerpoint</span><span class="x">,</span> <span class="n">uppoint</span><span class="x">,</span> <span class="mi">750</span><span class="x">)</span>
+    <span class="n">translate</span><span class="x">(</span><span class="o">-</span><span class="mi">10</span><span class="x">,</span> <span class="mi">15</span><span class="x">)</span>
+    <span class="n">cs</span> <span class="o">=</span> <span class="n">vcat</span><span class="x">(</span><span class="n">juliacolorscheme</span><span class="x">,</span> <span class="n">reverse</span><span class="x">(</span><span class="n">juliacolorscheme</span><span class="x">))</span>
+    <span class="k">for</span> <span class="n">t</span> <span class="k">in</span> <span class="mi">0</span><span class="x">:</span><span class="mf">0.001</span><span class="x">:</span><span class="mi">2</span><span class="nb">pi</span>
+        <span class="n">pt1</span> <span class="o">=</span> <span class="n">pointonstring</span><span class="x">(</span><span class="n">t</span><span class="x">,</span> <span class="mi">50</span><span class="x">,</span> <span class="mi">90</span><span class="x">,</span> <span class="o">.</span><span class="mi">5</span><span class="x">,</span> <span class="n">xy</span><span class="o">=</span><span class="mi">4</span><span class="x">,</span> <span class="n">z</span> <span class="o">=</span> <span class="mi">1</span><span class="x">)</span>
+        <span class="n">sethue</span><span class="x">(</span><span class="n">get</span><span class="x">(</span><span class="n">cs</span><span class="x">,</span> <span class="n">rescale</span><span class="x">(</span><span class="n">t</span><span class="x">,</span> <span class="mi">0</span><span class="x">,</span> <span class="mi">2</span><span class="nb">pi</span><span class="x">,</span> <span class="mi">0</span><span class="x">,</span> <span class="mi">1</span><span class="x">)))</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">rescale</span><span class="x">(</span><span class="n">pt1</span><span class="o">.</span><span class="n">z</span><span class="x">,</span> <span class="o">-</span><span class="mi">100</span><span class="x">,</span> <span class="mi">150</span><span class="x">,</span> <span class="mi">0</span><span class="x">,</span> <span class="mi">10</span><span class="x">)</span>
+        <span class="n">circle</span><span class="x">(</span><span class="n">project</span><span class="x">(</span><span class="n">pt1</span><span class="x">,</span> <span class="n">projection</span><span class="x">),</span> <span class="n">max</span><span class="x">(</span><span class="mf">1.0</span><span class="x">,</span> <span class="n">d</span><span class="x">),</span> <span class="x">:</span><span class="n">fill</span><span class="x">)</span>
+    <span class="k">end</span>
+<span class="k">end</span> <span class="mi">256</span> <span class="mi">256</span></code></pre></figure>
+
+<h3 id="everyones-a-critic">Everyone’s a critic</h3>
+
+<p>After all the graphics have faded from view, with just one left standing as the final offering, the fun really starts, because we all have opinions about things like logos, and there’s no easy way to measure their quality or effectiveness. There are <a href="http://www.bbc.com/culture/story/20150907-the-most-controversial-logos-ever">some famous examples</a> of good and bad logos getting all kinds of mixed reception, with praise and derision that they might not wholly deserve.</p>
+
+<p>Michael Bierut wrote an excellent piece (<a href="https://designobserver.com/feature/graphic-design-criticism-as-a-spectator-sport/37607/">Graphic Design Criticism as a Spectator Sport: Design Observer</a>) about how we all notice and talk about logos and designs these days:</p>
+
+<blockquote>
+  <p>Earlier last year, [2012], University of California quietly unveiled a new logo. Much has changed since 2009, including the notion that you can quietly unveil a logo. The logo was, eventually, inevitably noticed. After Tropicana, after the “epic fail” Gap debacle, after the seizure-inducing London 2012 affair, no one should have been surprised by what happened next. In fact, you almost had a sense that we all knew our roles in the drama to come: New logo? Game on!</p>
+</blockquote>
+
+<p>As he says, graphic design criticism is now a spectator sport, and anyone can play!</p>
+
+<blockquote>
+  <p>Fun fact. Michael Bierut designed the MIT Media Lab logo. And one of the developers of the Julia language, Jeff Bezanson, was a PhD student at MIT; and Julia source code is licensed using the MIT license.</p>
+</blockquote>
+
+<p>Well, Scott said the last iteration was pretty. So that’s nice! Here it is in use (without GitHub’s ugly black header bar, fortunately):</p>
+
+<p><img src="/images/string/github-page.png" alt="github page" class="center-image" /></p>
+
+<p>[2018-05-07]</p>
+
+<p><img src="http://steampiano.net/cormullionknot.gif?string" alt="cormullion signing off" class="center-image" /></p>
+
+  </div><a class="u-url" href="/blog/2018/05/07/string.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer>
+<pre class="smallheading">comments or questions - open an issue at <a href="https://github.com/cormullion/cormullion.github.io">github.com/cormullion/</a></pre>
+</footer>
+</body>
+
+</html>
