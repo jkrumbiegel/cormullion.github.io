@@ -1,0 +1,523 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="/assets/infra/favicon.png">
+
+     <!-- Un-minified script so that can play a bit -->
+<link rel="stylesheet" href="/libs/katex/katex.min.css">
+   
+     <!-- Syntax highlighting via Prism, note: restricted langs -->
+<link rel="stylesheet" href="/libs/highlight/github.min.css">
+   
+
+    <script src="/libs/vela/jquery.min.js"></script>
+
+    <link href="/css/vela.css" rel="stylesheet">
+    <link href="/css/franklin.css" rel="stylesheet">
+    <link href="/css/cormullionblog.css" rel="stylesheet">
+
+     <title>Pentachoron</title>  
+</head>
+<body>
+  <div class="main-nav" id="menu">
+    <div class="flex-container">
+      <span class="sidebar-brand">
+        <h3 style='font-size: 25px'>cormullion’s blog</h3>
+      </span>
+    </div> <!-- class="flex-container" -->
+    <nav class="sidebar-nav">
+       <ul class="metismenu"  id="metismenu" >
+        <li><a href="/">Home</a></li>
+        <li><a href="pages/2020-02-13-mauve">Mauve</a></li>
+        <li><a href="pages/2019-06-23-slackmojif">Slackmojif</a></li>
+        <li><a href="pages/2019-04-03-pentachoron">Pentachoron</a></li>
+        <li><a href="pages/2019-03-13-piday">π day</a></li>
+        <li><a href="pages/2018-11-29-automata">Automata</a></li>
+        <li><a href="pages/2018-10-11-noise">Noise</a></li>
+        <li><a href="pages/2018-08-10-guilloches">Guilloches</a></li>
+        <li><a href="pages/2018-08-02-infographic">Infographic</a></li>
+        <li><a href="pages/2018-06-20-bezier">Bézier Moi</a></li>
+        <li><a href="pages/2018-05-05-string">String</a></li>
+        <li><a href="pages/2018-03-14-some-piography">Some π-ography</a></li>
+        <li><a href="/pages/2015-06-02-pluto">Pluto</a></li>
+      </ul>
+    </nav>
+  </div> <!-- main nav menu -->
+
+  <main id="panel">
+    <div class="toggle-button hamburger hamburger--spin">
+      <div class="hamburger-box">
+        <div class="hamburger-inner"></div>
+      </div>
+    </div>
+    <h1 class="page title">Pentachoron</h1>
+
+
+<!-- Content appended here -->
+
+<div class="franklin-content">
+<blockquote>
+<p>This page contains quite a few animated GIFs. I apologise in advance if your browser or network connection doesn’t like them. It’s much easier to add a GIF than it is to embed a video into a GitHub pages blog, unfortunately.</p>
+</blockquote>
+<p><img src="/assets/images/pentachoron/header-image.svg" alt="image label" /></p>
+<p>I encountered the word “pentachoron’ recently for the first time, and I thought it had to be something cool. Turns out it is, so I thought I’d have a go at drawing one...</p>
+<p>Unfortunately, it’s a 4-dimensional object, which is going to tax my limited 2D skills. But I like being out of my depth.</p>
+<h2 id="first_steps"><a href="/pages/2019-04-03-pentachoron/index.html#first_steps">First steps</a></h2>
+<p>The first job is to define a couple of types to help organize all the various points.</p>
+<p>Here’s an immutable structure to hold the coordinates of a point in four dimensions. In four dimensions, the axes are usually called <code>x</code>, <code>y</code>, <code>z</code>, and <code>w</code>.</p>
+<pre><code class="language-julia">struct Point4D{T} <: AbstractArray{T, 1}
+    x::T
+    y::T
+    z::T
+    w::T
+end
+
+Point4D(a::Array{T, 1}) where T <: Real = Point4D(a...)
+
+Base.size(pt::Point4D) = (4, )
+
+Base.getindex(pt::Point4D, i) = [pt.x, pt.y, pt.z, pt.w][i]</code></pre>
+<p>By adopting the AbstractArray as our stepmother type, we can pick up many useful behaviors. <code>size&#40;&#41;</code> and <code>getindex&#40;&#41;</code> can be taught how to handle Point4Ds. If you browse the <a href="https://docs.julialang.org/en/v1/manual/interfaces/#man-interface-array-1">official documentation</a> for a while you’ll find out how to effectively tap in to many desirable pre-defined abilities that our new type can inherit.</p>
+<p>While we’re here, let’s do three-dimensional points as well:</p>
+<pre><code class="language-julia">struct Point3D{T} <: AbstractArray{T, 1}
+    x::T
+    y::T
+    z::T
+end
+
+Base.size(pt::Point3D) = (3, )</code></pre>
+<h2 id="conversion"><a href="/pages/2019-04-03-pentachoron/index.html#conversion">Conversion</a></h2>
+<p>The primary task we have to address is how to convert a 4D point into a 2D point. Let’s start with the easier task: how to convert a 3D point into a 2D point, ie how can we draw a 3D shape on a flat surface?</p>
+<p>Consider a simple cube. The front face and the back face could have the same X and Y coordinates, and vary only by their Z values.</p>
+<p>&#40;This is just a diagram, it’s not really 3D...&#41;</p>
+<p><img src="/assets/images/pentachoron/cube.svg" alt="image label" /></p>
+<pre><code class="language-julia">using Luxor
+
+@svg begin
+    fontface("Menlo")
+    fontsize(8)
+    setblend(blend(
+        boxtopcenter(BoundingBox()),
+        boxmiddlecenter(BoundingBox()),
+        "skyblue",
+        "white"))
+    box(boxtopleft(BoundingBox()),
+    boxmiddleright(BoundingBox()), :fill)
+
+    setblend(blend(
+        boxmiddlecenter(BoundingBox()),
+        boxbottomcenter(BoundingBox()),
+        "grey95",
+        "grey45"))
+    box(boxmiddleleft(BoundingBox()),
+    boxbottomright(BoundingBox()), :fill)
+
+    sethue("black")
+    setline(2)
+    bx1 = box(O, 250, 250, vertices=true)
+    poly(bx1, :stroke, close=true)
+    label.(["-1/1/1", "-1/-1/1", "1/-1/1", "1/1/1"],
+        slope.(O, bx1), bx1)
+
+    setline(1)
+    bx2 = box(O, 150, 150, vertices=true)
+    poly(bx2, :stroke, close=true)
+    label.(["-1/1/0", "-1/-1/0", "1/-1/0", "1/1/0"],
+    slope.(O, bx2), bx2, offset=-45)
+
+    map((x, y) -> line(x, y, :stroke), bx1, bx2)
+end 500 500 "../images/pentachoron/cube.svg"</code></pre>
+<p>So the idea is to project the cube from 3D to 2D by keeping the first two values, and multiplying or modifying them by the third value. We’ll make a <code>convert&#40;&#41;</code> function to do this:</p>
+<pre><code class="language-julia">function Base.convert(type::Type{Point}, pt3::Point3D)
+    k = 1/(K - pt3.z)
+    return Point(pt3.x * k, pt3.y * k)
+end</code></pre>
+<code>K</code> is just a constant which provides a consistent value for depth:</p>
+<pre><code class="language-julia">const K = 4.0</code></pre>
+<p>Testing this quickly in Luxor.jl gives promising results:</p>
+<pre><code class="language-julia">@svg begin
+    cube = [
+    Point3D(-1, -1,  1),
+    Point3D(-1,  1,  1),
+    Point3D( 1, -1,  1),
+    Point3D( 1,  1,  1),
+    Point3D(-1, -1, -1),
+    Point3D(-1,  1, -1),
+    Point3D( 1, -1, -1),
+    Point3D( 1,  1, -1),
+    ]
+    circle.(convert.(Point, cube) * 300, 5, :fill)
+end 500 500 "../images/pentachoron/basic3_to_2.png"</code></pre>
+<p><img src="/assets/images/pentachoron/basic3_to_2.png" alt="image label" /></p>
+<p>It’s a simple type of perspective projection.</p>
+<p>Using the same principle, let’s make a method for converting a 4D point.</p>
+<pre><code class="language-julia">function Base.convert(::Type{Point3D}, pt4::Point4D)
+    k = 1/(K - pt4.w)
+    return Point3D(pt4.x * k, pt4.y * k, pt4.z * k)
+end</code></pre>
+<p>Let’s hope it works.</p>
+<p>We can combine these into a single utility function called <code>flatten&#40;&#41;</code> that takes a list of 4D points and double-maps them into a list of 2D points suitable for drawing.</p>
+<pre><code class="language-julia">function flatten(shape4)
+    return map(pt3 -> convert(Point, pt3), map(pt4 -> convert(Point3D, pt4), shape4))
+end</code></pre>
+<h2 id="going_up_a_level"><a href="/pages/2019-04-03-pentachoron/index.html#going_up_a_level">Going up a level</a></h2>
+<p>To test this, we’ll define the vertices of a unit pentachoron:</p>
+<pre><code class="language-julia">const n = -1/√5
+
+const pentachoron = [Point4D(vertex...) for vertex in [
+    [ 1.0,  1.0,  1.0, n],
+    [ 1.0, -1.0, -1.0, n],
+    [-1.0,  1.0, -1.0, n],
+    [-1.0, -1.0,  1.0, n],
+    [ 0.0,  0.0,  0.0, n + √5]]]</code></pre>
+<p>&#40;According to <a href="https://en.wikipedia.org/wiki/5-cell">Wikipedia</a>, other names for the pentachoron include:</p>
+<ul>
+<li><p>Regular 5-cell</p>
+</li>
+<li><p>C5</p>
+</li>
+<li><p>pentatope</p>
+</li>
+<li><p>pentahedroid</p>
+</li>
+<li><p>tetrahedral pyramid</p>
+</li>
+<li><p>4-simplex</p>
+</li>
+</ul>
+<p>I think <em>pentachoron</em> is the coolest, though.&#41;</p>
+<p>Here’s a list of “faces”, with each face defined by three of the vertices:</p>
+<pre><code class="language-julia">const pentachoronfaces = [
+    [1, 2, 3],
+    [1, 2, 4],
+    [1, 2, 5],
+    [1, 3, 4],
+    [1, 3, 5],
+    [1, 4, 5],
+    [2, 3, 4],
+    [2, 3, 5],
+    [2, 4, 5],
+    [3, 4, 5]]</code></pre>
+<p>A quick test:</p>
+<pre><code class="language-julia">@svg begin
+    setopacity(0.2)
+    pentachoron2D = flatten(pentachoron)
+    for (n, face) in enumerate(pentachoronfaces)
+        randomhue()
+        poly(1500 * pentachoron2D[face], :fillpreserve, close=true)
+        sethue("black")
+        strokepath()
+    end
+end 600 250 "../images/pentachoron/firstdraw.svg"</code></pre>
+<p><img src="/assets/images/pentachoron/firstdraw.svg" alt="image label" /></p>
+<p>This isn’t very interesting, although I <em>think</em> it’s correct. To see a more appealing display, let’s make it dance...</p>
+<h2 id="swings_and_roundabouts"><a href="/pages/2019-04-03-pentachoron/index.html#swings_and_roundabouts">Swings and roundabouts</a></h2>
+<p>You usually rotate 2D points about a 1D point. You usually rotate 3D points about a 2D line &#40;often one of the XYZ axes&#41;. So logically you’d rotate 4D points with reference to a 3D plane. We’ll define some matrices that do 4D rotations relative to a plane defined by two of the X, Y, Z, and W axes.</p>
+<p>As I’m thinking about it, the XY plane is typically the plane of the drawing surface. If you think of the XY plane as a computer screen straight in front of you, the XZ plane is parallel to your desk or floor, and the YZ plane is like a wall beside your desk on your right or left side.</p>
+<p>But what about the XW plane? And the YW and ZW planes, for that matter? This is the mystery of 4D shapes: we can’t see these planes, we can only imagine their existence by watching shapes moving through and around them.</p>
+<p>Here’s a function that generates a suitable rotation matrix for rotating a 4D point in the XY plane:</p>
+<pre><code class="language-julia">function XY(θ)
+    [cos(θ)   -sin(θ)  0        0;
+    sin(θ)    cos(θ)   0        0;
+    0         0        1        0;
+    0         0        0        1]
+end</code></pre>
+<p>and here’s another one that rotates a 4D point in the XW plane:</p>
+<pre><code class="language-julia">function XW(θ)
+    [cos(θ)   0        0        -sin(θ);
+    0         1        0        0;
+    0         0        1        0;
+    sin(θ)    0        0        cos(θ)]
+end</code></pre>
+<p>Oh, it looks like we’re having a matrix party, so we might as well do the others while we’re here:</p>
+<pre><code class="language-julia">function XZ(θ)
+    [cos(θ)   0        -sin(θ)  0;
+    0         1        0        0;
+    sin(θ)    0        cos(θ)   0;
+    0         0        0        1]
+end
+
+
+function YZ(θ)
+    [1        0        0        0;
+    0         cos(θ)   -sin(θ)  0;
+    0         sin(θ)   cos(θ)   0;
+    0         0        0        1]
+end
+
+function YW(θ)
+    [1        0        0        0;
+    0         cos(θ)   0        -sin(θ);
+    0         0        1        0;
+    0         sin(θ)   0        cos(θ)]
+end
+
+function ZW(θ)
+    [1        0        0        0;
+    0         1        0        0;
+    0         0        cos(θ)   -sin(θ);
+    0         0        sin(θ)   cos(θ)];
+end</code></pre>
+<p>We’ll make a handy utility function that uses one of these matrix functions to rotate an array of 4D points <code>A</code> in the plane defined by the matrix function:</p>
+<pre><code class="language-julia">function rotate4(A, matrixfunction)
+    return map(A) do pt4
+        Point4D(matrixfunction * pt4)
+    end
+end</code></pre>
+<p>So we can write <code>rotate4&#40;A, XW&#40;π/2&#41;&#41;</code> to rotate the array of points in <code>A</code> in the XW plane by π/2. We can also write <code>rotate4&#40;A, XW&#40;π/2&#41; * XY&#40;π/2&#41;&#41;</code> to rotate the points first in the XW plane and then in the XY plane.</p>
+<p>Notice that the <code>rotate4&#40;&#41;</code> function returns a new array, rather than modifying the original one. This probably has some disadvantages, but for now it means that we don’t have to keep track of mutating objects so carefully.</p>
+<h2 id="it_moves"><a href="/pages/2019-04-03-pentachoron/index.html#it_moves">It moves</a></h2>
+<p>We’re now able to make an animation that rotates our pentachoron in one or more planes.</p>
+<p>The <code>frame&#40;&#41;</code> function generates a single frame, using the framenumber &#40;<code>eased_n</code> provides a normalized version of the framenumber modulated by the easing function&#41; to control the rotation between 0 and 2π. The scalefactor makes the unit shape big enough to fill the frame.</p>
+<p>It’s helpful to color the faces very slightly, using <code>poly&#40;..., :fill&#41;</code>-er.</p>
+<pre><code class="language-julia">using ColorSchemes
+
+function frame(scene, framenumber, scalefactor=1000)
+    background("antiquewhite")
+    setlinejoin("bevel")
+    setline(1.0)
+    sethue("black")
+    eased_n = scene.easingfunction(framenumber, 0, 1, scene.framerange.stop)
+    pentachoron′  = rotate4(pentachoron, XZ(eased_n * 2π))
+    pentachoron2D = flatten(pentachoron′)
+
+    setopacity(0.2)
+    for (n, face) in enumerate(pentachoronfaces)
+        sethue(get(ColorSchemes.diverging_rainbow_bgymr_45_85_c67_n256,
+            n/length(pentachoronfaces)))
+        poly(scalefactor * pentachoron2D[face], :fillpreserve, close=true)
+        sethue("black")
+        strokepath()
+    end
+end</code></pre>
+<p>And this function generates a series of frames and saves them to an animation:</p>
+<pre><code class="language-julia">function makemovie(w, h, fname;
+        scalefactor=1000)
+    movie1 = Movie(w, h, "4D movie")
+    animate(movie1,
+        Scene(movie1, (s, f)  -> frame(s, f, scalefactor),
+        1:300,
+        easingfunction=easeinoutsine),
+        creategif=true,
+        pathname="../images/pentachoron/$(fname)")
+end
+
+makemovie(600, 600, "pentachoron-xz.gif", scalefactor=2000)</code></pre>
+<p>This is a rotation in the “parallel to the desk my computer’s resting on” XZ plane.</p>
+<p><img src="/assets/images/pentachoron/pentachoron-xz.gif" alt="image label" /></p>
+<p>It’s not a realistic rendering with hidden-surface removal—I wouldn’t know how to do that in 3D, let alone 4D. But it does make it slightly easier to follow some of the faces. Something to do one day might be to sort the “faces” to determine which are drawn first, but given the maths involved this is a challenge I’m dubious about tackling...</p>
+<p>We can modify <code>frame&#40;&#41;</code> to allow various permutations of XY, XW, XZ, YZ, YW, and ZW rotations. Here’s a version that rotates in XZ, followed by YW:</p>
+<pre><code class="language-julia">function frame(scene, framenumber, scalefactor=1000)
+    background("antiquewhite")
+    setlinejoin("bevel")
+    setline(1.0)
+    setopacity(0.2)
+
+    eased_n = scene.easingfunction(framenumber, 0, 1,
+        scene.framerange.stop)
+
+    pentachoron2D = flatten(
+        rotate4(
+            pentachoron,
+            XZ(eased_n * 2π) *
+            YW(eased_n * 2π)))
+
+    for (n, face) in enumerate(pentachoronfaces)
+        sethue(get(ColorSchemes.diverging_rainbow_bgymr_45_85_c67_n256,
+            n/length(pentachoronfaces)))
+        poly(scalefactor * pentachoron2D[face], :fillpreserve, close=true)
+        sethue("black")
+        strokepath()
+    end
+end
+
+makemovie(800, 800, "pentachoron-xz-yw.gif", scalefactor=2000)</code></pre>
+<p><img src="/assets/images/pentachoron/pentachoron-xz-yw.gif" alt="image label" /></p>
+<p>These are starting to make me think of kneading machines for making pizza dough.</p>
+<p>You can draw a few different models at once, placing each one in a separate cell:</p>
+<p><img src="/assets/images/pentachoron/showall-pentachoronmovie.gif" alt="image label" /></p>
+<p>This is showing 2D shadows of 3D shadows of 4D objects. Do these objects exist? I don’t know...</p>
+<h3 id="other_shapes"><a href="/pages/2019-04-03-pentachoron/index.html#other_shapes">Other shapes</a></h3>
+<p>While the word “pentachoron” was unfamiliar to me until recently, the word “tesseract” is much more familiar. After all, didn’t the tesseract contain the Space Stone, one of the six Infinity Stones that apparently predate the universe and possess unlimited energy? &#40;According to the scientists at Marvel Comics, at least...&#41; It’s also the name of a 4-dimensional hypercube, one step up from the pentachoron.</p>
+<p>Here are the vital numbers for the tesseract:</p>
+<pre><code class="language-julia">const tesseract = [Point4D(vertex...) for vertex in [
+    [-1, -1, -1,  1],
+    [ 1, -1, -1,  1],
+    [ 1,  1, -1,  1],
+    [-1,  1, -1,  1],
+    [-1, -1,  1,  1],
+    [ 1, -1,  1,  1],
+    [ 1,  1,  1,  1],
+    [-1,  1,  1,  1],
+    [-1, -1, -1, -1],
+    [ 1, -1, -1, -1],
+    [ 1,  1, -1, -1],
+    [-1,  1, -1, -1],
+    [-1, -1,  1, -1],
+    [ 1, -1,  1, -1],
+    [ 1,  1,  1, -1],
+    [-1,  1,  1, -1]]]
+
+const tesseractfaces = [
+    [1,   2,   3,   4],
+    [1,   2,  10,   9],
+    [1,   4,   8,   5],
+    [1,   5,   6,   2],
+    [1,   9,  12,   4],
+    [2,   3,  11,  10],
+    [2,   3,   7,   6],
+    [3,   4,   8,   7],
+    [5,   6,  14,  13],
+    [5,   6,   7,   8],
+    [5,   8,  16,  13],
+    [6,   7,  15,  14],
+    [7,   8,  16,  15],
+    [9,  10,  11,  12],
+    [9,  10,  14,  13],
+    [9,  13,  16,  12],
+    [10, 11,  15,  14],
+    [13, 14,  15,  16]]</code></pre>
+<p>Replace <code>pentachoron</code> everywhere by <code>tesseract</code> in the above code, choosing the rotations to taste.</p>
+<pre><code class="language-julia">function frame(scene, framenumber, scalefactor=1000)
+    background("black")
+    setlinejoin("bevel")
+    setline(10.0)
+    setopacity(0.7)
+
+    eased_n = scene.easingfunction(framenumber, 0, 1,
+        scene.framerange.stop)
+
+    tesseract2D = flatten(
+        rotate4(
+            tesseract,
+            XZ(eased_n * 2π) *
+            YW(eased_n * 2π)))
+
+    for (n, face) in enumerate(tesseractfaces)
+        sethue([Luxor.lighter_blue, Luxor.lighter_green,
+            Luxor.lighter_purple, Luxor.lighter_red][mod1(n, 4)]...)
+
+        poly(scalefactor * tesseract2D[face], :fillpreserve, close=true)
+
+        sethue([Luxor.darker_blue, Luxor.darker_green,
+            Luxor.darker_purple, Luxor.darker_red][mod1(n, 4)]...)
+        strokepath()
+    end
+end
+
+makemovie(800, 800, "tesseract-xz-yw.gif", scalefactor=2000)</code></pre>
+<p><img src="/assets/images/pentachoron/tesseract-xz-yw.gif" alt="image label" /></p>
+<p>&#40;Just for fun I temporarily switched the color scheme over to the Julia logo colors. You can see the 3D rendering problems more clearly, as well&#33;&#41;</p>
+<p>Here’s a composite of four pairs of rotations:</p>
+<p><img src="/assets/images/pentachoron/showall-tesseractmovie.gif" alt="image label" /></p>
+<h2 id="enough_is_enough"><a href="/pages/2019-04-03-pentachoron/index.html#enough_is_enough">Enough is enough</a></h2>
+<p>It’s tempting to go further, but these web pages do get very big with all these GIFs. But just one more... I quite like this one, the <em>hexadecachoron</em>:</p>
+<pre><code class="language-julia">const hexadecachoron = [Point4D(vertex...) for vertex in [
+    [ 1,  0,  0,  0],
+    [ 0,  1,  0,  0],
+    [ 0,  0,  1,  0],
+    [ 0,  0,  0,  1],
+    [-1,  0,  0,  0],
+    [ 0, -1,  0,  0],
+    [ 0,  0, -1,  0],
+    [ 0,  0,  0, -1]]]
+
+using Combinatorics
+
+const hexadecachoronfaces = combinations(1:8, 3)
+
+function frame(scene, framenumber, scalefactor=1000)
+    background("antiquewhite")
+    setlinejoin("bevel")
+    setline(1.0)
+    setopacity(0.15)
+    eased_n = scene.easingfunction(framenumber, 0, 1, scene.framerange.stop)
+
+    hexadecachoron2D = flatten(
+        rotate4(
+            hexadecachoron,
+            YZ(eased_n * 2π) *
+            XZ(eased_n * 2π) *
+            YW(eased_n * 2π)))
+    for (n, face) in enumerate(hexadecachoronfaces)
+        sethue(get(ColorSchemes.magma, n/length(hexadecachoronfaces)))
+        poly(scalefactor * hexadecachoron2D[face], :fillpreserve, close=true)
+        sethue("black")
+        strokepath()
+    end
+end
+
+makemovie(650, 650, "movie-hexadecachoron.gif", scalefactor=5000)</code></pre>
+<p><img src="/assets/images/pentachoron/movie-hexadecachoron.gif" alt="image label" /></p>
+<p>There’s lots more fun to be had &#40;combining two or more different shapes is fun&#41;, but I’m worried about your network and my brain cells, so that’s enough animated GIFs for today.</p>
+<p>&#91;2018-04-03&#93;</p>
+<p><img src="http://steampiano.net/cormullionknot.gif?pentachoron" alt="cormullion signing off" /></p>
+<p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em>
+<div class="page-foot">
+  <p class="rss-subscribe">subscribe <a href="/feed.xml">via RSS</a></p>
+  <div class="copyright">
+    &copy; cormullion. Last modified: December 15, 2019. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a>.
+  </div>
+</div>
+
+</div>
+<!-- CONTENT ENDS HERE -->
+  </main> <!-- end of id=main -->
+  <script src="/libs/vela/metisMenu.min.js"></script>
+  <script src="/libs/vela/slideout.min.js"></script>
+  <script>
+    //initialize metismenu
+        $("#metismenu").metisMenu();
+
+        //initialize slideout
+        var slideout = new Slideout({
+            'panel': document.getElementById('panel'),
+            'menu': document.getElementById('menu'),
+            'padding': 300,
+            'tolerance': 70
+        });
+
+        //for closing menu on page click
+        function close(eve) {
+            eve.preventDefault();
+            slideout.close();
+        }
+
+        //make the hamburger animation correct when using touch events
+        slideout
+            .on('beforeopen', function() {
+                this.panel.classList.add('panel-open');
+                $(".hamburger").toggleClass("is-active");
+                $(".header-hamburger").toggleClass("fixed-open");
+            })
+            .on('open', function() {
+                this.panel.addEventListener('click', close);
+            })
+            .on('beforeclose', function() {
+                this.panel.classList.remove('panel-open');
+                this.panel.removeEventListener('click', close);
+                $(".hamburger").removeClass("is-active");
+                $(".header-hamburger").removeClass("fixed-open");
+            });
+
+        // Toggle button
+        $('.toggle-button').on('click', function() {
+            slideout.toggle();
+        });
+  </script>
+  
+    <script src="/libs/katex/katex.min.js"></script>
+<script src="/libs/katex/auto-render.min.js"></script>
+<script>renderMathInElement(document.body)</script>
+
+  
+  
+    <script src="/libs/highlight/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();hljs.configure({tabReplace: '    '});</script>
+
+  
+
+</body>
+</html>
