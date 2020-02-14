@@ -1,7 +1,6 @@
 .ipynb_checkpoints
 images/.DS_Store
-source/_site
 .sass-cache
 .jekyll-metadata
 .DS_Store
-
+old/*
