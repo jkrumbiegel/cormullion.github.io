@@ -66,7 +66,7 @@
 </blockquote>
 <p>Here in the UK we&#39;re usually better at closing railway stations than opening new ones. Dr Beeching famously closed thousands of them &#40;more than 50&#37; of the total&#41; in the 1960s. Occasionally, though, new stations are built, and one recent addition to the rail network is the station at <a href="https://www.networkrail.co.uk/running-the-railway/our-routes/anglia/cambridge-north-station/">Cambridge North</a>, built mainly to serve the Cambridge Science Park. &#40;I used to walk along the railway tracks there at weekends before the old disused line was re-opened, but that&#39;s another story...&#41;</p>
 <p>When the station was opened, in 2017, there was a bit of chatter about the decorative panels used for the building.</p>
-<p><img src="/images/automata/Cmglee_Cambridge_North_front_night.jpg" alt="image label" /></p>
+<p><img src="/assets/images/automata/Cmglee_Cambridge_North_front_night.jpg" alt="image label" /></p>
 <p>&#40;Image by <a href="https://commons.wikimedia.org/wiki/File:Cmglee_Cambridge_North_front_night.jpg">cmglee at wikipedia</a>, licensed CC-SA&#41;</p>
 <p>Thsee patterns were described by the designers at Atkins &#40;the contractors&#41; like this:</p>
 <blockquote>
@@ -78,7 +78,7 @@
 <p>A cellular automaton is a mathematical model that creates patterns automatically according to simple rules. In its simplest, one-dimensional form, it&#39;s a row of empty squares, each of which can be occupied or empty. The rules for the model determine how sensitive the occupants of each square are to their immediate left and right neighbours, and whether, after some unspecified time, they survive or die. Sometimes empty squares can miraculously become occupied. Because a square has just two immediate neighbours, there are 8 different cases to consider, ranging from all empty &#40;&quot;□□□&quot; or <code>000</code> in binary&#41; to all full &#40;&quot;■■■&quot; or <code>111</code>&#41;.</p>
 <p>The rule determines how one generation changes to the next by specifying the outcome for each of the 8 cases. So, for example, an empty square surrounded by empty neighbours can continue to be empty &#40;false, or 0&#41;, or it can produce a new occupant in the next generation, &#40;true, or 1&#41;. There are 256 different combinations, since each of the 8 cases can be either 0 or 1.</p>
 <p>The wikipedia has <a href="https://commons.wikimedia.org/wiki/File:One-d-cellular-automate-rule-30.gif">this nice animation</a> showing how the rule produces the next generation of squares.</p>
-<p><img src="/images/automata/one-d-cellular-automaton-rule-110.gif" alt="image label" /></p>
+<p><img src="/assets/images/automata/one-d-cellular-automaton-rule-110.gif" alt="image label" /></p>
 <p>&#40;Well, it has this nice animation now...&#41;</p>
 <h3 id="first_steps"><a href="/pages/2018-11-29-automata/index.html#first_steps">First steps</a></h3>
 <p>To explore these simple automata, I started<sup id="fnref:1"><a href="/pages/2018-11-29-automata/index.html#fndef:1" class="fnref">[1]</a></sup> by making a Julia structure:</p>
@@ -137,7 +137,7 @@ end</code></pre>
 <pre><code class="language-julia">for i in 1:30
     display(nextgeneration(ca))
 end</code></pre>
-<p><img src="/images/automata/terminal-output.png" alt="image label" /></p>
+<p><img src="/assets/images/automata/terminal-output.png" alt="image label" /></p>
 <h3 id="some_graphics"><a href="/pages/2018-11-29-automata/index.html#some_graphics">Some graphics</a></h3>
 <p>The REPL display is more or less functional, but I want to play with the graphic output, so &#40;you guessed&#41;:</p>
 <pre><code class="language-julia">using Luxor, Colors
@@ -163,7 +163,7 @@ end
         translate(Point(0, sidelength))
     end
 end 800 850 "../images/automata/simple-ca.png"</code></pre>
-<p><img src="/images/automata/simple-ca.png" alt="image label" /></p>
+<p><img src="/assets/images/automata/simple-ca.png" alt="image label" /></p>
 <p>You can call <code>nextgeneration&#40;&#41;</code> without displaying the results, of course. This lets you jump into the future history of an automaton at warp speed.</p>
 <pre><code class="language-julia">@png begin
     ca = CA(110, 200)
@@ -179,7 +179,7 @@ end 800 850 "../images/automata/simple-ca.png"</code></pre>
         translate(Point(0, sidelength))
     end
 end 800 800 "../images/automata/simple-ca-future.png"</code></pre>
-<p><img src="/images/automata/simple-ca-future.png" alt="image label" /></p>
+<p><img src="/assets/images/automata/simple-ca-future.png" alt="image label" /></p>
 <p>I found that sometimes drawing them from left to right looked better &#40;like videos recorded on phones...?&#41;:</p>
 <pre><code class="language-julia">@png begin
     ca = CA(30)
@@ -192,7 +192,7 @@ end 800 800 "../images/automata/simple-ca-future.png"</code></pre>
         translate(Point(0, sidelength))
     end
 end 1000 400 "../images/automata/simple-landscape-ca.png"</code></pre>
-<p><img src="/images/automata/simple-landscape-ca.png" alt="image label" /></p>
+<p><img src="/assets/images/automata/simple-landscape-ca.png" alt="image label" /></p>
 <h3 id="and_now_in_color"><a href="/pages/2018-11-29-automata/index.html#and_now_in_color">And now in color</a></h3>
 <p>So far I haven&#39;t used the color information that&#39;s stored.</p>
 <p>The <code>nextgeneration&#40;&#41;</code> function can be updated with instructions about how to modify the color of the next generation, based on the current set of three cells.</p>
@@ -245,11 +245,11 @@ end
         translate(Point(0, sidelength))
     end
 end 1000 400 "../images/automata/simple-color-ca.svg"</code></pre>
-<p><img src="/images/automata/simple-color-ca.svg" alt="image label" /></p>
+<p><img src="/assets/images/automata/simple-color-ca.svg" alt="image label" /></p>
 <p>This could lead to hours of entertainment &#40;depending on your definition of fun, of course&#41;. I uploaded a few experiments that didn&#39;t turn out too badly <a href="https://www.flickr.com/photos/153311384@N03/">on Flickr</a>. The current rules show a kind of literal winning streak, as a cell that remains occupied for many generations ends up being brightly illuminated.</p>
 <p>I think these images look quite good when scaled up. It only takes about a second to draw these, but would take much longer to stick them on the wall:</p>
-<p><img src="/images/automata/office-layout-1.png" alt="image label" /></p>
-<p><img src="/images/automata/office-layout-2.png" alt="image label" /></p>
+<p><img src="/assets/images/automata/office-layout-1.png" alt="image label" /></p>
+<p><img src="/assets/images/automata/office-layout-2.png" alt="image label" /></p>
 <p>The rules for specifying a change in color could do with some kind of systematic definition, perhaps, such that, say, &quot;rule C81&quot; means &quot;increase colorstop by amount if previous parent is 1, decrease it if previous uncle-aunt is 1&quot;, and so on. Then you could pass a set of color rules to the drawing function. &#40;<em>uncle-aunt</em>? I couldn&#39;t find a word for something that is either an uncle or an aunt, but not a parent...&#41;</p>
 <p>Instead of drawing simple squares, it&#39;s possible to draw other shapes. I&#39;m quite fond of the squircle — you can change the <code>rt</code> parameter to get different shapes:</p>
 <pre><code class="language-julia">function drawcolorsquircle(ca::CA, cellwidth=10;
@@ -278,7 +278,7 @@ end
         translate(Point(0, sidelength))
     end
 end 1000 400 "../images/automata/simple-color-ca-squircle.svg"</code></pre>
-<p><img src="/images/automata/simple-color-ca-squircle.svg" alt="image label" /></p>
+<p><img src="/assets/images/automata/simple-color-ca-squircle.svg" alt="image label" /></p>
 <p>&#40;This SVG is quite big, and won&#39;t display in Juno. But it should load in a browser.&#41;</p>
 <h3 id="getting_around_to_it"><a href="/pages/2018-11-29-automata/index.html#getting_around_to_it">Getting around to it</a></h3>
 <p>It occurred to me that you could take a rectangular array and wrap it into a circle.</p>
@@ -332,10 +332,10 @@ end</code></pre>
     finish()
     preview()
 end</code></pre>
-<p><img src="/images/automata/color-sector-assembly.svg" alt="image label" /></p>
+<p><img src="/assets/images/automata/color-sector-assembly.svg" alt="image label" /></p>
 <p>&#40;Again, this image is quite demanding for SVG and can take a while to load, even though it doesn&#39;t take long to generate.&#41;</p>
 <p>After playing with this idea, I thought it would make some nice jewellery:</p>
-<p><img src="/images/automata/ca-jewellery-like.png" alt="image label" /></p>
+<p><img src="/assets/images/automata/ca-jewellery-like.png" alt="image label" /></p>
 <p>This is rule 150. I mapped the array to a semicircle and drew it twice.</p>
 <h3 id="and_it_moves"><a href="/pages/2018-11-29-automata/index.html#and_it_moves">And it moves</a></h3>
 <p>Many of the rules have limited career paths. Some fizzle out very quickly, others settle down into a stable if repetitive life style. There are a few that continue to make patterns as the number of generations heads off into the thousands.</p>
@@ -405,7 +405,7 @@ function makeanimation(rule, filename)
     pathname="$(filename)")
 end</code></pre>
 <p>makeanimation&#40;110, &quot;../images/automata/animated-cellular-automaton.gif&quot;&#41;</p>
-<p><img src="/images/automata/animated-cellular-automaton.gif" alt="image label" /></p>
+<p><img src="/assets/images/automata/animated-cellular-automaton.gif" alt="image label" /></p>
 <p>If each frame moved the history &#39;window&#39; by one generation, you&#39;d get a jerky animation. The smooth-scrolling used here shifts the contents by a few pixels in each frame but changes the contents less often. This requires more frames than generations, so 300 frames with a <code>smoothscrolling</code> value of 10 shows only 30 new generations after the initial bunch.</p>
 <p>This GIF does have a few problems; the conflicting demands of file size, image size, image quality, and scroll speed work against each other. There&#39;s a slight flickering, due I think to the rounding or aliasing in the GIF. You could make the GIF as long as you want, subject of course to the maximum size of animated GIF that you&#39;re prepared to handle. &#40;And yes, this page does take a long time to load. Sorry.&#41;</p>
 <p>Videos also have their problems with this kind of content, because the downsampling commonly applied can affect the detail. To see what I mean, try watching <a href="https://www.youtube.com/watch?v&#61;iKpIuCmATYE&amp;feature&#61;youtu.be">Rule 110: The Movie</a> &#40;on YouTube&#41;. &#40;This is my submission for YouTube&#39;s <em>Most Boring Video 2018</em> competition.&#41;</p>
@@ -441,13 +441,13 @@ end
     sethue("grey80")
     fillpath()
 end 300 300 "../images/automata/ca-as-path.svg"</code></pre>
-<p><img src="/images/automata/ca-as-path.svg" alt="image label" /></p>
+<p><img src="/assets/images/automata/ca-as-path.svg" alt="image label" /></p>
 <p>So this is a single path, and the holes are reversed subpaths. When you import this single path into a 3D modelling program, you <em>should</em> be able to extrude it into a solid without problems. Here&#39;s one modelled as a thin gold reflective sheet.</p>
-<p><img src="/images/automata/ca-3d-render-1.png" alt="image label" /></p>
+<p><img src="/assets/images/automata/ca-3d-render-1.png" alt="image label" /></p>
 <p>It&#39;s hard to resist playing with 3D modellers... I added some fog and a rusty metal effect:</p>
-<p><img src="/images/automata/ca-3d-render-2.png" alt="image label" /></p>
+<p><img src="/assets/images/automata/ca-3d-render-2.png" alt="image label" /></p>
 <p>If you omit the surrounding path, it might still work visually. It would be a challenge to hang all these pieces on a gallery wall:</p>
-<p><img src="/images/automata/ca-3d-render-3.png" alt="image label" /></p>
+<p><img src="/assets/images/automata/ca-3d-render-3.png" alt="image label" /></p>
 <p>These little critters are quite interesting, and there are a <a href="https://arxiv.org/search/?query&#61;&#37;22cellular&#43;automata&#37;22&amp;searchtype&#61;title&amp;abstracts&#61;show&amp;order&#61;-announced_date_first&amp;size&#61;50">fair number of scientific papers</a> with &quot;cellular automata&quot; in the title . I think this must be because, although things don&#39;t get much simpler than a cellular automaton, perhaps they might—in some strange way—be similar to how the universe itself works when you zoom in close enough.</p>
 <p>&#91;2018-11-29&#93;</p>
 <table class="fndef" id="fndef:1">
