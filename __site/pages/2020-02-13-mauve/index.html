@@ -39,7 +39,7 @@
         <li><a href="pages/2018-06-20-bezier">Bézier Moi</a></li>
         <li><a href="pages/2018-05-05-string">String</a></li>
         <li><a href="pages/2018-03-14-some-piography">Some π-ography</a></li>
-        <li><a href="pages/2015-06-02-pluto">Pluto</a></li>
+        <li><a href="/pages/2015-06-02-pluto">Pluto</a></li>
       </ul>
     </nav>
   </div> <!-- main nav menu -->
@@ -66,7 +66,22 @@
 <p>Let’s see what this amazing mauve color looks like on our modern machines. I loaded up the Julia colors package, <a href="https://github.com/JuliaGraphics/Colors.jl">Colors.jl</a>, and set up a quick test:</p>
 <p>This is a code-block inside a markdown section, it is not considered code and therefore not run:</p>
 <pre><code class="language-julia">exit()</code></pre>
-<p><span style="color:red;">// Couldn't find a file when trying to resolve an input request with relative path: `/src/source/mauve-text-inserts/badcode1.jl`. //</span></p>
+<pre><code class="language-julia">using Colors, Luxor
+@draw begin
+    setcolor("mauve")
+    paint()
+end 600 300
+
+ERROR: LoadError: Unknown color: mauve
+Stacktrace:
+ [1] error(::String, ::String) at ./error.jl:42
+ [2] _parse_colorant(::String) at /Users/me/.julia/packages/Colors/r1p4Q/src/parse.jl:103
+ [3] _parse_colorant(::Type{RGBA}, ::Type{ColorAlpha{RGB{T},T,4} where T<:Union{AbstractFloat, FixedPointNumbers.FixedPoint}}, ::String) at /Users/me/.julia/packages/Colors/r1p4Q/src/parse.jl:112
+ [4] parse at /Users/me/.julia/packages/Colors/r1p4Q/src/parse.jl:145 [inlined]
+ [5] setcolor(::String) at /Users/me/.julia/dev/Luxor/src/colors_styles.jl:29
+ [6] top-level scope at untitled-ba17b354ac0d06ec10bd7374a7ef9522:4
+ [7] top-level scope at /Users/me/.julia/dev/Luxor/src/drawings.jl:555
+in expression starting at untitled-ba17b354ac0d06ec10bd7374a7ef9522:3</code></pre>
 <p>Oh, that didn’t go well. No sign of mauve? Mauve, one of the most famous colors of the 19th Century, has been put in the shade by colors with names like Burleywood and Papaya Whip.</p>
 <h1 id="standards_what_standards"><a href="/pages/2020-02-13-mauve/index.html#standards_what_standards">Standards, what standards?</a></h1>
 <p>In Colors.jl, the list of named colors is essentially the X11/CSS standard list. Typing color names is definitely not the best way of specifying colors - obviously, values in the RGB, Luv, and HSV color spaces are more precise, as are those three or six figure hexadecimal codes. But it’s sometimes easier to quickly grab a color name - “gold”, say - than to start filling your head with hex or computer-y numbers. There’s a slight speed penalty for using the names, too &#40;unless you use the macros&#41;, because they have to be parsed, but that won’t be a problem for many applications.</p>
@@ -117,7 +132,7 @@ end
         sethue(dot[2])
         circle(dot[1], rescale(dot[3], 0, 1, 10, 1), :fillstroke)
     end
-end 800 800  "../assets/images/mauve/colornames.svg"</code></pre>
+end 800 800  "_assets/images/mauve/colornames.svg"</code></pre>
 <p><img src="/assets/images/mauve/colornames.svg" alt="named colors" /></p>
 <p>All the grey shades are stacked up at the center. The ‘spheres’ are created because a number of colors are basically the same hue and saturation but just differ in brightness, the out-of-the-screen dimension.</p>
 <p>I think there’s a definite bias towards reds and oranges.</p>
@@ -146,7 +161,7 @@ end 800 800  "../assets/images/mauve/colornames.svg"</code></pre>
         sethue(col)
         circle(pt, d/2, :fillstroke)
    end
-end 800 800  "../assets/images/mauve/namedcolornames.svg"</code></pre>
+end 800 800  "_assets/images/mauve/namedcolornames.svg"</code></pre>
 <p><img src="/assets/images/mauve/namedcolornames.svg" alt="more named colors" /></p>
 <p>Some of these do have <em>mauve</em> in the names, so we can isolate them by replacing two lines with:</p>
 <p><span style="color:red;">// Couldn't find a file when trying to resolve an input request with relative path: `/src/source/mauve-text-inserts/code-fragment1.jl`. //</span></p>
@@ -262,8 +277,8 @@ end</code></pre>
 <p>And it runs like this:</p>
 <pre><code class="language-julia">@png begin
         background("grey10")
-        drawimagefile("../assets/images/mauve/science-museum-f6.jpg", caption="fabric")
-end 1200 900 "../assets/images/mauve/fabricsample.png"</code></pre>
+        drawimagefile("_assets/images/mauve/science-museum-f6.jpg", caption="fabric")
+end 1200 900 "_assets/images/mauve/fabricsample.png"</code></pre>
 <p><img src="/assets/images/mauve/fabricsample.png" alt="fabric sample" /></p>
 <p>In this image, each pixel of the original is drawn three times - in the thumbnail, on an isometric projection of the Hue/Saturation/Brightness space, and again on the Hue wheel as before.</p>
 <p>Here are the other images:</p>
@@ -287,7 +302,7 @@ end 1200 900 "../assets/images/mauve/fabricsample.png"</code></pre>
             circle(mauvepos, 3, :fill)
         end
     end
-end 800 800 "../assets/images/mauve/mauvepoints"</code></pre>
+end 800 800 "_assets/images/mauve/mauvepoints"</code></pre>
 <p>Somewhere around here perhaps?</p>
 <p><img src="/assets/images/mauve/mauvepoints.svg" alt="image label" /></p>
 <h1 id="50_shades_of_mauve"><a href="/pages/2020-02-13-mauve/index.html#50_shades_of_mauve">50 shades of ... mauve</a></h1>
@@ -346,7 +361,7 @@ end</code></pre>
     numberofcolors = 20
     fontface("AvenirNext-Bold")
     drawclosestcolors(targetcol, numberofcolors, Colors.color_names, title = "$(targetcol)")
-end 600 600 "../assets/images/mauve/nearestcolors1"</code></pre>
+end 600 600 "_assets/images/mauve/nearestcolors1"</code></pre>
 <p><img src="/assets/images/mauve/nearestcolors1.svg" alt="image label" /></p>
 <p>Or go for baroque with the NamedColors.jl list:</p>
 <pre><code class="language-julia">@svg begin
@@ -355,7 +370,7 @@ end 600 600 "../assets/images/mauve/nearestcolors1"</code></pre>
     numberofcolors = 20
     fontface("AvenirNext-Bold")
     drawclosestcolors(targetcol, numberofcolors, NamedColors.ALL_COLORS, title = "$(targetcol)")
-end 600 600 "../assets/images/mauve/nearestcolors2"</code></pre>
+end 600 600 "_assets/images/mauve/nearestcolors2"</code></pre>
 <p>The results are fairly similar. Not sure what the reported nearness units are, though - perhaps “millishades”?</p>
 <p><img src="/assets/images/mauve/nearestcolors2.svg" alt="image label" /></p>
 <h1 id="fade_out"><a href="/pages/2020-02-13-mauve/index.html#fade_out">Fade out</a></h1>
@@ -385,7 +400,7 @@ end 600 600 "../assets/images/mauve/nearestcolors2"</code></pre>
             end
             return npbp
         end)
-end 800 250 "../assets/images/mauve/brushstroke.svg"</code></pre>
+end 800 250 "_assets/images/mauve/brushstroke.svg"</code></pre>
 <h4 id="table_classfndef_idfndefgarfield_td_classfndef-backrefa_hrefpages2020-02-13-mauveindexhtmlfnrefgarfield2_td_classfndef-contentquotsimon_garfieldquot"><a href="/pages/2020-02-13-mauve/index.html#table_classfndef_idfndefgarfield_td_classfndef-backrefa_hrefpages2020-02-13-mauveindexhtmlfnrefgarfield2_td_classfndef-contentquotsimon_garfieldquot"><table class="fndef" id="fndef:garfield">
     <tr>
         <td class="fndef-backref"><a href="/pages/2020-02-13-mauve/index.html#fnref:garfield">[2]</a></td>
@@ -419,7 +434,7 @@ end 800 250 "../assets/images/mauve/brushstroke.svg"</code></pre>
 <div class="page-foot">
   <p class="rss-subscribe">subscribe <a href="/feed.xml">via RSS</a></p>
   <div class="copyright">
-    &copy; cormullion. Last modified: February 13, 2020. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a>.
+    &copy; cormullion. Last modified: February 14, 2020. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a>.
   </div>
 </div>
 

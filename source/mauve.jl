@@ -30,7 +30,7 @@
 # exit()
 # ```
 
-# \input{julia}{/src/source/mauve-text-inserts/badcode1.jl}
+# \input{julia}{/source/mauve-text-inserts/badcode1.jl}
 
 # Oh, that didn’t go well. No sign of mauve? Mauve, one of the most famous colors of the 19th Century, has been put in the shade by colors with names like Burleywood and Papaya Whip.
 
@@ -88,7 +88,7 @@ end
         sethue(dot[2])
         circle(dot[1], rescale(dot[3], 0, 1, 10, 1), :fillstroke)
     end
-end 800 800  "../assets/images/mauve/colornames.svg"
+end 800 800  "_assets/images/mauve/colornames.svg"
 
 # ![named colors](IMAGEFOLDER/colornames.svg)
 
@@ -123,7 +123,7 @@ using NamedColors
         sethue(col)
         circle(pt, d/2, :fillstroke)
    end
-end 800 800  "../assets/images/mauve/namedcolornames.svg"
+end 800 800  "_assets/images/mauve/namedcolornames.svg"
 
 # ![more named colors](IMAGEFOLDER/namedcolornames.svg)
 
@@ -252,8 +252,8 @@ end
 
 @png begin
         background("grey10")
-        drawimagefile("../assets/images/mauve/science-museum-f6.jpg", caption="fabric")
-end 1200 900 "../assets/images/mauve/fabricsample.png"
+        drawimagefile("_assets/images/mauve/science-museum-f6.jpg", caption="fabric")
+end 1200 900 "_assets/images/mauve/fabricsample.png"
 
 # ![fabric sample](IMAGEFOLDER/fabricsample.png)
 
@@ -289,7 +289,7 @@ end 1200 900 "../assets/images/mauve/fabricsample.png"
             circle(mauvepos, 3, :fill)
         end
     end
-end 800 800 "../assets/images/mauve/mauvepoints"
+end 800 800 "_assets/images/mauve/mauvepoints"
 
 # Somewhere around here perhaps?
 
@@ -357,7 +357,7 @@ end
     numberofcolors = 20
     fontface("AvenirNext-Bold")
     drawclosestcolors(targetcol, numberofcolors, Colors.color_names, title = "$(targetcol)")
-end 600 600 "../assets/images/mauve/nearestcolors1"
+end 600 600 "_assets/images/mauve/nearestcolors1"
 
 # ![image label](IMAGEFOLDER/nearestcolors1.svg)
 
@@ -369,7 +369,7 @@ end 600 600 "../assets/images/mauve/nearestcolors1"
     numberofcolors = 20
     fontface("AvenirNext-Bold")
     drawclosestcolors(targetcol, numberofcolors, NamedColors.ALL_COLORS, title = "$(targetcol)")
-end 600 600 "../assets/images/mauve/nearestcolors2"
+end 600 600 "_assets/images/mauve/nearestcolors2"
 
 # The results are fairly similar. Not sure what the reported nearness units are, though - perhaps “millishades”?
 
@@ -404,7 +404,7 @@ end 600 600 "../assets/images/mauve/nearestcolors2"
             end
             return npbp
         end)
-end 800 250 "../assets/images/mauve/brushstroke.svg"
+end 800 250 "_assets/images/mauve/brushstroke.svg"
 
 # #### [^garfield]: "Simon Garfield"
 
