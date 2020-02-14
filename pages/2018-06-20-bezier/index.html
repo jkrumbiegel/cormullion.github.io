@@ -1,0 +1,1248 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="/assets/infra/favicon.png">
+
+     <!-- Un-minified script so that can play a bit -->
+<link rel="stylesheet" href="/libs/katex/katex.min.css">
+   
+     <!-- Syntax highlighting via Prism, note: restricted langs -->
+<link rel="stylesheet" href="/libs/highlight/github.min.css">
+   
+
+    <script src="/libs/vela/jquery.min.js"></script>
+
+    <link href="/css/vela.css" rel="stylesheet">
+    <link href="/css/franklin.css" rel="stylesheet">
+    <link href="/css/cormullionblog.css" rel="stylesheet">
+
+     <title>Bezier Moi</title>  
+</head>
+<body>
+  <div class="main-nav" id="menu">
+    <div class="flex-container">
+      <span class="sidebar-brand">
+        <h3 style='font-size: 25px'>cormullion’s blog</h3>
+      </span>
+    </div> <!-- class="flex-container" -->
+    <nav class="sidebar-nav">
+       <ul class="metismenu"  id="metismenu" >
+        <li><a href="/">Home</a></li>
+        <li><a href="pages/2020-02-13-mauve">Mauve</a></li>
+        <li><a href="pages/2019-06-23-slackmojif">Slackmojif</a></li>
+        <li><a href="pages/2019-04-03-pentachoron">Pentachoron</a></li>
+        <li><a href="pages/2019-03-13-piday">π day</a></li>
+        <li><a href="pages/2018-11-29-automata">Automata</a></li>
+        <li><a href="pages/2018-10-11-noise">Noise</a></li>
+        <li><a href="pages/2018-08-10-guilloches">Guilloches</a></li>
+        <li><a href="pages/2018-08-02-infographic">Infographic</a></li>
+        <li><a href="pages/2018-06-20-bezier">Bézier Moi</a></li>
+        <li><a href="pages/2018-05-05-string">String</a></li>
+        <li><a href="pages/2018-03-14-some-piography">Some π-ography</a></li>
+        <li><a href="/pages/2015-06-02-pluto">Pluto</a></li>
+      </ul>
+    </nav>
+  </div> <!-- main nav menu -->
+
+  <main id="panel">
+    <div class="toggle-button hamburger hamburger--spin">
+      <div class="hamburger-box">
+        <div class="hamburger-inner"></div>
+      </div>
+    </div>
+    <h1 class="page title">Bezier Moi</h1>
+
+
+<!-- Content appended here -->
+
+<div class="franklin-content">
+<blockquote>
+<p>This post was inspired mostly by the arrival of the new Julia package <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a> by Fredrik Ekre. Literate lets you write a Julia source file, a Markdown blog post, and a Jupyter notebook all at the same time. It&#39;s magic, or, at least, indistinguishable from magic... As a result, you might be able to find a Jupyter notebook version of this Markdown-converted Julia source file somewhere nearby &#40;look in the <a href="https://github.com/cormullion/cormullion.github.io">github repo</a> for this blog, perhaps&#41;. The code uses the following packages, Literate, Luxor, Colors, Roots, Fontconfig, DataFrames, IterTools, ColorSchemes, and should work in Julia v1.0. <sup id="fnref:updated"><a href="/pages/2018-06-20-bezier/index.html#fndef:updated" class="fnref">[1]</a></sup>
+</blockquote>
+<h1 id="bzier_moi"><a href="/pages/2018-06-20-bezier/index.html#bzier_moi">Bézier moi&#33;</a></h1>
+<p>Luxor provides some support for Bézier curves, but there&#39;s no room for any more documentation—it&#39;s already too big. So the intention of this post is to provide some of the missing information about what&#39;s up with Bézier curves and how you might use them. And I confess in advance to wasting some of your bandwidth with some pointlessly colourful graphics. <sup id="fnref:graphics"><a href="/pages/2018-06-20-bezier/index.html#fndef:graphics" class="fnref">[2]</a></sup>
+<p>There&#39;s not a lot of mathematical material here, but fortunately the internet is <em>awash</em> with high-quality information about Bézier curves. The two articles you should definitely read instead of this post, or at least before, are:</p>
+<ul>
+<li><p><a href="https://pomax.github.io/bezierinfo/">https://pomax.github.io/bezierinfo/</a>  An exhaustive and exhausting examination of Bézier curves by Mike &#39;Pomax&#39; Kamermans, Mozilla JavaScript guru, complete with interactive JavaScript graphics.</p>
+</li>
+<li><p><a href="http://mae.engr.ucdavis.edu/~farouki/bernstein.pdf">http://mae.engr.ucdavis.edu/~farouki/bernstein.pdf</a> A paper exploring the history and mathematics of curves by Professor Rida T. Farouki &#40;University of California Davis&#41;.</p>
+</li>
+</ul>
+<h2 id="historical_background"><a href="/pages/2018-06-20-bezier/index.html#historical_background">Historical background</a></h2>
+<p>The story is quite well known: two engineers employed in the French car industry, <em>Paul de Faget de Casteljau</em>, at Citroen, and <em>Pierre Etienne Bézier</em>, at Renault, worked—mostly independently—on the mathematics of curves in the early 1960s, as the industry made its first tentative steps towards using computers for design and production.</p>
+<p><img src="/images/bezier/2560px-Bornholm_Rundt_2012.jpg" alt="Citroen DS" /></p>
+<p>&#40;This is the Citroen DS, which was once voted the most beautiful car ever made, apparently. Image from the WikiMedia Commons photographed by <a href="https://commons.wikimedia.org/w/index.php?curid&#61;28638457">Klugschnacker</a>&#41;</p>
+<p>De Casteljau and Bézier were interested in mathematical tools that would allow designers to intuitively construct and manipulate complex shapes. This problem was especially critical for “free–form” shapes that couldn&#39;t easily be specified by centre points, axes, angles, and dimensions. The motivation was also partly to replace the laborious, variable, and expensive process of sculpting clay models to specify the desired shape.</p>
+<p>De Casteljau found some resistance when his mathematical researches were introduced into the design studio. He observed that:</p>
+<blockquote>
+<p>the designers were astonished and scandalized. Was it some kind of joke? It was considered nonsense to represent a car body mathematically. It was enough to please the eye, the word &#39;accuracy&#39; had no meaning. &#91;quoted in Farouki&#93;</p>
+</blockquote>
+<p>Bézier popularized, but did not actually create, what we know today as the Bézier curve. He mainly developed the notation, and devised the idea of nodes with attached &quot;control handles&quot;, which the designers could use to adjust the shapes as easily as they used the turn indicators on their beloved Citroen DSs.</p>
+<p>De Casteljau is also remembered for the <a href="https://en.wikipedia.org/wiki/De_Casteljau&#37;27s_algorithm">algorithm</a> that bears his name.</p>
+<h2 id="the_shortest_distance"><a href="/pages/2018-06-20-bezier/index.html#the_shortest_distance">The shortest distance?</a></h2>
+<p>With the lingering thought of old Renaults and Citroens in mind, it&#39;s tempting to think of a Bézier curve as a line that takes, not the shortest distance between two points, but takes instead the scenic route.</p>
+<p>Let&#39;s define four points:</p>
+<pre><code class="language-julia">using Luxor
+P1  = Point(-200, 0)
+CP1 = Point(-100, -100)
+CP2 = Point(100, -100)
+P2  = Point(200, 0)
+@png begin
+    circle.([P1, CP1, CP2, P2], 5, :fill)
+    label.(["P1", "CP1", "CP2", "P2"], :N, [P1, CP1, CP2, P2], offset=10)
+end 800 300 "../images/bezier/fourpoints.png"</code></pre>
+<p><img src="/images/bezier/fourpoints.png" alt="four points" /></p>
+<p>The first and last points, P1 and P2, are the start and end of the line. The second point, CP1, controls the direction of the line as it leaves the first point, and the third point, CP2, determines the way the line approaches the fourth point. PostScript guru Don Lancaster <sup id="fnref:donlancaster"><a href="/pages/2018-06-20-bezier/index.html#fndef:donlancaster" class="fnref">[3]</a></sup> uses the terms ‘influence point’ and ‘enthusiasm’—so the second influence point determines the enthusiasm with which the curve travels towards its final destination.</p>
+<p>The graphics primitive <code>curve&#40;&#41;</code> function draws a Bézier curve between P1 and P2, taking into account the positions of control points CP1 and CP2. It takes just three points, using the current position as the starting point.</p>
+<pre><code class="language-julia">using Colors
+@png begin
+    sethue("red")
+    label.(["P1", "CP1", "CP2", "P2"], :N, [P1, CP1, CP2, P2])
+    line(P1, CP1,:stroke)
+    line(CP2, P2,:stroke)
+    sethue("black")
+    move(P1)
+    curve(CP1, CP2, P2)
+    strokepath()
+    circle.([P1, CP1, CP2, P2], 3, :fill)
+end 800 300 "../images/bezier/curve.png"</code></pre>
+<p><img src="/images/bezier/curve.png" alt="simple bezier curve" /></p>
+<p>The control points are like handles, controlling the shape of the curve. If you&#39;ve used Adobe Illustrator or some other vector graphics software, you&#39;ll be familiar with the idea of interactively dragging the handles around to get interesting curves. In Luxor, though, we sacrifice interactivity in favour of ruthless machine-driven automation. In the following animation, the control handles explore the geometry of a couple of hypotrochoids, while the helpless Bézier curve is pinned between them and forced into sinuous contortions:</p>
+<h1 id="img_srcimagesbezieranimationgif_altanimation_gif"><a href="/pages/2018-06-20-bezier/index.html#img_srcimagesbezieranimationgif_altanimation_gif"><img src="/images/bezier/animation.gif" alt="animation gif" /></a></h1>
+<p>Can I make this in Adobe Illustrator? Hold my beer...</p>
+<p>While you&#39;re waiting, have a look at another animation; this is my artist&#39;s impression of the De Casteljau algorithm dividing the control polygons around a Bézier curve as the parameter <code>n</code> moves from 0 to 1. The idea is that as <code>p1</code> divides <code>A</code> to <code>A1</code>, <code>p2</code> divides <code>A1</code> to <code>B1</code> and <code>p3</code> divides <code>B1</code> to <code>B</code>. So, <code>pp1</code> divides <code>p1</code> to <code>p2</code>, and <code>pp2</code> divides <code>p2</code> to <code>p3</code>. And you keep doing this until you can&#39;t divide any more, and eventually the point <code>P</code> plots the course of the final Bézier curve. The red and blue parts of the curve show that this technique is also a good way to split a single Bézier curve into two separate ones, and the red and blue parts are separate control polygons.</p>
+<p><img src="/images/bezier/decasteljau.gif" alt="De Casteljau" /></p>
+<p>In Luxor, a <code>BezierPathSegment</code> type contains four 2D points, stored in the fields <code>p1</code>, <code>cp1</code>, <code>cp2</code>, and <code>p2</code>, and a <code>BezierPath</code> is an array of one or more of these BezierPathSegments. The <code>drawbezierpath&#40;&#41;</code> function draws a BezierPath or BezierPathSegment, with similar results to the <code>curve&#40;&#41;</code> function:</p>
+<pre><code class="language-julia">@png begin
+    P1  = Point(-200, 0)
+    CP1 = Point(-100, -100)
+    CP2 = Point(100, -100)
+    P2  = Point(200, 0)
+
+    sethue("red")
+    label.(["P1", "CP1", "CP2", "P2"], :N, [P1, CP1, CP2, P2])
+    line(P1, CP1,:stroke)
+    line(P2, CP2,:stroke)
+    sethue("black")
+
+    beziersegment = BezierPathSegment(P1, CP1, CP2, P2)
+    circle.(beziersegment, 3, :fill)
+    drawbezierpath(beziersegment, :stroke)
+end 800 250 "../images/bezier/drawbezierpath.png"</code></pre>
+<p><img src="/images/bezier/drawbezierpath.png" alt="draw a Bezier path" /></p>
+<p>This last function, <code>drawbezierpath&#40;&#41;</code> is a typical Luxor drawing function, in that you can provide <code>:fill</code> as an alternative action to <code>:stroke</code>.</p>
+<p>An easy way to make a BezierPath is to use <code>makebezierpath&#40;&#41;</code> and supply a polygon. For example, let&#39;s make a triangle with <code>ngon&#40;&#41;</code> and use it as the skeleton for a new Bézier path:</p>
+<pre><code class="language-julia">@png begin
+    sethue("red")
+    triangle = ngon(O, 120, 3, vertices=true)
+    poly(triangle, :stroke, close=true)
+
+    sethue("black")
+    bezierpath = makebezierpath(triangle)
+    drawbezierpath(bezierpath, :stroke)
+    circle.(triangle, 5, :fill)
+
+    for bps in bezierpath
+        circle.(bps, 3, :fill)
+        line(bps[1], bps[2], :stroke)
+        line(bps[3], bps[4], :stroke)
+    end
+
+    label.(["p1", "p2", "p3"], [:S, :NW, :E], triangle, offset=10)
+end 800 400 "../images/bezier/makebezierpath.png"</code></pre>
+<p><img src="/images/bezier/makebezierpath.png" alt="make bezier path" /></p>
+<p>Here <code>makebezierpath&#40;&#41;</code> converted the three points into an array of three separate Bézier path segments. The control points are positioned so that the curve flows freely from one segment to the segment.</p>
+<h2 id="going_straight"><a href="/pages/2018-06-20-bezier/index.html#going_straight">Going straight</a></h2>
+<p>Bézier curves can have straight bits too. This animation shows the control points moving towards the points they&#39;re controlling. When they merge, the Bézier path appears to become a series of straight lines:</p>
+<pre><code class="language-julia">function frame(scene, framenumber)
+    background("white")
+    eased_n = scene.easingfunction(framenumber, 0, 1, scene.framerange.stop)
+    sethue("red")
+    triangle = ngon(O, 120, 3, vertices=true)
+    poly(triangle, :stroke, close=true)
+    sethue("black")
+    bezierpath = makebezierpath(triangle)
+    newbezierpath = BezierPath()
+    for bps in bezierpath
+        push!(newbezierpath,
+            BezierPathSegment(bps.p1,
+             between(bps.cp1, bps.p1, eased_n),
+             between(bps.cp2, bps.p2, eased_n),
+             bps.p2))
+    end
+    for bps in newbezierpath
+        circle.(bps, 3, :fill)
+        line(bps.p1, bps.cp1, :stroke)
+        line(bps.cp2, bps.p2, :stroke)
+    end
+    drawbezierpath(newbezierpath, :stroke)
+end
+
+width, height = (256, 256)
+
+bedtimemovie = Movie(width, height, "bedtimemovie")
+# probably requires ffmpeg installed
+animate(bedtimemovie, [Scene(bedtimemovie, frame, 1:150, easingfunction=easeoutquad)], creategif=true, framerate=30, pathname="../images/bezier/bedtimemovie.gif")</code></pre>
+<h1 id="img_srcimagesbezierbedtimemoviegif_altbedtime_for_bziers"><a href="/pages/2018-06-20-bezier/index.html#img_srcimagesbezierbedtimemoviegif_altbedtime_for_bziers"><img src="/images/bezier/bedtimemovie.gif" alt="bedtime for Béziers" /></a></h1>
+<p>This is a process known to very young Adobe Illustrator users as ‘putting the Bézier handles to bed’.</p>
+<p>It&#39;s also fun to move the control points somewhere else. Here, they&#39;re multiplied by 2, while the first and last points are left unchanged:</p>
+<pre><code class="language-julia">@png begin
+    sethue("red")
+    triangle = ngon(O, 100, 3, vertices=true)
+    poly(triangle, :stroke, close=true)
+
+    sethue("purple")
+    bezierpath = makebezierpath(triangle)
+    drawbezierpath(bezierpath, :stroke)
+    sethue("magenta")
+    for bps in bezierpath
+        bps = BezierPathSegment(bps[1], 2bps[2], 2bps[3], bps[4])
+        drawbezierpath(bps, :stroke)
+    end
+
+end 800 400 "../images/bezier/movecontrolpoints.png"</code></pre>
+<p><img src="/images/bezier/movecontrolpoints.png" alt="moving control points" /></p>
+<p>We could make even more copies, multiplying the control points each time through:</p>
+<pre><code class="language-julia">@png begin
+    setline(.5)
+    pgon = ngon(O, 100, 3, vertices=true)
+    bezierpath = makebezierpath(pgon)
+
+    for bpseg in bezierpath
+        for i in 1:20
+            bpseg.cp1 *= 1.05
+            bpseg.cp2 *= 1.05
+            drawbezierpath(bpseg, :stroke)
+        end
+    end
+end 800 400 "../images/bezier/movecontrolpointsmore.png"</code></pre>
+<p><img src="/images/bezier/movecontrolpointsmore.png" alt="moving multiple control points" /></p>
+<p>Try changing the initial triangle to a pentagon or heptagon by changing the <code>3</code> in <code>ngon&#40;&#41;</code>. And try multiplying by less than 1.05 too...</p>
+<p>Should you ever want to draw Bézier curves &quot;the hard way&quot;, try this. The standard Bézier function is available in Luxor as <code>bezier&#40;&#41;</code>, and we could draw a small hue-varying circle at each point:</p>
+<pre><code class="language-julia">@png begin
+    setopacity(0.6)
+    P1  = Point(-250, 0)
+    CP1 = Point(-200, -150)
+    CP2 = Point(200, -150)
+    P2  = Point(250, 0)
+    circle.([P1, CP1, CP2, P2], 3, :fill)
+
+    for u in 0.0:0.025:1.0
+        sethue(Colors.HSV(rescale(u, 0, 1, 0, 360), 1, 1))
+        pt = bezier(u, P1, CP1, CP2, P2)
+        circle(pt, 5, :fill)
+    end
+
+end 800 400 "../images/bezier/thehardway.png"</code></pre>
+<p><img src="/images/bezier/thehardway.png" alt="bezier the hard way" /></p>
+<p>What happens if you step <code>u</code> from say, -25.0 to 25.0? And is that supposed to happen? &#40;Spoiler: the curve doubles back and shoots off to <code>&#40;±∞/∞&#41;</code>.&#41;</p>
+<h2 id="out_of_control"><a href="/pages/2018-06-20-bezier/index.html#out_of_control">Out of control</a></h2>
+<p>Suppose you wanted to draw a Bézier curve but you didn&#39;t know where the control points were, but you did know a couple of points that should lie on the line? Again, Luxor has the answer for you, in the form of a function called <code>bezierfrompoints&#40;&#41;</code>. You supply four points, and the function returns the points of the Bézier curve that passes through them.</p>
+<pre><code class="language-julia">@png begin
+    sethue("grey80")
+    box(O, 120, 100, :stroke)
+    corners = box(O, 120, 100, vertices=true)
+    label.(["1", "2","3", "4"], :se, corners, offset=10)
+    sethue("red")
+    circle.(corners, 5, :fill)
+
+    startpoint, cp1, cp2, endpoint  = bezierfrompoints(corners...)
+
+    sethue("purple")
+    line(startpoint, cp1, :stroke)
+    line(endpoint, cp2, :stroke)
+
+    sethue("turquoise")
+    circle.([cp1, cp2, startpoint, endpoint], 3, :fill)
+
+    sethue("blue")
+    drawbezierpath(BezierPathSegment(startpoint, cp1, cp2, endpoint), :stroke)
+end 800 300 "../images/bezier/bezierfrompoints.png"</code></pre>
+<p><img src="/images/bezier/bezierfrompoints.png" alt="bezier through four points" /></p>
+<p>Note that this function returns all four points, but of course you already knew the first and last ones &#40;in <code>corners</code>&#41;, you just wanted the two control points.</p>
+<h2 id="on_the_right_path"><a href="/pages/2018-06-20-bezier/index.html#on_the_right_path">On the right path?</a></h2>
+<p>In Luxor the three main ways to make graphic lines and shapes are: <em>paths</em>, <em>polygons</em>, and <em>BezierPaths</em>. Paths are the fundamental building blocks of graphics, consisting of one or more sequences of straight and Bézier curves. A polygon is an array of points, which will be converted to a path when you draw it. And BezierPaths consist of a list of BezierPathSegments, which will also be converted to ordinary paths when they&#39;re drawn.</p>
+<p>It&#39;s useful to be able to convert between the different types:</p>
+<table><tr><th align="right">Function</th><th align="right">Converts</th></tr><tr><td align="right"><code>makebezierpath&#40;pgon&#41;</code></td><td align="right">polygon to BezierPath</td></tr><tr><td align="right"><code>pathtopoly&#40;&#41;</code></td><td align="right">current path to array of polygons</td></tr><tr><td align="right"><code>pathtobezierpaths&#40;&#41;</code></td><td align="right">current path to array of BezierPaths</td></tr><tr><td align="right"><code>beziertopoly&#40;bpseg&#41;</code></td><td align="right">BezierPathSegment to polygon</td></tr><tr><td align="right"><code>bezierpathtopoly&#40;bezierpath&#41;</code></td><td align="right">BezierPath to polygon</td></tr><tr><td align="right"><code>bezierfrompoints&#40;p1, p2, p3, p4&#41;</code></td><td align="right">convert four points to BezierPathSegment</td></tr></table>
+<h2 id="cant_draw_a_circle"><a href="/pages/2018-06-20-bezier/index.html#cant_draw_a_circle">Can&#39;t draw a circle?</a></h2>
+<p>Having witnessed the ability of a simple Bézier curve to adopt so many shapes, it&#39;s a bit surprising to find out that you can&#39;t use a Bézier curve to draw a circle. Well, it can do a very good impression of one, of course, but mathematically it can&#39;t produce a purely circular curve. You can see this if you draw a <em>very</em> large circle and a <em>very</em> large matching Bézier segment. For a circle with radius 10 meters &#40;and that&#39;s one big PDF&#41;, the discrepancy between the pure circle and the Bézier approximation isn&#39;t much bigger than the size of this period/full stop.←</p>
+<p>We non-scientists are lucky in not having to worry about errors of this magnitude...</p>
+<h1 id="img_srcimagesbezier10metrecirclepng_alta_10_metre_circle"><a href="/pages/2018-06-20-bezier/index.html#img_srcimagesbezier10metrecirclepng_alta_10_metre_circle"><img src="/images/bezier/10metrecircle.png" alt="a 10 metre circle" /></a></h1>
+<p>In the above picture, the red circle is made by <code>circle&#40;&#41;</code>, the green one is made with Bézier curves &#40;as used by <code>circlepath&#40;&#41;</code> and <code>ellipse&#40;&#41;</code>&#41;.</p>
+<h2 id="055228474983_is_the_magic_number"><a href="/pages/2018-06-20-bezier/index.html#055228474983_is_the_magic_number">“0.55228474983 is the magic number”</a></h2>
+<p>To draw approximate circles using Bézier curves, you need to know the magic number, usually called <em>kappa</em>, which has the value 0.552284.... We&#39;re looking at a Bézier curve pretending to be a circular quadrant, with control points positioned at a certain distance kappa from the end points. But how far? What value of kappa—what length of handle—will give us the most circular curve?</p>
+<p>A picture of the problem, using a deliberately not-very-good guess at a value for <em>kappa</em> of 0.5:</p>
+<pre><code class="language-julia">@png begin
+    scale(3)
+    fontsize(7)
+    translate(0, -50)
+    setline(1)
+
+    radius = 100
+
+    kappa_guess = .5
+
+    sethue("red")
+    arc(O, radius, 0, pi/2, :stroke)
+
+    sethue("black")
+    quadrant = BezierPathSegment(
+        Point(0, radius),
+        Point(kappa_guess * radius, radius),
+        Point(radius, kappa_guess * radius),
+        Point(radius, 0))
+    circle.(quadrant, 1, :fill)
+    arrow(quadrant.p1, quadrant.cp1, arrowheadlength=5)
+    arrow(quadrant.p2, quadrant.cp2, arrowheadlength=5)
+
+    drawbezierpath(quadrant, :stroke)
+
+    arrow(O, bezier(0.5, quadrant...))
+
+    label.(["(0, 1)", "(k, 1)", "(1, k)", "(1, 0)"], [:S, :S, :E, :E], quadrant)
+    label("kappa_guess = 0.5", :S, midpoint(quadrant.p1, quadrant.cp1), offset=15)
+end 800 450 "../images/bezier/kappaguess.png"</code></pre>
+<p><img src="/images/bezier/kappaguess.png" alt="guessing at kappa" /></p>
+<p>To solve this, we&#39;ll define a function that takes a value for <code>kappa</code> and works out the radius at the center of the Bézier curve.</p>
+<pre><code class="language-julia">_radiusofbezier(κ) = distance(O,
+    bezier(0.5, BezierPathSegment(
+        Point(0, 1),
+        Point(κ * 1, 1),
+        Point(1, κ * 1),
+        Point(1, 0)
+        )...))
+
+radiusofbezier(x) = _radiusofbezier(x) - 1</code></pre>
+<p>And we&#39;ll use one of the many excellent packages in <a href="https://github.com/JuliaMath/">JuliaMath</a>, Roots.jl, to find the zero point:</p>
+<pre><code class="language-julia">using Roots
+find_zero(radiusofbezier, (0, 1), verbose=true)
+
+Results of univariate zero finding:
+* Converged to: 0.5522847498307936
+* Algorithm: Roots.Bisection64()
+* iterations: 59
+* function evaluations: 61
+* stopped as |f(x_n)| ≤ max(δ, max(1,|x|)⋅ϵ) using δ = atol, ϵ = rtol
+Trace:
+x_0 =  0.0000000000000000,   f(x_0) = -0.2928932188134524
+x_1 =  0.0000000000000000,   f(x_1) = -0.2928932188134524
+x_2 =  0.0000000000000000,   f(x_2) = -0.2928932188134524
+x_3 =  0.0000000000000000,   f(x_3) = -0.2928932188134524
+x_4 =  0.0000000000000000,   f(x_4) = -0.2928932188134524
+x_5 =  0.0000000002401066,   f(x_5) = -0.2928932186861167
+x_6 =  0.0000154972076416,   f(x_6) = -0.2928850001779929
+x_7 =  0.0039367675781250,   f(x_7) = -0.2908054325256169
+x_8 =  0.0627441406250000,   f(x_8) = -0.2596181133267076
+x_9 =  0.2504882812500000,   f(x_9) = -0.1600517471037238
+x_10 =  0.5004882812500000,  f(x_10) = -0.0274692256312462
+x_11 =  0.5004882812500000,  f(x_11) = -0.0274692256312462
+x_12 =  0.5004882812500000,  f(x_12) = -0.0274692256312462
+x_13 =  0.5004882812500000,  f(x_13) = -0.0274692256312462
+x_14 =  0.5317077636718750,  f(x_14) = -0.0109125948370147
+x_15 =  0.5473175048828125,  f(x_15) = -0.0026342794398989
+x_16 =  0.5473175048828125,  f(x_16) = -0.0026342794398989
+x_17 =  0.5512199401855469,  f(x_17) = -0.0005647005906200
+x_18 =  0.5512199401855469,  f(x_18) = -0.0005647005906200
+x_19 =  0.5521955490112305,  f(x_19) = -0.0000473058783003
+x_20 =  0.5521955490112305,  f(x_20) = -0.0000473058783003
+x_21 =  0.5521955490112305,  f(x_21) = -0.0000473058783003
+x_22 =  0.5521955490112305,  f(x_22) = -0.0000473058783003
+x_23 =  0.5522565245628357,  f(x_23) = -0.0000149687087803
+x_24 =  0.5522565245628357,  f(x_24) = -0.0000149687087803
+x_25 =  0.5522717684507370,  f(x_25) = -0.0000068844164003
+x_26 =  0.5522793903946877,  f(x_26) = -0.0000028422702103
+x_27 =  0.5522832013666630,  f(x_27) = -0.0000008211971153
+x_28 =  0.5522832013666630,  f(x_28) = -0.0000008211971153
+x_29 =  0.5522841541096568,  f(x_29) = -0.0000003159288415
+x_30 =  0.5522846304811537,  f(x_30) = -0.0000000632947047
+x_31 =  0.5522846304811537,  f(x_31) = -0.0000000632947047
+x_32 =  0.5522847495740280,  f(x_32) = -0.0000000001361705
+x_33 =  0.5522847495740280,  f(x_33) = -0.0000000001361705
+x_34 =  0.5522847495740280,  f(x_34) = -0.0000000001361705
+x_35 =  0.5522847495740280,  f(x_35) = -0.0000000001361705
+x_36 =  0.5522847495740280,  f(x_36) = -0.0000000001361705
+x_37 =  0.5522847495740280,  f(x_37) = -0.0000000001361705
+x_38 =  0.5522847495740280,  f(x_38) = -0.0000000001361705
+x_39 =  0.5522847495740280,  f(x_39) = -0.0000000001361705
+x_40 =  0.5522847495740280,  f(x_40) = -0.0000000001361705
+x_41 =  0.5522847498066312,  f(x_41) = -0.0000000000128140
+x_42 =  0.5522847498066312,  f(x_42) = -0.0000000000128140
+x_43 =  0.5522847498066312,  f(x_43) = -0.0000000000128140
+x_44 =  0.5522847498066312,  f(x_44) = -0.0000000000128140
+x_45 =  0.5522847498211689,  f(x_45) = -0.0000000000051041
+x_46 =  0.5522847498284378,  f(x_46) = -0.0000000000012493
+x_47 =  0.5522847498284378,  f(x_47) = -0.0000000000012493
+x_48 =  0.5522847498302550,  f(x_48) = -0.0000000000002855
+x_49 =  0.5522847498302550,  f(x_49) = -0.0000000000002855
+x_50 =  0.5522847498307093,  f(x_50) = -0.0000000000000447
+x_51 =  0.5522847498307093,  f(x_51) = -0.0000000000000447
+x_52 =  0.5522847498307093,  f(x_52) = -0.0000000000000447
+x_53 =  0.5522847498307660,  f(x_53) = -0.0000000000000145
+x_54 =  0.5522847498307660,  f(x_54) = -0.0000000000000145
+x_55 =  0.5522847498307802,  f(x_55) = -0.0000000000000070
+x_56 =  0.5522847498307873,  f(x_56) = -0.0000000000000032
+x_57 =  0.5522847498307909,  f(x_57) = -0.0000000000000013
+x_58 =  0.5522847498307927,  f(x_58) = -0.0000000000000004
+x_59 =  0.5522847498307936,  f(x_59) =  0.0000000000000000
+0.5522847498307936</code></pre>
+<p>So that&#39;s <code>kappa</code>.</p>
+<p>Alternatively, we can use algebraic sorcery and the parametric equation for the Bézier cubic function to conjure the value from the following incantations:</p>
+\[
+\mathbf{p1} = (0, 1)                                                                                               \\
+\mathbf{cp1} = (k, 1)                                                                                              \\
+\mathbf{cp2} = (1, k)                                                                                              \\
+\mathbf{p2} = (1, 0)                                                                                               \\
+B(u) = \mathbf{p1}(1 - u)³ + \mathbf{cp1} 3u(1 - u)² + \mathbf{cp2}3u²(1 - u) + \mathbf{p2} u³                     \\
+u = 0.5                                                                                                            \\
+\sqrt{0.5}  = \frac{\mathbf{p1}}{8} + \frac{3\mathbf{cp1}}{8} + \frac{3\mathbf{cp2}}{8} + \frac{\mathbf{p2}}{}      \\
+x: \sqrt{0.5}  = \frac{0}{8} + \frac{3 k}{8} + \frac{3}{8} + \frac{1}{8}                                            \\
+y: \sqrt{0.5}  = \frac{1}{8} + \frac{3 }{8} + \frac{3 k}{8} + \frac{0}{8}                                           \\
+\frac{\sqrt{2}}{2} = 3  \frac{k}{8} + \frac{4}{8}                                                                   \\
+\sqrt{2} = 3  \frac{k}{4} + \frac{4}{4}                                                                             \\
+\sqrt{2} = 3  \frac{k}{4} + 1                                                                                      \\
+\sqrt{2} - 1 = 3  \frac{k}{4}                                                                                      \\
+3 k  = 4  (\sqrt{2} - 1)                                                                                            \\
+k = \frac{4}{3}  (\sqrt{2} - 1)                                                                                     \\
+k = 0.5522847498307936                                                                                              \\
+\]
+<p>I suspect most applications simply hard-code the magic number 0.552284... directly.</p>
+<p>The following code shows how we could animate the process of changing the length of the handles by changing the value of kappa. Blink and you&#39;ll miss the sweet spot, though, and the movement of the handles is imperceptible, so perhaps this isn&#39;t the best way of illustrating the construction.</p>
+<pre><code class="language-julia">function frame(scene, framenumber)
+    background("white")
+    eased_n = scene.easingfunction(framenumber, 0, 1, scene.framerange.stop)
+
+    radius = 250
+    setline(1)
+    sethue("black")
+    kappa = rescale(eased_n, 0, 1, 0.525, 0.575)
+
+    handlelength = (radius/2)  * kappa
+
+    left   = Point(-radius/2, 0)
+    top    = Point(0,        -radius/2)
+    right  = Point(radius/2,  0)
+    bottom = Point(0,         radius/2)
+
+    line(left, left + (0, -handlelength), :stroke)
+    line(top + (-handlelength, 0), top, :stroke)
+    circle.([left, top, right, bottom], 2, :fill)
+    circle.([left + (0, -handlelength), top + (-handlelength, 0)], 2, :fill)
+
+    line(left, left + (0, -handlelength), :stroke)
+    line(top + (-handlelength, 0), top, :stroke)
+    circle.([left, top, right, bottom], 2, :fill)
+    circle.([left + (0, -handlelength), top + (-handlelength, 0)], 2, :fill)
+
+    move(left)
+    curve(left   + (0, -handlelength),
+          top    + (-handlelength, 0),
+          top)
+    curve(top    + (handlelength, 0),
+          right  + (0, -handlelength),
+          right)
+    curve(right  + (0, handlelength),
+          bottom + (handlelength, 0),
+          bottom)
+    curve(bottom + (-handlelength, 0),
+          left   + (0, handlelength),
+          left)
+
+    if isapprox(kappa, 0.55228, atol=0.001)
+        sethue("red")
+        fillpath()
+        sethue("black")
+    else
+        strokepath()
+    end
+    fontface("Menlo")
+    fontsize(20)
+    text(string(round(kappa, digits=4)), halign=:center)
+end
+width, height = (400, 400)
+circlefrombezier = Movie(width, height, "circlefrombezier")
+animate(circlefrombezier, [Scene(circlefrombezier, frame, 1:150, easingfunction=easeoutquad)], creategif=true, framerate=30, pathname="../images/bezier/circlefrombezier.gif")</code></pre>
+<h1 id="img_srcimagesbeziercirclefrombeziergif_altkappa_value_animation"><a href="/pages/2018-06-20-bezier/index.html#img_srcimagesbeziercirclefrombeziergif_altkappa_value_animation"><img src="/images/bezier/circlefrombezier.gif" alt="kappa value animation" /></a></h1>
+<p>Luxor already provides a <code>Luxor.circlepath&#40;&#41;</code> function that uses four Bézier curve segments to build a path that draws a circle. The main advantage of using this instead of the default <code>arc</code>-based circle is that it&#39;s easier to build circles with holes:</p>
+<pre><code class="language-julia">@png begin
+    background("moccasin")
+    sethue("darkorange")
+    circlepath(O, 200, :path)
+
+    newsubpath()
+    circlepath(O + (100, -40), 70, :path, reversepath=true)
+
+    newsubpath()
+    circlepath(O - (100, 40), 70, :path, reversepath=true)
+
+    fillpreserve()
+    setline(8)
+    sethue("skyblue")
+    strokepath()
+end 800 500 "../images/bezier/circularpaths.png"</code></pre>
+<p><img src="/images/bezier/circularpaths.png" alt="circular paths" /></p>
+<h2 id="detour_into_typomania"><a href="/pages/2018-06-20-bezier/index.html#detour_into_typomania">Detour into Typomania</a></h2>
+<p>In practice, not being able to draw perfect circles with Bezier curves isn&#39;t a big problem. Font designers &#40;you knew this was going to go ‘all typographical’ sooner or later&#41; are big users of Bézier curves, and typically they don&#39;t like drawing perfect circles anyway, because of the optical corrections required to make things ‘look right’.</p>
+<p>There are a number of optical illusions that demonstrate that the human eye and the brain don&#39;t always see reality accurately. The following is one of the simplest, but most people would be prepared to bet that the horizontal bar is thicker and shorter than the vertical bar. I had to draw a grid to double-check...</p>
+<pre><code class="language-julia">@png begin
+    background("white")
+
+    sethue("gray90")
+    g = GridRect(BoundingBox()[1], 15, 15, 30 * 20, 30 * 20)
+    for i in 1:1600
+        circle(nextgridpoint(g), 0.5, :fill)
+    end
+
+    b = box(O - (15, -60), O + (15, -60), vertices=true)
+
+    sethue("black")
+    poly(b, :fill)
+    translate(0, -90)
+    rotate(pi/2)
+    poly(b, :fill)
+
+end 300 300 "../images/bezier/opticalillusion.png"</code></pre>
+<p><img src="/images/bezier/opticalillusion.png" alt="simple illusion" /></p>
+<p>It&#39;s something to do with how our eyes, set side by side and trained to move side to side horizontally with great speed and precision, underestimate width. Type designers spend much of their time adjusting the relative widths and thicknesses of letter shapes so that illusions like this are compensated for in advance. What happens if you turn your display on its side &#40;apart from possibly spilling your coffee&#41;?</p>
+<p>Here&#39;s a short script to examine the bounding boxes of the inner and outer loops of the letter ‘o’ in various fonts.</p>
+<pre><code class="language-julia">function drawletteraspect(pos, font, thefontsize, str)
+    @layer begin
+        translate(pos)
+        translate(-thefontsize/3, 0)
+        fontsize(thefontsize)
+        fontface(font)
+        sethue("gray40")
+        setline(0.5)
+        text(str)
+        newpath()
+        textpath(str)
+        o = pathtopoly()
+        @layer begin
+            fontsize(thefontsize/20)
+            text(font, Point(0, thefontsize/15))
+            sethue("magenta")
+            fontface("Cousine-Bold")
+            n = 0
+            for i in o
+                b = BoundingBox(i)
+                text(string(round(boxaspectratio(b), digits = 4)), midpoint(b...) + (0, n), halign=:center)
+                n += thefontsize/20
+                box(b, :stroke)
+            end
+        end
+    end
+end
+
+@png begin
+    fonts = [
+        "ArialUnicodeMS",
+        "AvantGarde-Book",
+        "BauhausLT-Light",
+        "CircularStd-Book",
+        "Cousine",
+        "FuturaLT-Book",
+        "GillSansMTPro-Book",
+        "GothamBlack",
+        "Helvetica",
+        "KabelLTStd-Light",
+        "ProximaNova-Bold",
+        "Times-Roman",
+    ]
+    tiles = Tiler(800, 400, 3, 4, margin=40)
+    for (pos, n) in tiles
+        drawletteraspect(pos, fonts[mod1(n, length(fonts))], 150, "o")
+    end
+end 800 400 "../images/bezier/drawletteraspect.png"</code></pre>
+<p><img src="/images/bezier/drawletteraspect.png" alt="aspect ratios of letter O" /></p>
+<p>The fonts on your system will be different, of course.</p>
+<h2 id="the_story_of_o"><a href="/pages/2018-06-20-bezier/index.html#the_story_of_o">The story of “o”</a></h2>
+<p>I wondered which fonts used the most circular circles for the letter “o”. This script wanders through all the fonts registered with Fontconfig and stores the bounding boxes of the letter “o”, then finds “the most circular”.</p>
+<pre><code class="language-julia">using Fontconfig, Luxor, DataFrames
+
+function buildfontlist()
+    fonts = []
+    for font in Fontconfig.list()
+        families = Fontconfig.format(font, "%{family}")
+        for family in split(families, ",")
+            push!(fonts, family)
+        end
+    end
+    filter!(font -> !startswith(font, "."), fonts)
+    filter!(font -> !occursin(r"Wing.*", font), fonts)
+    filter!(font -> !occursin(r".*Extra", font), fonts)
+    filter!(font -> !occursin(r".*Expert", font), fonts)
+    return sort(unique(fonts))
+end
+
+mutable struct Score
+    fontname::String
+    bbox1::BoundingBox
+    bbox2::BoundingBox
+end
+
+scores = Score[]
+
+# we have to have a drawing open, otherwise textpath() doesn't know where to turn
+
+Drawing(100, 100, "/tmp/emptydrawing.png")
+fontlist = unique(buildfontlist())
+fontsize(20)
+
+for font in fontlist
+    fontface(font)
+    newpath() # !!!!
+    textpath("o")
+    o = pathtopoly()
+    bboxes = BoundingBox[]
+    for i in o
+        push!(bboxes, BoundingBox(i))
+    end
+    if length(bboxes) == 2
+        push!(scores, Score(font, bboxes[1], bboxes[2]))
+    end
+end
+finish() # unused drawing</code></pre>
+<p>To analyse the results, we&#39;ll put everything into a DataFrame.</p>
+<pre><code class="language-julia">using Statistics
+df = DataFrame(
+    Fontname = String[],  # font name
+    Outer    = Float64[], # outer aspect ratio
+    Inner    = Float64[], # inner loop aspect ratio
+    Total    = Float64[],
+    Mean     = Float64[]
+    )
+
+for f in scores
+    push!(df, [f.fontname,
+               boxaspectratio(f.bbox1),
+               boxaspectratio(f.bbox2),
+               1 - (boxaspectratio(f.bbox1) + boxaspectratio(f.bbox2))/2,
+               mean([boxaspectratio(f.bbox1),
+                     boxaspectratio(f.bbox2)])
+              ])
+end
+
+sort!(df, :Total, lt = (a, b) -> abs(a) < abs(b))
+
+1018×5 DataFrames.DataFrame
+│ Row  │ Fontname                │ Outer    │ Inner   │ Total        │ Mean     │
+├──────┼─────────────────────────┼──────────┼─────────┼──────────────┼──────────┤
+│ 1    │ Kabel LT Std Light      │ 1.0      │ 1.0     │ 0.0          │ 1.0      │
+│ 2    │ ITC Avant Garde Std XLt │ 0.9965   │ 1.0035  │ -2.04211e-7  │ 1.0      │
+│ 3    │ Kabel LT Std Black      │ 1.0      │ 1.00101 │ -0.000503525 │ 1.0005   │
+│ 4    │ Gill Sans               │ 0.972742 │ 1.02949 │ -0.00111546  │ 1.00112  │
+│ 5    │ Gill Sans MT Pro Medium │ 0.972742 │ 1.02949 │ -0.00111546  │ 1.00112  │
+│ 6    │ ITC Avant Garde Gothic  │ 0.993158 │ 1.01428 │ -0.00371842  │ 1.00372  │
+│ 7    │ ITC Avant Garde Std Bk  │ 0.993158 │ 1.01428 │ -0.00371842  │ 1.00372  │
+│ 8    │ ITC Avant Garde Std Md  │ 0.991246 │ 1.021   │ -0.00612158  │ 1.00612  │
+│ 9    │ Avenir Heavy            │ 0.965208 │ 1.02078 │ 0.00700837   │ 0.992992 │
+⋮
+│ 1009 │ Akzidenz-Grotesk BQ Con │ 2.30537  │ 5.19277 │ -2.74907     │ 3.74907  │
+│ 1010 │ AmplitudeComp-Ultra     │ 1.52721  │ 6.41949 │ -2.97335     │ 3.97335  │
+│ 1011 │ Industria LT Std Solid  │ 2.62973  │ 5.72823 │ -3.17898     │ 4.17898  │
+│ 1012 │ Bernard MT Condensed    │ 1.5877   │ 7.55733 │ -3.57252     │ 4.57252  │
+│ 1013 │ Impact                  │ 1.4851   │ 7.6678  │ -3.57645     │ 4.57645  │
+│ 1014 │ HeadLineA               │ 1.6      │ 8.34783 │ -3.97391     │ 4.97391  │
+│ 1015 │ Univers LT Std 39 Thin  │ 3.69307  │ 6.81657 │ -4.25482     │ 5.25482  │
+│ 1016 │ Helvetica LT Std ExtCom │ 1.9595   │ 8.82251 │ -4.39101     │ 5.39101  │
+│ 1017 │ Gill Sans MT Pro Bold E │ 2.70499  │ 9.1913  │ -4.94815     │ 5.94815  │
+│ 1018 │ Helvetica LT Std UltCom │ 2.46103  │ 9.71489 │ -5.08796     │ 6.08796  │</code></pre>
+<p>Few typefaces are perfectly circular. Even <a href="http://typographica.org/typeface-reviews/ll-circular/">Circular</a>, LineTo&#39;s trendy geometric sans typeface, isn&#39;t perfectly circular.</p>
+<p>Most of the least circular ones, according to this rough examination, are in the Condensed and Compressed sections of the font libraries. No surprise, Sherlock.</p>
+<pre><code class="language-julia">display(df[end-10:end, :])
+
+11×5 DataFrames.DataFrame
+│ Row │ Fontname                       │ Outer   │ Inner   │ Total    │ Mean    │
+├─────┼────────────────────────────────┼─────────┼─────────┼──────────┼─────────┤
+│ 1   │ Helvetica LT Std Compressed    │ 5.72485 │ 1.53453 │ -2.62969 │ 3.62969 │
+│ 2   │ Akzidenz-Grotesk BQ Condensed  │ 2.30537 │ 5.19277 │ -2.74907 │ 3.74907 │
+│ 3   │ AmplitudeComp-Ultra            │ 1.52721 │ 6.41949 │ -2.97335 │ 3.97335 │
+│ 4   │ Industria LT Std Solid         │ 2.62973 │ 5.72823 │ -3.17898 │ 4.17898 │
+│ 5   │ Bernard MT Condensed           │ 1.5877  │ 7.55733 │ -3.57252 │ 4.57252 │
+│ 6   │ Impact                         │ 1.4851  │ 7.6678  │ -3.57645 │ 4.57645 │
+│ 7   │ HeadLineA                      │ 1.6     │ 8.34783 │ -3.97391 │ 4.97391 │
+│ 8   │ Univers LT Std 39 Thin UltraC  │ 3.69307 │ 6.81657 │ -4.25482 │ 5.25482 │
+│ 9   │ Helvetica LT Std ExtCompresse  │ 1.9595  │ 8.82251 │ -4.39101 │ 5.39101 │
+│ 10  │ Gill Sans MT Pro Bold ExtCond  │ 2.70499 │ 9.1913  │ -4.94815 │ 5.94815 │
+│ 11  │ Helvetica LT Std UltCompresse  │ 2.46103 │ 9.71489 │ -5.08796 │ 6.08796 │
+
+t = Table(2, 5, 170, 140)
+@png begin
+    for (n, f) in enumerate(df[end-9:end, 1])
+        fontsize(60)
+        fontface(f)
+        text("O", t[n], halign=:center)
+        fontsize(14)
+        text(f, t[n] + (0, 40), halign=:center)
+    end
+end 800 250 "../images/bezier/leastcircularfonts.png"</code></pre>
+<p><img src="/images/bezier/leastcircularfonts.png" alt="some of the least circular fonts" /></p>
+<p>The most circular ones on my computer are the classic geometric sans serif fonts.</p>
+<pre><code class="language-julia">display(df[1:10, :])
+
+10×5 DataFrames.DataFrame
+│ Row │ Fontname                 │ Outer    │ Inner   │ Total        │ Mean     │
+├─────┼──────────────────────────┼──────────┼─────────┼──────────────┼──────────┤
+│ 1   │ Kabel LT Std Light       │ 1.0      │ 1.0     │ 0.0          │ 1.0      │
+│ 2   │ ITC Avant Garde Std XLt  │ 0.9965   │ 1.0035  │ -2.04211e-7  │ 1.0      │
+│ 3   │ Kabel LT Std Black       │ 1.0      │ 1.00101 │ -0.000503525 │ 1.0005   │
+│ 4   │ Gill Sans                │ 0.972742 │ 1.02949 │ -0.00111546  │ 1.00112  │
+│ 5   │ Gill Sans MT Pro Medium  │ 0.972742 │ 1.02949 │ -0.00111546  │ 1.00112  │
+│ 6   │ ITC Avant Garde Gothic S │ 0.993158 │ 1.01428 │ -0.00371842  │ 1.00372  │
+│ 7   │ ITC Avant Garde Std Bk   │ 0.993158 │ 1.01428 │ -0.00371842  │ 1.00372  │
+│ 8   │ ITC Avant Garde Std Md   │ 0.991246 │ 1.021   │ -0.00612158  │ 1.00612  │
+│ 9   │ Avenir Heavy             │ 0.965208 │ 1.02078 │ 0.00700837   │ 0.992992 │
+│ 10  │ DIN 30640 Std            │ 0.966066 │ 1.01366 │ 0.010139     │ 0.989861 │
+
+t = Table(2, 5, 160, 140)
+@png begin
+    for (n, f) in enumerate(df[1:10, 1])
+        fontsize(50)
+        fontface(f)
+        text("O", t[n], halign=:center)
+        fontsize(11)
+        text(f, t[n] + (0, 50), halign=:center)
+    end
+end 800 300 "../images/bezier/mostcircularfonts.png"</code></pre>
+<p><img src="/images/bezier/mostcircularfonts.png" alt="the most circular fonts" /></p>
+<p>In the ‘most circular o’ fonts, there are a few examples from Rudolf Koch&#39;s Kabel family.</p>
+<pre><code class="language-julia">kabel = df[[occursin(r".*Kabel.*", fontname) for fontname in df[:Fontname]], :]
+
+9×5 DataFrames.DataFrame
+│ Row │ Fontname             │ Outer    │ Inner   │ Total        │ Mean     │
+├─────┼──────────────────────┼──────────┼─────────┼──────────────┼──────────┤
+│ 1   │ Kabel LT Std Light   │ 1.0      │ 1.0     │ 0.0          │ 1.0      │
+│ 2   │ Kabel LT Std Black   │ 1.0      │ 1.00101 │ -0.000503525 │ 1.0005   │
+│ 3   │ ITC Kabel Std Medium │ 0.976604 │ 0.99728 │ 0.0130582    │ 0.986942 │
+│ 4   │ Kabel LT Std         │ 1.02945  │ 1.0     │ -0.014727    │ 1.01473  │
+│ 5   │ Kabel LT Std Book    │ 1.02945  │ 1.0     │ -0.014727    │ 1.01473  │
+│ 6   │ ITC Kabel Std Ultra  │ 0.961288 │ 1.07731 │ -0.0193006   │ 1.0193   │
+│ 7   │ ITC Kabel Std        │ 1.02357  │ 1.02993 │ -0.0267482   │ 1.02675  │
+│ 8   │ ITC Kabel Std Book   │ 1.02357  │ 1.02993 │ -0.0267482   │ 1.02675  │
+│ 9   │ ITCKabel             │ 1.02357  │ 1.02993 │ -0.0267482   │ 1.02675  │
+
+t = Table(2, 5, 160, 140)
+@png begin
+    for (n, f) in enumerate(kabel[:, 1])
+        fontsize(50)
+        fontface(f)
+        text("O", t[n], halign=:center)
+        fontsize(11)
+        text(f, t[n] + (0, 50), halign=:center)
+    end
+end 800 300 "../images/bezier/kabelfonts.png"</code></pre>
+<p><img src="/images/bezier/kabelfonts.png" alt="Kabel fonts" /></p>
+<p>Here&#39;s Wikipedia:</p>
+<blockquote>
+<p>Kabel belongs to the &quot;geometric&quot; style of sans-serifs, which was becoming popular in Germany at the time of Kabel&#39;s creation &#91;1920s&#93;. Based loosely on the structure of the circle and straight lines, it nonetheless applies a number of unusual design decisions, such as a delicately low x-height &#40;although larger in the bold weight&#41;, a quirky tilted &#39;e&#39; and irregularly angled terminals, to add delicacy and an irregularity suggesting stylish calligraphy, of which Koch was an expert.</p>
+</blockquote>
+<p>Eye magazine <a href="http://eyemagazine.com/feature/article/expressive-geometry">isn&#39;t convinced</a> by the apparent geometrical precision of Kabel:</p>
+<blockquote>
+<p>its eccentricities reveal Koch’s unwavering expressionistic and humanist instincts</p>
+</blockquote>
+<p>But at least the ‘o’s are circular...</p>
+<h2 id="curvy"><a href="/pages/2018-06-20-bezier/index.html#curvy">Curvy</a></h2>
+<p>Moving back to Bézier curves, you can summarize the behaviour of a Bézier curve at a point by finding the curvature. The Luxor function <code>beziercurvature&#40;&#41;</code> returns a number, called <code>kappa</code>, that varies and flips from positive to negative as the Bézier path varies in ‘curviness’. We&#39;re using the first and second derivatives to find the kappa value:</p>
+\[
+\kappa = \frac{\mid \dot{x}\ddot{y}-\dot{y}\ddot{x}\mid}
+    {(\dot{x}^2 + \dot{y}^2)^{\frac{3}{2}}}
+\]
+<p>The following <code>drawcurvature&#40;&#41;</code> function uses the kappa value to work out the slope, and draw a perpendicular to the curve, with lengths varying according to the value of kappa, indicating the way the curvature changes.</p>
+<p>&#40;This is another <em>kappa</em>, by the way, no relation to the Bézier circularity kappa. Or indeed to the Lancia Kappa...</p>
+<h1 id="img_srcimagesbezier2880px-lancia_kappa_front_20110130jpg_altlancia_kappa_from_wikimedia_commons"><a href="/pages/2018-06-20-bezier/index.html#img_srcimagesbezier2880px-lancia_kappa_front_20110130jpg_altlancia_kappa_from_wikimedia_commons"><img src="/images/bezier/2880px-Lancia_Kappa_front_20110130.jpg" alt="Lancia Kappa from Wikimedia Commons" /></a></h1>
+<p><a href="https://commons.wikimedia.org/wiki/File:Lancia_Kappa_front_20110130.jpg">Photograph by Rudolf Stricker</a></p>
+<p>...or to many of the other things called kappa, such as the curvature of the universe, the torsional constant of an oscillator, Einstein&#39;s constant of gravitation, the coupling coefficient in magnetostatics—and that&#39;s just in physics.&#41;</p>
+<pre><code class="language-julia">function drawcurvature(bezpathsegment::BezierPathSegment;
+        scale=500,
+        stepby=0.01,
+        colors=["purple", "green"])
+    p1, cp1, cp2, p2 = bezpathsegment
+    for u in 0:stepby:1
+        pt = bezier(u, p1, cp1, cp2, p2)
+        kappa = beziercurvature(u, p1, cp1, cp2, p2)
+        # comb lines are perpendiculars
+        @layer begin
+            pt1 = bezier′(u, p1, cp1, cp2, p2)
+            # slope of curve at t = y′(t)/x′(t)
+            # normal is 1/slope
+            s = -1/(pt1.y/pt1.x)
+            sign(kappa) >= 0 ? sethue(colors[1]) : sethue(colors[2])
+            len = scale * abs(kappa)
+            line(pt - polar(len, atan(s)), pt + polar(len, atan(s)), :stroke)
+        end
+    end
+end</code></pre>
+<p>Here it is in action:</p>
+<pre><code class="language-julia">@png begin
+    p1  = Point(-150, 0)
+    cp1 = Point(-50, -200)
+    cp2 = Point(150, 200)
+    p2  = Point(250, -150)
+    setline(0.1)
+    for u in 0:0.025:1
+        pt = bezier(u, p1, cp1, cp2, p2)
+        circle(pt, 2, :fill)
+    end
+    sethue("red")
+    circle.([p1, cp1, cp2, p2], 3, :fill)
+    setline(1)
+    line(p1, cp1, :stroke)
+    line(p2, cp2, :stroke)
+    sethue("black")
+    fontsize(6)
+    setline(0.5)
+    drawcurvature(BezierPathSegment(p1, cp1, cp2, p2),
+        scale=1500,
+        stepby=0.005)
+end 600 500 "../images/bezier/drawcurvaturecomb.png"</code></pre>
+<p><img src="/images/bezier/drawcurvaturecomb.png" alt="drawing the curvature comb" /></p>
+<p>Users of CAD systems &#40;particularly industrial designers&#41; like to display these <em>curvature combs</em> &#40;in both 2D and 3D&#41; to make sure that their shapes don&#39;t introduce noticeably abrupt &#40;and possible weak&#41; transitions. Type designers use them too, but as usual they like to let their eyes have the final say.</p>
+<pre><code class="language-julia">@png begin
+    background("gray30")
+    fontface("Times-BoldItalic")
+    translate(-250, 80)
+    fontsize(300)
+    textpath("julia")
+    bpaths = pathtobezierpaths()
+    sethue("gray60")
+    for bpath in bpaths
+        for bpseg in bpath
+            setline(0.5)
+            drawbezierpath(bpseg, :stroke)
+            setline(0.25)
+            drawcurvature(bpseg,
+                scale=180,
+                stepby=0.05,
+                colors=["gold", "cyan"])
+        end
+    end
+end 800 500 "../images/bezier/typecomb.png"</code></pre>
+<p><img src="/images/bezier/typecomb.png" alt="curvature comb for the g" /></p>
+<p>The dots over the ‘i’ and ‘j’ don&#39;t look like perfect circles; these are defined by 8 points, not 4, for some reason.</p>
+<h3 id="osculate_my_bziers"><a href="/pages/2018-06-20-bezier/index.html#osculate_my_bziers">Osculate my Béziers</a></h3>
+<p>The value of kappa is typically very small, so the <em>radius of curvature</em>, which is defined as \[\frac{1}{kappa}\], can become very large. This radius value defines a circle that just touches the curve and follows the curvature at that point. Mathematicians, in typically romantic mood, call it the <em>osculating circle</em>, <em>osculate</em> being from the Latin noun <em>osculum</em>, meaning &quot;kiss&quot;.</p>
+<p>Drawing osculating circles can be a challenge; they grow very large when the curve looks flat. To be honest it&#39;s a tricky diagram to style up, and there&#39;s a lot of information that it would be cool to keep and a shame to throw away. There&#39;s quite a bit of osculation going on here...</p>
+<pre><code class="language-julia">@png begin
+    p1  = Point(-400, 60)
+    cp1 = Point(-300, -400)
+    cp2 = Point(250, 300)
+    p2  = Point(200, -100)
+    background("pink")
+    scale(0.75)
+    for u in 0:0.001:1
+        pt = bezier(u, p1, cp1, cp2, p2)
+        circle(pt, 4, :fill)
+    end
+    sethue("red")
+    circle.([p1, cp1, cp2, p2], 5, :fill)
+    setline(2)
+    line(p1, cp1, :stroke)
+    line(p2, cp2, :stroke)
+    setopacity(0.1) ; setline(1.5) ; fontsize(5)
+    for pointofcontact in 0.0:0.015:1.0
+        kappa = beziercurvature(pointofcontact, p1, cp1, cp2, p2)
+        pt = bezier(pointofcontact, p1, cp1, cp2, p2)
+        @layer begin
+            setopacity(1.0)
+            sethue("black")
+            circle(pt, 5, :fill)
+        end
+        pt1 = bezier′(pointofcontact, p1, cp1, cp2, p2)
+        s = -1/(pt1.y/pt1.x) # normal is 1/slope
+        radius = abs(1/kappa)
+        centrepoint = pt + polar(radius, atan(s))
+        if radius < 600
+            sign(kappa) >= 0 ? sethue("plum1") : sethue("mediumpurple")
+            circle(centrepoint, radius, :fill)
+            @layer begin
+                setopacity(1)
+                setline(0.25)
+                sethue("black")
+                fontsize(12)
+                circle(centrepoint, radius, :stroke)
+                circle(centrepoint, 2, :fill)
+                line(centrepoint, pt, :stroke)
+                text(string(round(1/kappa, digits = 2)), centrepoint)
+            end
+        else
+            text("too big", pt)
+        end
+    end
+end 800 800 "../images/bezier/osculate.png"</code></pre>
+<p><img src="/images/bezier/osculate.png" alt="osculating" /></p>
+<h2 id="a_blot_on_the_landscape"><a href="/pages/2018-06-20-bezier/index.html#a_blot_on_the_landscape">A blot on the landscape</a></h2>
+<p>Bézier curves became popular because they allow us to specify gently curving shapes that would be impractical and cumbersome to specify with circular arcs. The Comprehensive Taxonomy of Irregular Amoeboid Shapes is perhaps still waiting to be written, but here&#39;s my contribution to the ‘random ink blot’ chapter. Sometimes you&#39;ll get lucky and get a nice one.</p>
+<pre><code class="language-julia">function blot(;pos=O, radius=50, npoints=10, action=:fill)
+    center = pos
+    pts = ngon(pos, radius, npoints, vertices=true)
+    for i in 1:length(pts)
+        pts[i] = pts[i] + (rand(-radius/3:radius/3), rand(-radius/3:radius/3))
+    end
+    bezpath = makebezierpath(pts)
+    for n in 1:length(bezpath)
+        bezseg = bezpath[mod1(n, length(bezpath))]
+        if isodd(n)
+            j = rand(1.4:0.1:7)
+            bezseg.cp1 = between(center, bezseg.p1, j)
+            bezseg.cp2 = between(center, bezseg.p2, j)
+        else
+            j = rand(0.25:0.1:0.7)
+            bezseg.cp1 = between(center, bezseg.p1, j)
+            bezseg.cp2 = between(center, bezseg.p2, j)
+        end
+    end
+    drawbezierpath(bezpath, action)
+    return bezpath
+end
+
+@png begin
+    sethue("midnightblue")
+    blot(npoints=10)
+    circle.([Point(rand(-200:200), rand(-200:200)) for i in 1:15], rand(1:0.1:15, 15), :fill)
+end 800 500 "../images/bezier/blot.png"</code></pre>
+<p><img src="/images/bezier/blot.png" alt="blot" /></p>
+<p>The control handles of alternate points are positioned on a line from the center to the point.</p>
+<p>You could analyse the curvature of these blobs, if you really wanted to, using the <code>drawcurvature&#40;&#41;</code> function from earlier:</p>
+<pre><code class="language-julia">@png begin
+    pl = box(BoundingBox(), vertices=true)
+    mesh1 = mesh(pl, ["purple", "blue", "yellow", "orange"])
+    setmesh(mesh1)
+    paint()
+    setopacity(0.8)
+    sethue("orange")
+    setline(5)
+    b = blot(radius=80, npoints=8, action=:stroke)
+    drawbezierpath(b, :fill)
+    setline(.25)
+    drawcurvature.(b, colors=["white", "black"])
+end 800 500 "../images/bezier/blobcomb.png"</code></pre>
+<p><img src="/images/bezier/blobcomb.png" alt="blob comb" /></p>
+<h2 id="a_brush_in_the_rough"><a href="/pages/2018-06-20-bezier/index.html#a_brush_in_the_rough">A brush in the rough</a></h2>
+<p>Not all lines generated by computers have to be rigidly straight and precise. What if we could easily make graphics that are a bit more relaxed in style, rather than the rigid CAD-like &#40;and yes, awesome&#41; precision graphics we&#39;re used to?</p>
+<pre><code class="language-julia">@png begin
+    t = Table(1, 3)
+    box(t[1], 160, 160, :stroke)
+    boxv = box(t[3], 160, 160, vertices=true)
+    foreach((f, t) ->
+        brush(f, t, 3),
+           boxv[1:4],
+           boxv[mod1.(2:5, 4)])
+end 800 300 "../images/bezier/lines.png"</code></pre>
+<p><img src="/images/bezier/lines.png" alt="rough lines" /></p>
+<h2 id="a_line_is_a_breadthless_length_euclid"><a href="/pages/2018-06-20-bezier/index.html#a_line_is_a_breadthless_length_euclid">“A line is a breadthless length.” &#40;Euclid&#41;</a></h2>
+<p>The idea here is that a single line between two points is replaced with some BezierPathSegments that together define a shape that can vary in thickness along its length. This shape can be then filled, and is independent of the set line thickness.</p>
+<pre><code class="language-julia">@png begin
+    setline(60) # <— pointless
+    brush(O - (250, 0), O + (250, 0), 4, strokes=1)
+end 800 50  "../images/bezier/brushline1.png"</code></pre>
+<p><img src="/images/bezier/brushline1.png" alt="brush line" /></p>
+<p>The experimental <code>brush&#40;&#41;</code> function is bristling with built-in randomness, so you never know what you&#39;re going to get. There are some control knobs available which you can play with.</p>
+<pre><code class="language-julia">@png begin
+    brush(O - (250, 0), O + (250, 0), 5,
+        strokes=15,
+        twist=4)
+end 800 50  "../images/bezier/brushline2.png"</code></pre>
+<p><img src="/images/bezier/brushline2.png" alt="brush line 2" /></p>
+<p>To be honest, I think it&#39;s a bit daft to abandon the machine-like precision that our graphics software usually gives us for this variable hand-made look.</p>
+<pre><code class="language-julia">using IterTools
+@png begin
+    background("gray20")
+    sethue("ivory")
+    for ss in subsets(ngon(O, 250, 13, vertices=true), 2)
+        # line(ss[1], ss[2], :stroke) # use this line for accurate graphics
+        brush(ss[1], ss[2], 4,
+            strokes=1,
+            minwidth=0.001,
+            maxwidth=0.05,
+            lowhandle=0.1,
+            highhandle=.2,
+            randomopacity=true)
+    end
+end 800 600  "../images/bezier/linepartition.png"</code></pre>
+<p><img src="/images/bezier/linepartition.png" alt="line partition" /></p>
+<p>Today, our relationship with mechanical production and product design is inconsistent; some of the things we desire we want to be hand-made, but others we&#39;d prefer to be machine-made. Only the most expensive cars claim to be made ‘by hand’; the cheaper models flaunt their nanometre precision instead. Hipsters seek the authentic analogue roughness of the products of the Second Industrial age, but are secretly grateful for and rely on the smooth precisions afforded by the Third. Handmade shoes yes, handmode iPhones, no.</p>
+<p>There are a number of plotting packages that offer a hand-drawn aesthetic—<a href="http://xkcdgraphs.com">this site</a> is web-based. So you can definitely announce your latest scientific discovery using XKCD-style presentation graphics. There are XKCD-styling kits for most of the software used by people who have heard of XKCD.</p>
+<pre><code class="language-julia">@png begin
+    background("bisque")
+    sethue("gray60")
+    setopacity(0.1)
+    blot(pos=O + (-10, -50), radius=100)
+    sethue("springgreen2")
+    brush(O + (20, 270), O + (0, -270), 3) # wonk y-axis
+    brush(O - (350, 0), O + (350, 10), 3)  # wonk x-axis
+
+    sine = [(Point(50x, -200sin(x)), Point(50(x + pi/6), -200sin(x + pi/6))) for x in -2pi:pi/10:2pi]
+
+    sethue("pink1")
+    brush(Point(-300, -200), Point(300, -200), 0.5)
+
+    sethue("mediumorchid")
+    foreach(pr -> brush(pr[1], pr[2], twist=5, highhandle=4, strokes=3), sine)
+end 800 600 "../images/bezier/graph.png"</code></pre>
+<p><img src="/images/bezier/graph.png" alt="a graph" /></p>
+<p>Unfortunately you&#39;ve got the imprecise finish <em>without</em> the reassuring and lovable hand-made quirks. Like those imitation hand-writing fonts, it&#39;s presenting the illusion of manual labour.</p>
+<pre><code class="language-julia">@png begin
+    fontsize(30)
+    fontface("SnellRoundhand-Script")
+    text("pint of milk   cat food   stamps   something for dinner? ", halign=:center)
+end 800 100 "../images/bezier/shoppinglist.png"</code></pre>
+<p><img src="/images/bezier/shoppinglist.png" alt="a shopping list" /></p>
+<h2 id="a_fist_full_of_brushes"><a href="/pages/2018-06-20-bezier/index.html#a_fist_full_of_brushes">A fist full of brushes</a></h2>
+<p>But it&#39;s always fun to explore an idea to see where it leads:</p>
+<pre><code class="language-julia">@png begin
+    t = Table(5, 5, 130, 100)
+    l = t.colwidths[1]
+    fontsize(4)
+    for (pos, n) in t
+        weight = rand(0:2:20)
+        strokes = rand(1:20)
+        minwidth=rand(0.0:0.1:0.3)
+        maxwidth=rand(minwidth+0.1:0.1:minwidth+0.3)
+        twist = rand(-10:10)
+        randomopacity = rand(Bool)
+        lowhandle = rand(0.0:0.1:0.5)
+        highhandle = rand(lowhandle:0.1:lowhandle+.5)
+        tidystart = rand(Bool)
+        @layer begin
+            translate(pos)
+            rotate(-0.2)
+            randomhue()
+            brush(O - (l/2, 0), O + (l/2, 0), weight,
+                strokes=strokes,
+                minwidth=minwidth,
+                maxwidth=maxwidth,
+                lowhandle=lowhandle,
+                highhandle=highhandle,
+                twist=twist,
+                randomopacity=randomopacity,
+                tidystart=tidystart)
+        end
+
+        textwrap("weight: $weight
+            strokes: $strokes
+            minwidth: $minwidth
+            maxwidth $maxwidth
+            twist: $twist
+            randomopacity: $randomopacity
+            tidystart :$tidystart", t.colwidths[1] - 30, pos + (-l/2, 30))
+    end
+
+    sethue("black")
+    fontsize(30)
+    fontface("Elephant")
+    text("brush strokes", boxtop(BoundingBox()) + (0, 40), halign=:center)
+end 800 600 "../images/bezier/brushes.png"</code></pre>
+<p><img src="/images/bezier/brushes.png" alt="a catalog of brushes" /></p>
+<p>The line quality can make for simple painterly graphics, good for the occasional <a href="https://en.wikipedia.org/wiki/Bob_Ross">Bob Ross</a> painting:</p>
+<pre><code class="language-julia">using ColorSchemes
+function drawsunset()
+    colscheme= ColorSchemes.sunset
+    @png begin
+        background("burlywood4")
+        sethue("orange")
+        circle(O + (0, 60), 60, :fill)
+        setopacity(0.5)
+        for y in -200:20:180
+            sethue(get(colscheme, rescale(y, -200, 180, 1, 0)))
+            for w in 10:5:20
+                brush(Point(-350, y), Point(350, y), w,
+                    strokes = 1,
+                    twist = 5,
+                    minwidth=0.02,
+                    maxwidth=0.04,
+                    randomopacity=true
+                )
+            end
+        end
+        fontsize(30)
+        fontface("Pique-Black")
+        text("Sunset over Luxor", Point(0, 230), halign=:center)
+    end 800 500 "../images/bezier/sunset.png"
+end
+drawsunset()</code></pre>
+<p><img src="/images/bezier/sunset.png" alt="sunset over luxor" /></p>
+<p>Each time you evaluate this the result is slightly different, yet always the same. Perhaps the next one will be better — wait, no, perhaps I preferred the previous one...</p>
+<p>And because we started in France, let&#39;s paint some graffiti:</p>
+<pre><code class="language-julia">function drawfrenchflag()
+    w, h = 700, 400
+    @png begin
+        background("azure")
+        setopacity(0.85)
+        setline(0.5)
+        colscheme = ColorScheme([Colors.RGB.(sethue("royalblue1")...),
+                   Colors.RGB.(sethue("white")...),
+                   Colors.RGB.(sethue("red")...)])
+        for x in -w/2:40:w/2
+            # reduce x to 1, 2, or 3, then to [0-1] to get red/white/blue
+            col = rescale(div(x+w/2, w/3) + 1, 1, 3, 0, 1)
+            sethue(get(colscheme, col))
+            for i in 5:10:50
+                brush(Point(x, -h/2), Point(x, h/2),
+                    i,
+                    strokes=2,
+                    twist=10,
+                    highhandle=1)
+            end
+        end
+        b = box(O, 675, 375, vertices=true)
+        for i in 1:length(b)
+            sethue("purple")
+            brush(b[i], b[mod1(i + 1, length(b))], 30,
+                strokes=20,
+                minwidth=0.01,
+                maxwidth=0.05)
+        end
+        fontface("MistralStd")
+        setopacity(0.7)
+        sethue("purple")
+        fontsize(100)
+        text("Vive la France!", O + (10, 80), halign=:center, angle=-pi/10)
+    end 800 500 "../images/bezier/frenchflag.png"
+end
+
+drawfrenchflag()</code></pre>
+<p><img src="/images/bezier/frenchflag.png" alt="drapeau francais" /></p>
+<p>...and then speed off in our curvaceous old Citroen DS and drive to the France/Swiss border, where CERN are busy recreating the big bang:</p>
+<pre><code class="language-julia">using ColorSchemes
+function unpetitbang()
+    @png begin
+        background("gray10")
+
+        # rays
+        for i in 1:300
+            sethue(get(ColorSchemes.inferno, rand()))
+            rotate(rand())
+            brush(O + (rand(30:500), 0), O + (rand(501:1000), 0), 1,
+                strokes=5,
+                twist=rand(-1:0.1:1),
+                lowhandle  = 0.0,
+                highhandle = 0.5
+                )
+            l = rand(100:600)
+            l1 = l + rand(5:50)
+            sethue("white")
+            brush(O + (l, 0), O + (l1, 0), 1,
+                strokes=10,
+                twist=rand(-1:0.1:1),
+                lowhandle  = 0.0,
+                highhandle = 1
+                )
+        end
+
+        # plasmas
+        for i in 1:20
+            sethue(get(ColorSchemes.plasma, rand()))
+            setopacity(rand(0.25:.05:0.75))
+            rotate(rand())
+            brush(O - (20, 0), O + (20, 0), 20,
+                maxwidth = 10,
+                highhandle = 10)
+        end
+
+        # orbits
+        sethue("ivory")
+        setline(0.5)
+        for i in 1:10
+            rotate(rand())
+            brush(O - (0, 0), O + (50, 0), 10,
+                maxwidth = 20,
+                highhandle = 20,
+                action=:stroke)
+        end
+
+    end 1000 1000 "../images/bezier/unpetitbang.png"
+end
+unpetitbang()</code></pre>
+<p><img src="/images/bezier/unpetitbang.png" alt="un petit bang" /></p>
+<p>&#91;2018-06-20&#93;</p>
+<p><img src="http://steampiano.net/cormullionknot.gif?bezier" alt="cormullion signing off" /></p>
+<h3 id="footnotes"><a href="/pages/2018-06-20-bezier/index.html#footnotes">Footnotes</a></h3>
+<h4 id="table_classfndef_idfndefupdated_td_classfndef-backrefa_hrefpages2018-06-20-bezierindexhtmlfnrefupdated1_td_classfndef-contentupdates"><a href="/pages/2018-06-20-bezier/index.html#table_classfndef_idfndefupdated_td_classfndef-backrefa_hrefpages2018-06-20-bezierindexhtmlfnrefupdated1_td_classfndef-contentupdates"><table class="fndef" id="fndef:updated">
+    <tr>
+        <td class="fndef-backref"><a href="/pages/2018-06-20-bezier/index.html#fnref:updated">[1]</a></td>
+        <td class="fndef-content"><em>Updates</em></td>
+    </tr>
+</table>
+</a></h4>  I&#39;ve updated this post to work with Julia v1.0 and to take advantage of Franklin&#39;s ever-growing feature set.</p>
+<h4 id="table_classfndef_idfndefgraphics_td_classfndef-backrefa_hrefpages2018-06-20-bezierindexhtmlfnrefgraphics2_td_classfndef-contentgraphic_formats"><a href="/pages/2018-06-20-bezier/index.html#table_classfndef_idfndefgraphics_td_classfndef-backrefa_hrefpages2018-06-20-bezierindexhtmlfnrefgraphics2_td_classfndef-contentgraphic_formats"><table class="fndef" id="fndef:graphics">
+    <tr>
+        <td class="fndef-backref"><a href="/pages/2018-06-20-bezier/index.html#fnref:graphics">[2]</a></td>
+        <td class="fndef-content"><em>Graphic formats</em></td>
+    </tr>
+</table>
+</a></h4>  All the images in this post are in PNG, but they looked better in the vector-based SVG format. However, there was an annoying ‘bug’ in Jupyter/IJulia/IPython involving text in SVG images created by Cairo. What happened was that Cairo tried to be smart and stored text in XML symbols, suitable for re-use. A good idea, but unfortunately they&#39;re stored in the notebook&#39;s ‘global XML scope’, and so later cells accidentally picked up symbol definitions from earlier cells and re-used them, even though that&#39;s not always what you wanted.</p>
+<h4 id="table_classfndef_idfndefdonlancaster_td_classfndef-backrefa_hrefpages2018-06-20-bezierindexhtmlfnrefdonlancaster3_td_classfndef-contentdon_lancaster"><a href="/pages/2018-06-20-bezier/index.html#table_classfndef_idfndefdonlancaster_td_classfndef-backrefa_hrefpages2018-06-20-bezierindexhtmlfnrefdonlancaster3_td_classfndef-contentdon_lancaster"><table class="fndef" id="fndef:donlancaster">
+    <tr>
+        <td class="fndef-backref"><a href="/pages/2018-06-20-bezier/index.html#fnref:donlancaster">[3]</a></td>
+        <td class="fndef-content"><em>Don Lancaster</em></td>
+    </tr>
+</table>
+</a></h4>  Don Lancaster is the totally awesome dude who was active in the very early days of personal computing, and probably knows more about PostScript than most of the current Adobe Systems employees put together. Travel back in time by visiting his wacky website at http://www.tinaja.com.</p>
+<p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em>
+<div class="page-foot">
+  <p class="rss-subscribe">subscribe <a href="/feed.xml">via RSS</a></p>
+  <div class="copyright">
+    &copy; cormullion. Last modified: February 14, 2020. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a>.
+  </div>
+</div>
+
+</div>
+<!-- CONTENT ENDS HERE -->
+  </main> <!-- end of id=main -->
+  <script src="/libs/vela/metisMenu.min.js"></script>
+  <script src="/libs/vela/slideout.min.js"></script>
+  <script>
+    //initialize metismenu
+        $("#metismenu").metisMenu();
+
+        //initialize slideout
+        var slideout = new Slideout({
+            'panel': document.getElementById('panel'),
+            'menu': document.getElementById('menu'),
+            'padding': 300,
+            'tolerance': 70
+        });
+
+        //for closing menu on page click
+        function close(eve) {
+            eve.preventDefault();
+            slideout.close();
+        }
+
+        //make the hamburger animation correct when using touch events
+        slideout
+            .on('beforeopen', function() {
+                this.panel.classList.add('panel-open');
+                $(".hamburger").toggleClass("is-active");
+                $(".header-hamburger").toggleClass("fixed-open");
+            })
+            .on('open', function() {
+                this.panel.addEventListener('click', close);
+            })
+            .on('beforeclose', function() {
+                this.panel.classList.remove('panel-open');
+                this.panel.removeEventListener('click', close);
+                $(".hamburger").removeClass("is-active");
+                $(".header-hamburger").removeClass("fixed-open");
+            });
+
+        // Toggle button
+        $('.toggle-button').on('click', function() {
+            slideout.toggle();
+        });
+  </script>
+  
+    <script src="/libs/katex/katex.min.js"></script>
+<script src="/libs/katex/auto-render.min.js"></script>
+<script>renderMathInElement(document.body)</script>
+
+  
+  
+    <script src="/libs/highlight/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();hljs.configure({tabReplace: '    '});</script>
+
+  
+
+</body>
+</html>
