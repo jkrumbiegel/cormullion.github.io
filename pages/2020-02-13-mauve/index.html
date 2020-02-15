@@ -64,7 +64,8 @@
 <p>It’s a great story &#40;you might know it already&#41;. In London, in the 1850s, 18 year old chemistry student William Perkin has been assigned the task of synthesizing quinine from coal tar residues, as part of the effort to combat the ongoing worldwide malaria epidemic. Each attempt failed, but just before throwing out one particularly bad mess, he spotted a purple glint deep in the slurry. Seeing the potential, and against the advice of his supervisors, he left academia, set up a factory, obtained a patent &#40;you could patent colors then&#41;, and by the end of the 1850s he was making a lot of money providing the new color to the clothing and dyeing industries.</p>
 <p>As with many modern entrepreneurs, such as Steve Jobs or Bill Gates, there was a bit of luck too. It helped that he was in exactly the right place at exactly the right time. Because, shortly after he’d got his new start-up into production, there was a sudden European-wide craze for the color mauve. Queen Victoria wore it to a royal wedding, the Empress Eugenie, Napoleon III’s wife, made it fashionable in Paris. And these celebrity endorsements, then as now, drove sales to new heights. “Mauve mania” swept through Europe.</p>
 <p>Let’s see what this amazing mauve color looks like on our modern machines. I loaded up the Julia colors package, <a href="https://github.com/JuliaGraphics/Colors.jl">Colors.jl</a>, and set up a quick test:</p>
-
+<p>This is a code-block inside a markdown section, it is not considered code and therefore not run:</p>
+<pre><code class="language-julia">exit()</code></pre>
 <pre><code class="language-julia">using Colors, Luxor
 @draw begin
     setcolor("mauve")
@@ -162,8 +163,16 @@ end 800 800  "_assets/images/mauve/colornames.svg"</code></pre>
    end
 end 800 800  "_assets/images/mauve/namedcolornames.svg"</code></pre>
 <p><img src="/assets/images/mauve/namedcolornames.svg" alt="more named colors" /></p>
+
 <p>Some of these do have <em>mauve</em> in the names, so we can isolate them by replacing two lines with:</p>
-<p><span style="color:red;">// Couldn't find a file when trying to resolve an input request with relative path: `/src/source/mauve-text-inserts/code-fragment1.jl`. //</span></p>
+<pre><code class="language-julia">if occursin("mauv", k)
+   sethue("cyan")
+   box(pt, 2d, 2d, :stroke)
+   text(k, pt + (0, 8), halign=:center)
+   sethue(col)
+   circle(pt, d/2, :fillstroke)
+end</code></pre>
+
 <p><img src="/assets/images/mauve/namedcolorhuesonlymauve.svg" alt="just the mauves" /></p>
 <p>If you ask me, I don’t think many of these are really mauve. There’s a sparse-looking area in the purples where I think a real mauve might belong. So, what color is mauve? To find out, I think we’ll have to go back in time.</p>
 <h1 id="the_royal_purple"><a href="/pages/2020-02-13-mauve/index.html#the_royal_purple">The royal purple</a></h1>
