@@ -3,7 +3,7 @@
 # @def authors = """Cormullion"""
 # @def hascode = true
 # @def hasmath = false
-# @def rss = "In search of the color mauve ![image](/assets/images/mauve/imagebrushstroke.svg)"
+# @def rss = "In search of the color mauve ![image](/assets/images/mauve/images/brushstroke.svg)"
 # @def rss_pubdate = Date(2020, 2, 13)
 # @def rss_author = "cormullion"
 
@@ -22,13 +22,6 @@
 # As with many modern entrepreneurs, such as Steve Jobs or Bill Gates, there was a bit of luck too. It helped that he was in exactly the right place at exactly the right time. Because, shortly after he’d got his new start-up into production, there was a sudden European-wide craze for the color mauve. Queen Victoria wore it to a royal wedding, the Empress Eugenie, Napoleon III’s wife, made it fashionable in Paris. And these celebrity endorsements, then as now, drove sales to new heights. “Mauve mania” swept through Europe.
 
 # Let’s see what this amazing mauve color looks like on our modern machines. I loaded up the Julia colors package, [Colors.jl](https://github.com/JuliaGraphics/Colors.jl), and set up a quick test:
-
-# This is a code-block inside a markdown section,
-# it is not considered code and therefore not run:
-#
-# ```julia
-# exit()
-# ```
 
 # \input{julia}{/source/mauve-text-inserts/badcode1.jl}
 
@@ -129,7 +122,7 @@ end 800 800  "_assets/images/mauve/namedcolornames.svg"
 
 # Some of these do have *mauve* in the names, so we can isolate them by replacing two lines with:
 
-# \input{julia}{/src/source/mauve-text-inserts/code-fragment1.jl}
+# \input{julia}{/source/mauve-text-inserts/code-fragment1.jl}
 
 # ![just the mauves](IMAGEFOLDER/namedcolorhuesonlymauve.svg)
 
