@@ -58,7 +58,7 @@
 <!-- Content appended here -->
 
 <div class="franklin-content">
-<p><img src="/assets/images/noise/ice.png" alt="noise" /></p>
+<p><img src="/assets/images/noise/ice-800.png" alt="noise" /></p>
 <blockquote>
 <p>This is another post in the ongoing series in which I try to learn 2D vector graphics using Julia. It doesn&#39;t contain any revelations or new material, and you should visit the following sites if you&#39;re looking for a good introduction to the subject of noise in graphics:</p>
 </blockquote>
@@ -131,24 +131,24 @@ translate(BoundingBox()[1] + (margin, boxheight(BoundingBox()/2)))
 sethue("black")
 graph(rand(200))
 finish(); preview()</code></pre>
-<p><img src="images/noise/graph-random.png" alt="image label" /></p>
+<p><img src="/assets/images/noise/graph-random.png" alt="image label" /></p>
 <p>To start with, let&#39;s graph the output of the <code>noise&#40;&#41;</code> function for the first 200 integers:</p>
 <pre><code class="language-julia">drawgraph(0, 200, "images/noise/graph-0-200.png")</code></pre>
-<p><img src="images/noise/graph-0-200.png" alt="image label" /></p>
+<p><img src="/assets/images/noise/graph-0-200.png" alt="image label" /></p>
 <p>It looks very random. But let&#39;s look at 200 values between 0 and 10:</p>
 <pre><code class="language-julia">drawgraph(0, 10, "images/noise/graph-0-10.png")</code></pre>
-<p><img src="images/noise/graph-0-10.png" alt="image label" /></p>
+<p><img src="/assets/images/noise/graph-0-10.png" alt="image label" /></p>
 <p>There&#39;s some randomness, but it&#39;s smoother, and looks more natural.</p>
 <p>Zoom and enhance, between 0 and 5:</p>
 <pre><code class="language-julia">drawgraph(0, 5, "images/noise/graph-5.png")</code></pre>
-<p><img src="images/noise/graph-5.png" alt="image label" /></p>
+<p><img src="/assets/images/noise/graph-5.png" alt="image label" /></p>
 <p>You can see that the left half of the 0 to 10 graph has been stretched.</p>
 <p>Between 0 and 1:</p>
 <pre><code class="language-julia">drawgraph(0, 1, "images/noise/graph-0-1.png")</code></pre>
-<p><img src="images/noise/graph-0-1.png" alt="image label" /></p>
+<p><img src="/assets/images/noise/graph-0-1.png" alt="image label" /></p>
 <p>One more for luck:</p>
 <pre><code class="language-julia">drawgraph(0, 0.5, "images/noise/graph-0-05.png")</code></pre>
-<p><img src="images/noise/graph-0-05.png" alt="image label" /></p>
+<p><img src="/assets/images/noise/graph-0-05.png" alt="image label" /></p>
 <p>The more often you sample the noise space &#40;ie the shorter the gaps between the set of values passed to <code>noise&#40;&#41;</code>, the closer together the output values will be.</p>
 <p>So the <code>noise&#40;&#41;</code> function provides gently changing undulations rather than the unpredictable jumps of randomness. Here&#39;s a slowly changing color pattern in the LCHab color space, using a set of noisy values to choose the hue. We&#39;ll change the length of each line as well just for fun:</p>
 <pre><code class="language-julia">using Colors
@@ -163,7 +163,7 @@ finish(); preview()</code></pre>
         line(Point(x, -ht/2), Point(x, ht/2), :stroke)
     end
 end 600 200 "images/noise/colorbars.svg"</code></pre>
-<p><img src="images/noise/colorbars.svg" alt="image label" /></p>
+<p><img src="/assets/images/noise/colorbars.svg" alt="image label" /></p>
 <p>You can use noisy values to specify other changing parameters. For example, let&#39;s place some pebbles at random, and control their size using a noisy distribution, to give the illusion of a naturally changing distribution.</p>
 <pre><code class="language-julia">function drawpebble(pt, radius)
     sethue("grey60")
@@ -191,7 +191,7 @@ end
         drawpebble(pt, pebblesize * n)
     end
 end 800 400 "images/noise/pebbles.png"</code></pre>
-<p><img src="images/noise/pebbles.png" alt="image label" /></p>
+<p><img src="/assets/images/noise/pebbles.png" alt="image label" /></p>
 <h3 id="detail_and_persistence"><a href="/pages/2018-10-11-noise/index.html#detail_and_persistence">Detail and persistence</a></h3>
 <p>The <code>noise&#40;&#41;</code> function has two optional keyword arguments that let you tweak the knobs of the noise generator.</p>
 <p>The first is <code>detail</code>, an integer. Increasing it from the default value of 1 upwards will add finer detail to the basic noise. The second is <code>persistence</code>, a floating-point value between 0 and 1 &#40;or more&#41;.</p>
@@ -215,7 +215,7 @@ end 800 400 "images/noise/pebbles.png"</code></pre>
     end 800 650 "images/noise/detail-graph.svg"
  end
 detailgraph()</code></pre>
-<p><img src="images/noise/detail-graph.svg" alt="image label" /></p>
+<p><img src="/assets/images/noise/detail-graph.svg" alt="image label" /></p>
 <p>You can see the original noisy curve &#40;in red&#41; behind each more detailed graph. The noise generator is doubling the frequency but halving the amplitude every time you go one level higher. Noise, like music, can have octaves of higher frequencies mixed with lower fundamental frequency. The <code>detail</code> keyword is adding one or more octaves of noise.</p>
 <p>The <code>persistence</code> argument defaults to zero. The value controls the amplitude of each successive octave of noise, with higher values of persistence producing higher levels of finer detail, as the values persist for longer.</p>
 <pre><code class="language-julia">function persistencegraph()
@@ -240,7 +240,7 @@ detailgraph()</code></pre>
 end
 
 persistencegraph()</code></pre>
-<p><img src="images/noise/persistence-graph.svg" alt="image label" /></p>
+<p><img src="/assets/images/noise/persistence-graph.svg" alt="image label" /></p>
 <p>Here, the detail is kept at 4, and the persistence varies from 0 upwards. As the persistence increases, the effects accumulate, until the original curve is barely visible.</p>
 <p>There are many uses for noisy input, such as generating varying shapes that don&#39;t have that undesirable &#39;too random&#39; quality.</p>
 <pre><code class="language-julia">using ColorSchemes
@@ -267,7 +267,7 @@ function treerings()
 end
 
 treerings()</code></pre>
-<p><img src="images/noise/treerings.svg" alt="image label" /></p>
+<p><img src="/assets/images/noise/treerings.svg" alt="image label" /></p>
 <p>Here&#39;s a more questionable idea, using noise to control the setting of a line of text.</p>
 <pre><code class="language-julia">function drawtextline(t, point, fsize; rate=0.1)
     for (n, c) in enumerate(split(t, ""))
@@ -285,14 +285,14 @@ end
     drawtextline("variablefontsizetextsettingiscool,orisit?",
         O - (380, 0), 50, rate=.11)
 end 800 120 "images/noise/text-setting.png"</code></pre>
-<p><img src="images/noise/text-setting.png" alt="image label" /></p>
+<p><img src="/assets/images/noise/text-setting.png" alt="image label" /></p>
 <p>I then used the <code>readpng&#40;&#41;</code> and <code>placeimage&#40;&#41;</code> functions to add a background image &#40;the original Tenniel illustration&#41;, with the following result:</p>
-<p><img src="images/noise/jabberwocky.png" alt="image label" /></p>
+<p><img src="/assets/images/noise/jabberwocky.png" alt="image label" /></p>
 <h3 id="why_noise"><a href="/pages/2018-10-11-noise/index.html#why_noise">Why noise?</a></h3>
 <p>The first use of computer graphics in movies is generally considered to be Tron &#40;1981&#41;.</p>
 <p>Tron lies at the very beginning of the history of CGI in the movies, and the technology available to the artists, mathematicians, and programmers making Tron was amazingly underpowered compared with the computing power that we have today on our wrists, let alone on our phones.</p>
 <p>Ken Perlin was a mathematician and programmer who worked on Tron, and &#40;I think after the film was released&#41; he realised that there was room for using mathematical techniques for realistic-looking surfaces and textures, such as terrain.</p>
-<p><img src="images/noise/tron-800.png" alt="image label" /></p>
+<p><img src="/assets/images/noise/tron-800.png" alt="image label" /></p>
 <p>Ken&#39;s noise, or Perlin Noise as it became known, was quickly adodpted as the best way to generate naturalistic surfaces.</p>
 <p>I think the reason why natural scenes appear to us as variable but not completely random is due to the &#40;possibly hidden&#41; larger scale processes that make smaller and more visible details clump together, and appear to work together and change gradually. For example, clouds, mountains, and pebble beaches have large scale structure controlled by unseen forces like heat, pressure, and gravity. We mostly see the objects that are subject to these forces, rather than the forces themselves.</p>
 <h3 id="moving_into_2d"><a href="/pages/2018-10-11-noise/index.html#moving_into_2d">Moving into 2D</a></h3>
@@ -319,9 +319,9 @@ end 800 120 "images/noise/text-setting.png"</code></pre>
         end
     end
 end 800 700 "images/noise/table.svg"</code></pre>
-<p><img src="images/noise/table.svg" alt="image label" /></p>
+<p><img src="/assets/images/noise/table.svg" alt="image label" /></p>
 <p>Alternatively, we can create a 3D surface and use the noise values for the height at each point. Normally this would require a visit to Julia&#39;s colorful and generally awesome Swedish-nightclub-themed Package manager, Pkg:</p>
-<p><img src="images/noise/imstillfree.gif" alt="image label" /></p>
+<p><img src="/assets/images/noise/imstillfree.gif" alt="image label" /></p>
 <p>to download some of the cool plotting packages available, not least Simon Danisch&#39;s impressive <a href="https://github.com/JuliaPlots/Makie.jl">Makie.jl</a>.</p>
 <p>But, just to be contrary, I decided to whip up a simple isometric projection:</p>
 <pre><code class="language-julia">function project(x, y, z;
@@ -384,9 +384,9 @@ function isograph(a)
 end
 
 isograph(generatenoisearray(80, 80, rate=0.08))</code></pre>
-<p><img src="images/noise/isograph.svg" alt="image label" /></p>
+<p><img src="/assets/images/noise/isograph.svg" alt="image label" /></p>
 <p>&#40;This image reminds me of the famous Joy Division LP cover and T-shirt image, which features plots of the first ever pulsar discovered by Jocelyn Bell Burnell and Antony Hewish in 1967. This then became the basis of many entertaining blog posts, such as <a href="https://adamcap.com/2011/05/19/history-of-joy-division-unknown-pleasures-album-art/">this one</a>.&#41;</p>
-<p><img src="images/noise/joydivision.jpg" alt="image label" /></p>
+<p><img src="/assets/images/noise/joydivision.jpg" alt="image label" /></p>
 <p>A more conventional surface rendering is also possible:</p>
 <pre><code class="language-julia">function isograph(a)
     @png begin
@@ -413,7 +413,7 @@ isograph(generatenoisearray(80, 80, rate=0.08))</code></pre>
 end
 
 isograph(generatenoisearray(100, 100, rate=0.08))</code></pre>
-<p><img src="images/noise/isosurface-2.png" alt="image label" /></p>
+<p><img src="/assets/images/noise/isosurface-2.png" alt="image label" /></p>
 <h3 id="what_more_dimensions"><a href="/pages/2018-10-11-noise/index.html#what_more_dimensions">What, more dimensions?</a></h3>
 <p>So far we&#39;ve been generating 2D noise. The <code>noise&#40;&#41;</code> function can also accept three floating-point numbers as input. This produces noise values in 3D space, where each 3D point can have a noise value between 0 and 1. Rendering these point clouds is definitely a job for something other than a simple 2D graphics system. But, while we&#39;re here, let&#39;s have a go:</p>
 <pre><code class="language-julia">function buildarray(a::AbstractArray; rate=20)
@@ -452,7 +452,7 @@ const A = Array{Float64, 3}(undef, 50, 50, 50)
 @png begin
     iso3d(buildarray(A, rate=0.05))
 end 800 800 "images/noise/isosolid.png"</code></pre>
-<p><img src="images/noise/isosolid.png" alt="image label" /></p>
+<p><img src="/assets/images/noise/isosolid.png" alt="image label" /></p>
 <p>The noise values nearer 1 look like hot plasma, whereas values nearer 0 are almost translucent. It suggests what you might expect to see from a real volume visualization tool.</p>
 <h2 id="journey_to_algorithmia"><a href="/pages/2018-10-11-noise/index.html#journey_to_algorithmia">Journey to Algorithmia</a></h2>
 <p>The final images in this post combine 2D noise and 1D noise; 2D noise for the sky, and 1D noise to create the contours.</p>
@@ -547,9 +547,9 @@ function landscape(scheme, filename)
 end
 
 landscape(ColorSchemes.leonardo, "images/noise/landscape-leonardo")</code></pre>
-<p><img src="images/noise/landscape-leonardo.png" alt="image label" /></p>
+<p><img src="/assets/images/noise/landscape-leonardo.png" alt="image label" /></p>
 <pre><code class="language-julia">landscape(ColorSchemes.starrynight, "images/noise/landscapes-starrynight")</code></pre>
-<p><img src="images/noise/landscapes-starrynight.png" alt="image label" /></p>
+<p><img src="/assets/images/noise/landscapes-starrynight.png" alt="image label" /></p>
 <p>I generated a few hundred of these &#40;there are over 300 colorschemes that can be selected at random&#41; and, scrolling through them quickly, I found that sometimes the results were good, sometimes they weren&#39;t. Randomness—and noise—can be hard to predict.</p>
 <p>&#91;2018-10-16&#93;</p>
 <p><img src="http://steampiano.net/cormullionknot.gif?noise" alt="cormullion signing off" /></p>
@@ -559,7 +559,7 @@ landscape(ColorSchemes.leonardo, "images/noise/landscape-leonardo")</code></pre>
 <div class="page-foot">
   <p class="rss-subscribe">subscribe <a href="/feed.xml">via RSS</a></p>
   <div class="copyright">
-    &copy; cormullion. Last modified: February 17, 2020. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a>.
+    &copy; cormullion. Last modified: February 23, 2020. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a>.
   </div>
 </div>
 
