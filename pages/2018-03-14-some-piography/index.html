@@ -56,9 +56,7 @@
 
 
 <!-- Content appended here -->
-
-<div class="franklin-content">
-<blockquote>
+<div class="franklin-content"><blockquote>
 <p>This post was originally intended to be a light-hearted addendum to the serious math stuff that usually gets posted on the <a href="https://julialang.org/blog/">official Julia blog</a> on Pi day, but in the end there were no other contributions, so Simon asked if I wanted to go ahead anyway. So this had more prominence than I expected. This is the final draft; there were some improvements made by the community after I&#39;d submitted it.</p>
 </blockquote>
 <p>Although we&#39;ve known about &quot;Archimedes&#39; constant&quot; for a few millennia, we&#39;ve been referring to it as the Greek letter π only since the 1700s. Patricia Rothman <a href="https://www.historytoday.com/patricia-rothman/william-jones-and-his-circle-man-who-invented-pi">suggested</a> that the following page <em>could</em> contain one of the earliest uses of the Greek character to indicate the concept. It&#39;s from a mathematics text book written by William Jones and published in 1706:</p>
@@ -77,7 +75,7 @@
 <p>As always in Julia, you can usually see how the magic is performed:</p>
 <pre><code class="language-julia">julia> Base.REPLCompletions.latex_symbols["\\pi"]
 "π"</code></pre>
-<h3 id="more"><a href="/pages/2018-03-14-some-piography/index.html#more">More π</a></h3>
+<h3 id="more_π"><a href="#more_π">More π</a></h3>
 <p>We usually use the <code>U&#43;03C0</code> π from the Unicode block for Greek and Coptic text glyphs &#40;Coptic was the Greek-based language adopted by the Egyptians to replace hieroglyphs&#41;, but there are other π symbols intended mainly for mathematical use. The following snippet of Julia code tries to show all the lower-case Unicode π symbols:</p>
 <pre><code class="language-julia">morepi = [
 (0x3c0,    "\\pi",           "GREEK SMALL LETTER PI")
@@ -105,12 +103,12 @@ foreach(p ->
 <pre><code class="language-julia">julia> 𝜋 = 3
 julia> 2𝜋
 6</code></pre>
-<h3 id="the_publisher_symbol"><a href="/pages/2018-03-14-some-piography/index.html#the_publisher_symbol">The publisher symbol Ⓟ</a></h3>
+<h3 id="the_publisher_symbol"><a href="#the_publisher_symbol">The publisher symbol Ⓟ</a></h3>
 <p>Not all fonts contain a suitable Greek π at <code>U&#43;03C0</code>. A few expensive fonts such as <a href="https://www.typography.com/fonts/gotham/overview/">Gotham</a> offer the circled P symbol at <code>U&#43;03c0</code> instead of π. This is the &quot;publisher&quot; symbol, which usually lives at <code>U&#43;2117</code> &#40;the one at <code>U&#43;24C5</code> is also used&#41;, and it&#39;s like the copyright symbol © but for sound recordings. The story behind this is that, particularly before the days of Unicode standardization, font companies sometimes favoured pragmatism over correctness. According to <a href="http://www.typophile.com/node/45116">David Berlow</a>:</p>
 <blockquote>
 <p>we at Font Bureau understand how users work, and so we put the p in a circle, a &quot;must-have&quot; glyph that is very difficult for a user to make on the fly, in the slot of a glyph &#40;math pi&#41; that most people really don&#39;t need &#40;because even if they do, it&#39;s in the Symbol font on every single computer on earth&#41;.</p>
 </blockquote>
-<h3 id="designs_on"><a href="/pages/2018-03-14-some-piography/index.html#designs_on">Designs on π</a></h3>
+<h3 id="designs_on_π"><a href="#designs_on_π">Designs on π</a></h3>
 <p>Can we use Julia to find all the different designs of π? My first attempt at this challenge uses <a href="https://github.com/JuliaGraphics/Fontconfig.jl">Fontconfig.jl</a> to produce a list of installed fonts, and <a href="https://github.com/JuliaGraphics/Luxor.jl">Luxor.jl</a> to draw them in a table. It at least gives a glimpse of the variety of designs available, and illustrates some of the issues. Fonts that provide a zero-width glyph are skipped, meaning the table winds up being smaller than originally planned.</p>
 <pre><code class="language-julia">using Fontconfig, Luxor
 
@@ -159,7 +157,7 @@ tabulatepi()</code></pre>
 <p>Here are a few of the more interesting designs: the portly Cooper Black and Tiffany Heavy, the minimalist Verdana and Tahoma &#40;looking almost like &quot;n&quot;s?&#41;, the eccentric Gill &quot;Kayo&quot; Sans, and the silly Chalkduster.</p>
 <p><img src="/assets/images/pi/piversity.png" alt="piversity" /></p>
 <p>I like the small version from Dalliance; it&#39;s nicely old-school, where &quot;old-school&quot; here means based on an original from 1799, not long after Euler&#39;s death.</p>
-<h3 id="the_average"><a href="/pages/2018-03-14-some-piography/index.html#the_average">The average π</a></h3>
+<h3 id="the_average_π"><a href="#the_average_π">The average π</a></h3>
 <p>It occurred to me to ask &quot;what is the average of π?&quot;, or &quot;what would it look like if all the πs were displayed at the same time?&quot;. Using the same font list generation as before, I ran this:</p>
 <pre><code class="language-julia">function textstroke(s, pos, action)
     @layer begin
@@ -193,16 +191,13 @@ accumulatepi()</code></pre>
 <p><img src="/assets/images/pi/accumulate-pi.png" alt="accumulating pi" /></p>
 <p>For a complete font based on the average shapes of many other fonts, have a look at <a href="http://www.iotic.com/averia/">Averia</a>.</p>
 <p>I haven&#39;t yet found a way to list all the fonts that contain the full set of Unicode π symbols. In theory I think I can use <a href="https://github.com/juliagraphics/FreeType.jl">Freetype.jl</a> to inspect a font to see whether it contains code points for particular character glyphs. Perhaps I&#39;ll report back on 3-14-19 with any progress...</p>
-<p><img src="http://steampiano.net/cormullionknot.gif?piography" alt="cormullion signing off" />
-<div class="page-foot">
+<p><img src="http://steampiano.net/cormullionknot.gif?piography" alt="cormullion signing off" /><div class="page-foot">
   <p class="rss-subscribe">subscribe <a href="/feed.xml">via RSS</a></p>
   <div class="copyright">
     &copy; cormullion. Last modified: February 17, 2020. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a>.
   </div>
 </div>
-
-</div>
-<!-- CONTENT ENDS HERE -->
+</div><!-- CONTENT ENDS HERE -->
   </main> <!-- end of id=main -->
   <script src="/libs/vela/metisMenu.min.js"></script>
   <script src="/libs/vela/slideout.min.js"></script>

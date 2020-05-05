@@ -56,16 +56,14 @@
 
 
 <!-- Content appended here -->
-
-<div class="franklin-content">
-<blockquote>
+<div class="franklin-content"><blockquote>
 <p>In the UK we have started to celebrate π day &#40;the 3rd month&#39;s 14th day&#41; every year, even though we don&#39;t use the USA&#39;s date formatting convention of <code>monthnumber</code> followed by <code>daynumber</code>. But we can&#39;t really celebrate the 31st of April &#40;31/4&#41; or the 3rd of Quatember &#40;?&#41; &#40;3/14&#41;, so we&#39;ll happily celebrate π day on 14/3 along with everyone else&#33;</p>
 </blockquote>
 <blockquote>
 <p>I set myself a challenge at the beginning of March: make a π-related image using Julia and the Luxor.jl package every day until π day. Some days it worked out well, others didn&#39;t, but I&#39;ve gathered them all here anyway. This post has a fair few images, but not very much code or mathematical content.</p>
 </blockquote>
 <p>The images here are in low-resolution: they should be available on my <a href="https://www.flickr.com/photos/153311384@N03/">Flickr page</a> at their full resolution if you want to download or re-use them.</p>
-<h3 id="day_1_circle_packing"><a href="/pages/2019-03-13-piday/index.html#day_1_circle_packing">Day 1: Circle packing</a></h3>
+<h3 id="day_1_circle_packing"><a href="#day_1_circle_packing">Day 1: Circle packing</a></h3>
 <p>Circle packing may be a well-trodden path, but it always looks neat, and it&#39;s a nice easy start. You maintain a list of circles &#40;center point and radius&#41;. Then you create a random circle, check it against all the other ones, draw it if it doesn&#39;t overlap, or reduce the radius and try again. It&#39;s not very efficient but you can set it going and go and make some coffee.</p>
 <p>To make the π shape appear, the code creates a path:</p>
 <pre><code class="language-julia">fontsize(480)
@@ -75,13 +73,13 @@ textoutlines("π", O, :path, halign=:center, valign=:middle)
 <pre><code class="language-julia">isinside(pt, πoutline)</code></pre>
 <p>and colors it accordingly.</p>
 <p><img src="/assets/images/piday/t-800.png" alt="image label" /></p>
-<h3 id="day_2_dry_and_wet"><a href="/pages/2019-03-13-piday/index.html#day_2_dry_and_wet">Day 2: Dry and wet</a></h3>
+<h3 id="day_2_dry_and_wet"><a href="#day_2_dry_and_wet">Day 2: Dry and wet</a></h3>
 <p>I repeated myself today, thinking I could develop the circles a bit more, and ended up with this glossier wet-look version. The apparently random-looking shapes in the background are Bézier splodges that are supposed to be splashes...</p>
 <p><img src="/assets/images/piday/pi-reds-balls-wet-800.png" alt="image label" /></p>
-<h3 id="day_3_packing"><a href="/pages/2019-03-13-piday/index.html#day_3_packing">Day 3: π packing</a></h3>
+<h3 id="day_3_π_packing"><a href="#day_3_π_packing">Day 3: π packing</a></h3>
 <p>This is π packing rather than circle packing, although the code is again quite similar in outline: choose a point at random, find the largest font size at which the π character fits without overlapping others in the list, and then place it and add it to the list. The colors are a bit murky though.</p>
 <p><img src="/assets/images/piday/pi-swarm-3-800.png" alt="image label" /></p>
-<h3 id="day_4_rainbow"><a href="/pages/2019-03-13-piday/index.html#day_4_rainbow">Day 4: Rainbow</a></h3>
+<h3 id="day_4_rainbow"><a href="#day_4_rainbow">Day 4: Rainbow</a></h3>
 <p>Combining concentric circles and rainbow colors, this image shows about 350 digits of π.</p>
 <p><img src="/assets/images/piday/digits-of-pi-avenir-800.png" alt="image label" /></p>
 <p>To generate the digits of π, I use this function:</p>
@@ -121,18 +119,18 @@ findsubsequence(str::String, digits) =
     findsubsequence(map(x -> parse(Int, x), split(str, "")), digits)
 
 findsubsequence("999999", pidigits(2000)) # => [763]</code></pre>
-<h3 id="day_5_low-fat"><a href="/pages/2019-03-13-piday/index.html#day_5_low-fat">Day 5: Low-fat</a></h3>
+<h3 id="day_5_low-fat"><a href="#day_5_low-fat">Day 5: Low-fat</a></h3>
 <p>A chunky typeface like the Avenir Heavy I used yesterday is good for masking and clipping. But I wondered how the narrowest typeface would look. I found Briem Akademi, designed by Gunnlaugur Briem at the Royal Academy of Fine Arts in Copenhagen. Adobe&#39;s description says:</p>
 <blockquote>
 <p>The most compressed version works best where legibility is less important than dramatic visual effect.</p>
 </blockquote>
 <p>and I like the abstract look even though it&#39;s almost illegible... Would this make nice bathroom tiles?</p>
 <p><img src="/assets/images/piday/many-digits-of-pi-briem-800.png" alt="image label" /></p>
-<h3 id="day_6_breakfast_and_tiffany"><a href="/pages/2019-03-13-piday/index.html#day_6_breakfast_and_tiffany">Day 6 Breakfast and Tiffany</a></h3>
+<h3 id="day_6_breakfast_and_tiffany"><a href="#day_6_breakfast_and_tiffany">Day 6 Breakfast and Tiffany</a></h3>
 <p>I&#39;m still thinking about using typefaces. I&#39;m a fan of Ed Benguiat&#39;s ITC Tiffany font, his nostalgic look back from the 1970s to the age of Edwardian elegance.</p>
 <p><img src="/assets/images/piday/pi-digits-appearing-800.png" alt="image label" /></p>
 <p>It&#39;s easy to do this with tables. Like the circle packing, the code checks whether the coordinates of each table cell fall within a given perimeter, and changes the font accordingly.</p>
-<h3 id="day_7_distinguished"><a href="/pages/2019-03-13-piday/index.html#day_7_distinguished">Day 7 Distinguished</a></h3>
+<h3 id="day_7_distinguished"><a href="#day_7_distinguished">Day 7 Distinguished</a></h3>
 <p>The excellent Colors.jl package has a function called <code>distinguishable_colors&#40;&#41;</code> &#40;which fortunately tab-completes&#41;. The help text says:</p>
 <blockquote>
 <p>This uses a greedy brute-force approach to choose <code>n</code> colors that are maximally distinguishable. Given <code>seed</code> color&#40;s&#41;, and a set of possible hue, chroma, and lightness values &#40;in LCHab space&#41;, it repeatedly chooses the next color as the one that maximizes the minimum pairwise distance to any of the colors already in the palette.</p>
@@ -144,25 +142,25 @@ findsubsequence("999999", pidigits(2000)) # => [763]</code></pre>
 gamma = 2.2
 luminance = 0.2126 * r^gamma + 0.7152 * g^gamma + 0.0722 * b^gamma
 (luminance > 0.5^gamma) ? sethue("black") : sethue("white")</code></pre>
-<h3 id="day_8_candy_crush_edition"><a href="/pages/2019-03-13-piday/index.html#day_8_candy_crush_edition">Day 8 Candy crush edition</a></h3>
+<h3 id="day_8_candy_crush_edition"><a href="#day_8_candy_crush_edition">Day 8 Candy crush edition</a></h3>
 <p><img src="/assets/images/piday/candy-crush.png" alt="image label" /></p>
 <p>I must have seen an advert for CandyCrush yesterday, or perhaps all that talk of gamma and LCHab spaces caused a reaction, but this sugar rush of an image was the result. The SVG version looks tasty but is too big for this web page.</p>
-<h3 id="day_9_like_a_circle_in_a_spiral_a_wheel_within_a_wheel"><a href="/pages/2019-03-13-piday/index.html#day_9_like_a_circle_in_a_spiral_a_wheel_within_a_wheel">Day 9 Like a circle in a spiral, a wheel within a wheel</a></h3>
+<h3 id="day_9_like_a_circle_in_a_spiral_a_wheel_within_a_wheel"><a href="#day_9_like_a_circle_in_a_spiral_a_wheel_within_a_wheel">Day 9 Like a circle in a spiral, a wheel within a wheel</a></h3>
 <p>Arranging the sweets in a spiral looks tidy.</p>
 <p><img src="/assets/images/piday/pi-digits-in-spiral-balls-800.png" alt="image label" /></p>
-<h3 id="day_10_into_circumference"><a href="/pages/2019-03-13-piday/index.html#day_10_into_circumference">Day 10 π into circumference</a></h3>
+<h3 id="day_10_π_into_circumference"><a href="#day_10_π_into_circumference">Day 10 π into circumference</a></h3>
 <p>Luxor&#39;s <code>polysample&#40;&#41;</code> function takes a polygon and samples it at regular intervals. This allows the following idea, where each point on a shape &#40;here, the outline of the π character&#41; is slowly moved to a matching location on the circular shape around the outside.</p>
 <p><img src="/assets/images/piday/pi-to-circle-800.png" alt="image label" /></p>
 <p>For a point on the π border <code>p1</code>, and a matching point on the circumference polygon <code>p2</code>, the intermediate point is given by <code>between&#40;p1, p2, n&#41;</code>, where <code>n</code> is between 0 and 1.</p>
 <p>I like the almost 3D effect you get from this.</p>
-<h3 id="day_11_charcoal"><a href="/pages/2019-03-13-piday/index.html#day_11_charcoal">Day 11 Charcoal</a></h3>
+<h3 id="day_11_charcoal"><a href="#day_11_charcoal">Day 11 Charcoal</a></h3>
 <p>Time for a charcoal sketch:</p>
 <p><img src="/assets/images/piday/pi-charcoal-1-800.png" alt="image label" /></p>
 <p>The crinkly edges of the paper are made by the <code>polysample&#40;&#41;</code> function on a rectangle then applying simplex-<code>noise&#40;&#41;</code>-y nudges to the vertices. The paper is textured with <code>rule&#40;&#41;</code>d lines, and there&#39;s some very low values for <code>setopacity&#40;&#41;</code> smudges. Shifting the Bézier curve handles slightly for each iteration gives a brushy/sketchy feel. &#40;It&#39;s fortunate I can copy and paste some of this code from drawings I&#39;ve made before: I&#39;ve learnt the hard way that it&#39;s better keep things than throw them away...&#41;</p>
-<h3 id="day_12"><a href="/pages/2019-03-13-piday/index.html#day_12">Day 12</a></h3>
+<h3 id="day_12"><a href="#day_12">Day 12</a></h3>
 <p>I ran out of time on this one, and there are still some problems with the text spacing. The idea is to have the infinite digits of π spiral into some fiery star with some space-y stuff. Probably not the sort of image I should be attempting at all with simple vector-based 2D graphics tools, but it feels like a challenge. Those wispy trails are the same as yesterday&#39;s brush strokes, but using custom <code>setdash&#40;&#41;</code> dashing patterns.</p>
 <p><img src="/assets/images/piday/pi-cosmic-spiral-800.png" alt="image label" /></p>
-<h3 id="day_13"><a href="/pages/2019-03-13-piday/index.html#day_13">Day 13</a></h3>
+<h3 id="day_13"><a href="#day_13">Day 13</a></h3>
 <p>The idea here is to show which digit of π is the current leader, in terms of how many times that digit has appeared already. &#40;Yes, a stupid idea, I know&#33;&#41; Then I couldn&#39;t decide on how many digits to show, so it&#39;s going to be an animated GIF showing the first 1000 digits. At the 200 digit mark poor old &quot;7&quot; is struggling at the back of the field, but the glory days are ahead - after 1000 digits, it&#39;s overtaken 0, 4, and 6.</p>
 <p><img src="/assets/images/piday/200-digits-of-pi-800.png" alt="image label" /></p>
 <p>The animation turned into a video rather than a GIF, because I don&#39;t like the low resolution of GIFs today.</p>
@@ -203,16 +201,13 @@ savetrack(track, notes)</code></pre>
 <p>Happy π day&#33;</p>
 <p>&#91;2019-03-13&#93;</p>
 <p><img src="http://steampiano.net/cormullionknot.gif?piday" alt="cormullion signing off" /></p>
-<p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em>
-<div class="page-foot">
+<p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em><div class="page-foot">
   <p class="rss-subscribe">subscribe <a href="/feed.xml">via RSS</a></p>
   <div class="copyright">
     &copy; cormullion. Last modified: February 17, 2020. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a>.
   </div>
 </div>
-
-</div>
-<!-- CONTENT ENDS HERE -->
+</div><!-- CONTENT ENDS HERE -->
   </main> <!-- end of id=main -->
   <script src="/libs/vela/metisMenu.min.js"></script>
   <script src="/libs/vela/slideout.min.js"></script>
