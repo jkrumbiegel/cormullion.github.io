@@ -4,38 +4,12 @@ body
 	margin-left: 3em;
 }
 
-@font-face {
-	font-family: JuliaMono-Regular;
-	src: url("https://cormullion.github.io/assets/fonts/JuliaMono-Regular.woff2");
-}
-
-@font-face {
-	font-family: JuliaMono-Medium;
-	src: url("https://cormullion.github.io/assets/fonts/JuliaMono-Medium.woff2");
-}
-
-@font-face {
-	font-family: JuliaMono-Bold;
-	src: url("https://cormullion.github.io/assets/fonts/JuliaMono-Bold.woff2");
-}
-
-@font-face {
-	font-family: JuliaMono-ExtraBold;
-	src: url("https://cormullion.github.io/assets/fonts/JuliaMono-ExtraBold.woff2");
-}
-
-@font-face {
-	font-family: JuliaMono-Black;
-	src: url("https://cormullion.github.io/assets/fonts/JuliaMono-Black.woff2");
-}
-
 /*text-rendering: auto !important;*/
 /*text-rendering: optimizeSpeed !important;*/
 /*text-rendering: optimizeLegibility !important;*/
 
 
 pre, code, tt {
-	font-family: "JuliaMono-Regular" !important;
 	text-rendering: geometricPrecision !important;
 		/*
 		liga = standard ligatures (eg fi)
@@ -137,32 +111,32 @@ code.language-julia.hljs {
 }
 
 .hljs-keyword {
-	font-family: JuliaMono-Bold;
+	/* font-family: JuliaMono-Bold; */
 	color: #de8025;
 }
 
 .hljs-string {
-	font-family: JuliaMono-Regular;
+	/* font-family: JuliaMono-Regular; */
 	color: #f6f1cd;
 }
 
 .hljs-number {
-	font-family: JuliaMono-Regular;
+	/* font-family: JuliaMono-Regular; */
 	color: rgb(246, 204, 116);
 }
 
 .hljs-literal {
-	font-family: JuliaMono-Regular;
+	/* font-family: JuliaMono-Regular; */
 	color: #eaf9ba;
 }
 
 .hljs-meta {
-	font-family: JuliaMono-Regular;
+	/* font-family: JuliaMono-Regular; */
 	color: #fef;
 }
 
 .hljs-variable {
-	font-family: JuliaMono-Regular;
+	/* font-family: JuliaMono-Regular; */
 	color: #ddd;
 }
 
