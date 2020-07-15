@@ -6,7 +6,9 @@
 @font-face {
 	font-family: JuliaMono-Regular;
 	src: url("https://github.com/cormullion/juliamono/blob/master/webfonts/JuliaMono-Regular.woff2");
+	src: url("https://juliamono.netlify.app/assets/fonts/JuliaMono-Regular.woff2");
 }
+
 @font-face {
 	font-family: JuliaMono-Medium;
 	src: url("https://github.com/cormullion/juliamono/blob/master/webfonts/JuliaMono-Medium.woff2");
