@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+   <link rel="stylesheet" href="/libs/highlight/github.min.css">
+   
+  <link rel="stylesheet" href="/css/franklin.css">
+  <link rel="stylesheet" href="/css/basic.css">
+  <link rel="stylesheet" href="/css/cormullion.css">
+  <link rel="icon" href="/assets/favicon.png">
+   <title>View</title>  
+</head>
+<body>
+  <header>
+<div class="blog-name"><a href="/">cormullion’s blog</a></div>
+<nav>
+  <ul>
+    <li><a href="/">Home</a></li>
+  </ul>
+  <img src="/assets/hamburger.svg" id="menu-icon">
+</nav>
+</header>
+
+
+<!-- Content appended here -->
+<div class="franklin-content"><h1 id="view"><a href="#view">View</a></h1>
+<p>MIT are running a <a href="https://mitmath.github.io/18S191/Fall20/">new introductory course on Computational Thinking</a>:</p>
+<blockquote>
+<p>We use the Julia programming language to approach real-world problems in varied areas applying data analysis and computational and mathematical modeling. In this class you will learn computer science, software, algorithms, applications, and mathematics as an integrated whole.1</p>
+</blockquote>
+<p>Teachers include Alan Edelman &#40;co-creator of Julia&#41;, well-known Julia educator David Sanders, Grant Sanderson, and James Schloss.</p>
+<p>And Grant Sanderson turns out to be the voice behind the famous <a href="https://www.youtube.com/c/3blue1brown">3blue1brown</a> YouTube channel, with over three million subscribers. As you might imagine, I’m very keen on the visual approach he uses. I don’t always understand the maths, but the graphics are cool, and his relaxed and friendly tone makes learning as easy as it could be.</p>
+<p>While browsing his <a href="https://www.3blue1brown.com/">web site</a> I was intrigued by his logo, and the story behind it.</p>
+<p>Out of interest, and as a sort of “Welcome to Julia&#33;”, I thought I’d have a go at interpreting his logo in Julia. It’s a great design. After sampling the colors, the code was straightforward.</p>
+<pre><code class="language-julia">using Luxor, Colors
+
+function drawstars(colors)
+    sethue(colors[1])
+    circle(O, 200, :fill)
+    sethue("white")
+    radii = [180, 200, 150]
+    rotations = [π/28, 0, 0]
+    for (n, r) in enumerate(radii)
+        sethue(colors[n + 1])
+        star(O, r, 28, 0.7, rotations[n], :fill)
+    end
+    sethue("black")
+    star(O, 120, 28, 0.7, 0, :fill)
+end
+
+blues =  [
+    RGB(0.455,0.753,0.89), # main
+    RGB(0.322,0.557,0.639),
+    RGB(0.243,0.396,0.463),
+    RGB(0.133,0.298,0.357)]
+browns = [
+    RGB(0.549,0.384,0.224), # main
+    RGB(0.459,0.298,0.141),
+    RGB(0.376,0.22,0.075),
+    RGB(0.259,0.129,0.043)]
+
+@draw begin
+    background("black")
+
+    sector(O, 100, 200, π, 3π/2)
+    clip()
+    drawstars(browns)
+    clipreset()
+
+    sector(O, 100, 200, 3π/2, π)
+    clip()
+    drawstars(blues)
+    clipreset()
+end</code></pre>
+<p>giving</p>
+<p><img src="/assets/images/view/3b1b.png" alt="3b1b logo" /></p>
+<p>which is a reasonable likeness for a first attempt.</p>
+<h2 id="new_horizons"><a href="#new_horizons">New horizons</a></h2>
+<p>The MIT course is using <a href="https://github.com/fonsp/Pluto.jl">Pluto.jl</a> for exploring ideas. I like Pluto.jl a lot as well, because I share the developers’ belief that simplicity is worth striving for:</p>
+<blockquote>
+<p>We believe that scientific computing can be a lot simpler and more accessible.</p>
+</blockquote>
+<p>With Pluto.jl you can quickly explore the parameter space even of simple little logos like this. Here for example is a way to investigate different numbers of points for the stars:</p>
+<p><img src="/assets/images/view/plutoeye.gif" alt="pluto parameter" /></p>
+<p>&#91;2020-09-05&#93;</p>
+<div class="smallimage"><img src="http://steampiano.net/cormullionknot.gif?view" alt="cormullion signing off" /></div>
+<div class="page-foot">
+  <div class="copyright">
+    &copy; cormullion. Last modified: September 05, 2020. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a>.
+  </div>
+</div>
+</div><!-- CONTENT ENDS HERE -->
+    
+    
+        <script src="/libs/highlight/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();hljs.configure({tabReplace: '    '});</script>
+
+    
+  </body>
+</html>

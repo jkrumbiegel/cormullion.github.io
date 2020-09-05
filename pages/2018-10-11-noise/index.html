@@ -1,63 +1,33 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" href="/assets/infra/favicon.png">
-
-     <!-- Un-minified script so that can play a bit -->
-<link rel="stylesheet" href="/libs/katex/katex.min.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+   <link rel="stylesheet" href="/libs/katex/katex.min.css">
+     
+   <link rel="stylesheet" href="/libs/highlight/github.min.css">
    
-     <!-- Syntax highlighting via Prism, note: restricted langs -->
-<link rel="stylesheet" href="/libs/highlight/github.min.css">
-   
-
-    <script src="/libs/vela/jquery.min.js"></script>
-
-    <link href="/css/vela.css" rel="stylesheet">
-    <link href="/css/franklin.css" rel="stylesheet">
-    <link href="/css/cormullionblog.css" rel="stylesheet">
-
-     <title>Random noise</title>  
+  <link rel="stylesheet" href="/css/franklin.css">
+  <link rel="stylesheet" href="/css/basic.css">
+  <link rel="stylesheet" href="/css/cormullion.css">
+  <link rel="icon" href="/assets/favicon.png">
+   <title>Random noise</title>  
 </head>
 <body>
-  <div class="main-nav" id="menu">
-    <div class="flex-container">
-      <span class="sidebar-brand">
-        <h3 style='font-size: 25px'>cormullion’s blog</h3>
-      </span>
-    </div> <!-- class="flex-container" -->
-    <nav class="sidebar-nav">
-       <ul class="metismenu"  id="metismenu" >
-        <li><a href="/">Home</a></li>
-        <li><a href="/pages/2020-08-13-world/">World</a></li>
-        <li><a href="/pages/2020-02-13-mauve/">Mauve</a></li>
-        <li><a href="/pages/2019-06-23-slackmojif/">Slackmojif</a></li>
-        <li><a href="/pages/2019-04-03-pentachoron/">Pentachoron</a></li>
-        <li><a href="/pages/2019-03-13-piday/">π day</a></li>
-        <li><a href="/pages/2018-11-29-automata/">Automata</a></li>
-        <li><a href="/pages/2018-10-11-noise/">Noise</a></li>
-        <li><a href="/pages/2018-08-10-guilloches/">Guilloches</a></li>
-        <li><a href="/pages/2018-08-02-infographic/">Infographic</a></li>
-        <li><a href="/pages/2018-06-20-bezier/">Bézier Moi</a></li>
-        <li><a href="/pages/2018-05-05-string/">String</a></li>
-        <li><a href="/pages/2018-03-14-some-piography/">Some π-ography</a></li>
-        <li><a href="/pages/2015-06-02-pluto/">Pluto</a></li>
-      </ul>
-    </nav>
-  </div> <!-- main nav menu -->
-
-  <main id="panel">
-    <div class="toggle-button hamburger hamburger--spin">
-      <div class="hamburger-box">
-        <div class="hamburger-inner"></div>
-      </div>
-    </div>
-    <h1 class="page title">Random noise</h1>
+  <header>
+<div class="blog-name"><a href="/">cormullion’s blog</a></div>
+<nav>
+  <ul>
+    <li><a href="/">Home</a></li>
+  </ul>
+  <img src="/assets/hamburger.svg" id="menu-icon">
+</nav>
+</header>
 
 
 <!-- Content appended here -->
 <div class="franklin-content"><p><img src="/assets/images/noise/ice-800.png" alt="noise" /></p>
+<h1 id="noise"><a href="#noise">Noise</a></h1>
 <blockquote>
 <p>This is another post in the ongoing series in which I try to learn 2D vector graphics using Julia. It doesn&#39;t contain any revelations or new material, and you should visit the following sites if you&#39;re looking for a good introduction to the subject of noise in graphics:</p>
 </blockquote>
@@ -194,7 +164,7 @@ end 800 400 "images/noise/pebbles.png"</code></pre>
 <h3 id="detail_and_persistence"><a href="#detail_and_persistence">Detail and persistence</a></h3>
 <p>The <code>noise&#40;&#41;</code> function has two optional keyword arguments that let you tweak the knobs of the noise generator.</p>
 <p>The first is <code>detail</code>, an integer. Increasing it from the default value of 1 upwards will add finer detail to the basic noise. The second is <code>persistence</code>, a floating-point value between 0 and 1 &#40;or more&#41;.</p>
-<code>detail</code> is graphed here with values from 1 to 12. As the level increases, you can see that the same overall noise contours are gradually modulated with finer variations.</p>
+<p><code>detail</code> is graphed here with values from 1 to 12. As the level increases, you can see that the same overall noise contours are gradually modulated with finer variations.</p>
 <pre><code class="language-julia">function detailgraph()
     @svg begin
         margin=30
@@ -551,70 +521,25 @@ landscape(ColorSchemes.leonardo, "images/noise/landscape-leonardo")</code></pre>
 <p><img src="/assets/images/noise/landscapes-starrynight.png" alt="image label" /></p>
 <p>I generated a few hundred of these &#40;there are over 300 colorschemes that can be selected at random&#41; and, scrolling through them quickly, I found that sometimes the results were good, sometimes they weren&#39;t. Randomness—and noise—can be hard to predict.</p>
 <p>&#91;2018-10-16&#93;</p>
-<p><img src="http://steampiano.net/cormullionknot.gif?noise" alt="cormullion signing off" /></p>
+<div class="smallimage"><img src="http://steampiano.net/cormullionknot.gif?noise" alt="cormullion signing off" /></div>
 <hr />
 <p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p>
 <div class="page-foot">
-  <p class="rss-subscribe">subscribe <a href="/feed.xml">via RSS</a></p>
   <div class="copyright">
-    &copy; cormullion. Last modified: February 23, 2020. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a>.
+    &copy; cormullion. Last modified: August 17, 2020. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a>.
   </div>
 </div>
 </div><!-- CONTENT ENDS HERE -->
-  </main> <!-- end of id=main -->
-  <script src="/libs/vela/metisMenu.min.js"></script>
-  <script src="/libs/vela/slideout.min.js"></script>
-  <script>
-    //initialize metismenu
-        $("#metismenu").metisMenu();
-
-        //initialize slideout
-        var slideout = new Slideout({
-            'panel': document.getElementById('panel'),
-            'menu': document.getElementById('menu'),
-            'padding': 300,
-            'tolerance': 70
-        });
-
-        //for closing menu on page click
-        function close(eve) {
-            eve.preventDefault();
-            slideout.close();
-        }
-
-        //make the hamburger animation correct when using touch events
-        slideout
-            .on('beforeopen', function() {
-                this.panel.classList.add('panel-open');
-                $(".hamburger").toggleClass("is-active");
-                $(".header-hamburger").toggleClass("fixed-open");
-            })
-            .on('open', function() {
-                this.panel.addEventListener('click', close);
-            })
-            .on('beforeclose', function() {
-                this.panel.classList.remove('panel-open');
-                this.panel.removeEventListener('click', close);
-                $(".hamburger").removeClass("is-active");
-                $(".header-hamburger").removeClass("fixed-open");
-            });
-
-        // Toggle button
-        $('.toggle-button').on('click', function() {
-            slideout.toggle();
-        });
-  </script>
-  
-    <script src="/libs/katex/katex.min.js"></script>
+    
+        <script src="/libs/katex/katex.min.js"></script>
 <script src="/libs/katex/auto-render.min.js"></script>
 <script>renderMathInElement(document.body)</script>
 
-  
-  
-    <script src="/libs/highlight/highlight.pack.js"></script>
+    
+    
+        <script src="/libs/highlight/highlight.pack.js"></script>
 <script>hljs.initHighlightingOnLoad();hljs.configure({tabReplace: '    '});</script>
 
-  
-
-</body>
+    
+  </body>
 </html>
