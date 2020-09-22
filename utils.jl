@@ -1,3 +1,5 @@
+using FranklinUtils, Franklin
+
 """
 make a list of blog posts for inclusion on home page
 """
@@ -34,29 +36,35 @@ end
 using Luxor, Dates
 
 """
-usage {{ drawunicodechar 0x002A }}
+usage \\drawunicodechar{0x2a, 0x2020, 0x2021, 0xa7, 0xb6, 0x2225, 0x2042}
 
 draw the unicode character from its numeric code
 
-I don't yet understand paths in franklin properly, so I've
-hard coded them...
-"""
-function hfun_drawunicodechar(ca)
-    @info pwd()
-    filename = "unicodechar-$(join(ca, "")).svg"
-    pathname = "_assets/images/asterisk/" * filename
+_assets/images/POSTNAME
 
-    Drawing(600, 130, pathname)
+"""
+function lx_drawunicodechar(lxc, _)
+    args, kwargs = lxargs(lxc)
+
+# args is Any[0x2a, 0x2020, 0x2021, 0xa7, 0xb6, 0x2225, 0x2042]
+
+    s =  join(string.(args, base=16), "_")
+
+    dir = lowercase(locvar("title"))
+    filename = "unicodechar-$(s).svg"
+    pathname = "_assets/images/$(dir)/" * filename
+
+    Drawing(600, 120, pathname)
     origin()
     fontface("JuliaMono-Regular")
 
-    t = Tiler(600, 130, 1, length(ca))
+    t = Tiler(600, 120, 1, length(args))
     fontsize(t.tileheight)
     for (pos, n) in t
-        s = string(Char(parse(Int, ca[n])))
+        s = string(Char(args[n]))
 
-        if 0x300 < parse(Int, ca[n]) < 0x3ff ||
-           0x20D0 < parse(Int, ca[n]) < 0x20FF
+        if 0x300 < args[n] < 0x3ff ||
+           0x20D0 < args[n] < 0x20FF
             text(string(" ", s), pos, halign=:left, valign=:middle)
         else
             text(s, pos, halign=:center, valign=:middle)
@@ -64,35 +72,44 @@ function hfun_drawunicodechar(ca)
         @layer begin
             fontsize(10)
             sethue("skyblue")
-            unicp = parse(Int, ca[n])
+            unicp = args[n]
             hs = string("\\u", lpad(string(unicp, base=16), 4 , "0"))
             text(hs, Point(pos.x, 10 + t.tileheight/2), halign=:center)
         end
     end
     finish()
+
     # might need to work round svg DOM bugs in browsers?
     tidiedfile = tidysvg(pathname)
     tidiedfile = replace(tidiedfile, "_assets" => "/assets")
-    io = IOBuffer()
-    write(io, "<img src=\"$(tidiedfile)\" >")
-    return String(take!(io))
+
+    return "![]($(tidiedfile))"
 end
 
-function hfun_drawunicodestring(s)
-        @info pwd()
-    str = replace(join(s), "*" => "*")
+"""
+
+usage \\drawunicodestring{"x ∗+= y"}
+
+draws all the Unicode characters
+
+"""
+function lx_drawunicodestring(lxc, _)
+    args, kwargs = lxargs(lxc)
+
+    str = replace(join(args), "*" => "*")
     str = replace(str, "#" => "#")
     str = replace(str, "|" => "bar")
-    filename = "unicode-string-$(join(str, "")).svg"
-    pathname = "_assets/images/asterisk/" * filename
 
-    Drawing(600, 130, pathname)
+    dir = lowercase(locvar("title"))
+    filename = "unicodechar-$(str).svg"
+    pathname = "_assets/images/$(dir)/" * filename
+
+    Drawing(600, 120, pathname)
     origin()
     fontface("JuliaMono-Regular")
 
     fsize = 200
     fontsize(fsize)
-    str = join(s, " ")
 
     te = textextents(str)
     # width too big?
@@ -105,12 +122,11 @@ function hfun_drawunicodestring(s)
     text(str, O, halign=:center, valign=:middle)
     finish()
 
+    # might need to work round svg DOM bugs in browsers?
     tidiedfile = tidysvg(pathname)
     tidiedfile = replace(tidiedfile, "_assets" => "/assets")
-
-    io = IOBuffer()
-    write(io, "<img src=\"$(tidiedfile)\" >")
-    return String(take!(io))
+    rm(pathname)
+    return "![]($(tidiedfile))"
 end
 
 """
