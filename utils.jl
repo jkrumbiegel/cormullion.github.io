@@ -1,4 +1,4 @@
-using FranklinUtils, Franklin
+using FranklinUtils, Franklin, Markdown
 
 """
 make a list of blog posts for inclusion on home page
@@ -46,9 +46,10 @@ _assets/images/POSTNAME
 function lx_drawunicodechar(lxc, _)
     args, kwargs = lxargs(lxc)
 
-# args is Any[0x2a, 0x2020, 0x2021, 0xa7, 0xb6, 0x2225, 0x2042]
+    # args is Any[0x2a, 0x2020, 0x2021, 0xa7, 0xb6, 0x2225, 0x2042]
 
     s =  join(string.(args, base=16), "_")
+    s =  replace(s, " " => "")
 
     dir = lowercase(locvar("title"))
     filename = "unicodechar-$(s).svg"
@@ -96,29 +97,39 @@ draws all the Unicode characters
 function lx_drawunicodestring(lxc, _)
     args, kwargs = lxargs(lxc)
 
-    str = replace(join(args), "*" => "*")
-    str = replace(str, "#" => "#")
-    str = replace(str, "|" => "bar")
+    # not sure why this needs escaping
+    str = join(args)
 
     dir = lowercase(locvar("title"))
-    filename = "unicodechar-$(str).svg"
+    stamp = replace(string(Libc.time()), "." => "")
+    filename = "unicodestring-$(stamp).svg"
     pathname = "_assets/images/$(dir)/" * filename
 
-    Drawing(600, 120, pathname)
-    origin()
+    str = replace(str, "hash" => "#")
     fontface("JuliaMono-Regular")
-
     fsize = 200
-    fontsize(fsize)
 
-    te = textextents(str)
-    # width too big?
-    while te[3] > 400
-        fsize -= 5
+    #get fontsize
+    @draw begin
         fontsize(fsize)
         te = textextents(str)
+        # width too big?
+        while te[3] > 600
+            fsize -= 5
+            fontsize(fsize)
+            te = textextents(str)
+        end
+        while te[4] > 100
+            fsize -= 5
+            fontsize(fsize)
+            te = textextents(str)
+        end
     end
 
+    Drawing(600, 200, pathname)
+    fontface("JuliaMono-Regular")
+    origin()
+    fontsize(fsize)
     text(str, O, halign=:center, valign=:middle)
     finish()
 
@@ -126,7 +137,7 @@ function lx_drawunicodestring(lxc, _)
     tidiedfile = tidysvg(pathname)
     tidiedfile = replace(tidiedfile, "_assets" => "/assets")
     rm(pathname)
-    return "![]($(tidiedfile))"
+    return "![image]($(tidiedfile))"
 end
 
 """

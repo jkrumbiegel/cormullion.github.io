@@ -42,40 +42,40 @@
 <p>It&#39;s possible to retrieve added and deleted line counts for each commit. This might give some indication of the importance of the associated work. But then, sometimes it takes a long time to find and fix a misfeature that&#39;s caused by a small amount of erroneous code. And is it better to remove lines of code or documentation, or add them? Rewriting and refactoring doesn&#39;t automatically lead to more or less code.</p>
 <p>So I&#39;d consider the frequency and quantity of commits a indication of activity but not too much more. In other words, don&#39;t draw conclusions in ink, but sketch a few thoughts with a soft pencil...</p>
 <p>You can obtain the git log of a repository at the Julia REPL using the nifty <code>pipeline&#40;&#41;</code> function  &#40;<a href="https://docs.julialang.org/en/latest/base/base/#Base.pipeline-Tuple&#123;Any,Any,Any,Vararg&#123;Any,N&#125; where N&#125;">here</a>&#39;s the documentation&#41;. This lets you chain shell commands together without having to worry about escaping half the characters in the ASCII table:</p>
-<pre><code class="language-julia">repo = "Julia"
-cd("/Users/me/.julia/dev/$(repo)")
-run(pipeline(`git log
-    --after "2014-02-01"
-    --before "2016-02-02"`,
-    stdout="/tmp/$(repo)-gitlog.csv"))</code></pre>
+<pre><code class="language-julia">repo &#61; &quot;Julia&quot;
+cd&#40;&quot;/Users/me/.julia/dev/&#36;&#40;repo&#41;&quot;&#41;
+run&#40;pipeline&#40;&#96;git log
+    --after &quot;2014-02-01&quot;
+    --before &quot;2016-02-02&quot;&#96;,
+    stdout&#61;&quot;/tmp/&#36;&#40;repo&#41;-gitlog.csv&quot;&#41;&#41;</code></pre>
 <p>There are lots of options to <code>git log</code>, useful for obtaining things like dates in the required format.</p>
 <p>Once loaded into a DataFrame, I used functions from the <a href="https://github.com/JuliaTime/TimeZones.jl">TimeZones.jl</a> package to retrieve the time zone data. This package provides a new type, the <code>ZonedDateTime</code>. So if you have a list of dates as strings:</p>
-<pre><code class="language-julia">dates = ["2014-06-21 20:27:12 -0400",
-         "2014-06-22 08:42:34 +0530",
-         "2014-06-21 18:55:37 -0400",
-         "2014-06-21 18:17:57 -0400",
-         "2014-06-21 18:08:18 -0400",
-         "2014-06-21 17:50:48 -0400",
-         "2014-06-21 16:54:24 -0400",
-         "2014-06-21 16:28:08 -0400",
-         "2014-06-21 15:08:14 -0500",
-         "2014-06-21 14:58:17 -0400",
-         "2014-06-21 14:44:11 -0400",
-         "2014-06-21 14:41:45 -0400",
-         "2014-06-21 14:41:37 -0400",
-         "2014-06-18 21:34:03 -0400",
-         "2014-06-21 13:00:22 -0500",
-         "2014-06-21 10:48:42 -0700",
-         "2014-06-21 10:45:51 -0500",
-         "2014-06-20 23:23:06 -0400"]</code></pre>
+<pre><code class="language-julia">dates &#61; &#91;&quot;2014-06-21 20:27:12 -0400&quot;,
+         &quot;2014-06-22 08:42:34 &#43;0530&quot;,
+         &quot;2014-06-21 18:55:37 -0400&quot;,
+         &quot;2014-06-21 18:17:57 -0400&quot;,
+         &quot;2014-06-21 18:08:18 -0400&quot;,
+         &quot;2014-06-21 17:50:48 -0400&quot;,
+         &quot;2014-06-21 16:54:24 -0400&quot;,
+         &quot;2014-06-21 16:28:08 -0400&quot;,
+         &quot;2014-06-21 15:08:14 -0500&quot;,
+         &quot;2014-06-21 14:58:17 -0400&quot;,
+         &quot;2014-06-21 14:44:11 -0400&quot;,
+         &quot;2014-06-21 14:41:45 -0400&quot;,
+         &quot;2014-06-21 14:41:37 -0400&quot;,
+         &quot;2014-06-18 21:34:03 -0400&quot;,
+         &quot;2014-06-21 13:00:22 -0500&quot;,
+         &quot;2014-06-21 10:48:42 -0700&quot;,
+         &quot;2014-06-21 10:45:51 -0500&quot;,
+         &quot;2014-06-20 23:23:06 -0400&quot;&#93;</code></pre>
 <p>you can convert them into <code>ZonedDateTime</code>s with:</p>
-<pre><code class="language-julia">ZonedDateTime.(dates)</code></pre>
+<pre><code class="language-julia">ZonedDateTime.&#40;dates&#41;</code></pre>
 <p>or extract just the zones with:</p>
-<pre><code class="language-julia">getfield.(ZonedDateTime.(dates, "yyyy-mm-dd H:M:S z"), :zone)</code></pre>
+<pre><code class="language-julia">getfield.&#40;ZonedDateTime.&#40;dates, &quot;yyyy-mm-dd H:M:S z&quot;&#41;, :zone&#41;</code></pre>
 <p>giving you:</p>
-<pre><code class="language-julia">18-element Array{TimeZones.FixedTimeZone,1}:
+<pre><code class="language-julia">18-element Array&#123;TimeZones.FixedTimeZone,1&#125;:
  UTC-04:00
- UTC+05:30
+ UTC&#43;05:30
  UTC-04:00
  UTC-04:00
  UTC-04:00
@@ -132,14 +132,14 @@ run(pipeline(`git log
 <p>I was unsure about including the names of individuals here because, obviously, there&#39;s just not enough room to include everyone&#39;s name; it&#39;s good to include everyone, and bad to miss people out. At least everyone has a box of their own, even if it&#39;s too small to be labelled.</p>
 <p>The colors are not significant. It would mostly work without different colors at all, but I like pretty things, and the contrast between adjacent boxes is useful. With nearly 900 boxes to be drawn, some people will most likely have to share the same color, because &#39;for aesthetic reasons&#39; all colors are chosen from a single colorscheme provided by <a href="https://github.com/JuliaGraphics/ColorSchemes.jl">ColorSchemes.jl</a>. The color of the box is found by hashing the author&#39;s name to get a decimal number to place it somewhere on the &#91;0, 1&#93; color scale.</p>
 <p>Sidenote: In preparing the data, I needed a function to find the duplicates in an array. Surprisingly Julia doesn&#39;t have a built-in function to do this, but the awesome Matt Bauman wrote this elegantly simple solution in about 15 seconds after I asked on the Julia Slack:</p>
-<pre><code class="language-julia">function repeated_elements(A::AbstractVector)
-    seen = Set{eltype(A)}()
-    out = eltype(A)[]
+<pre><code class="language-julia">function repeated_elements&#40;A::AbstractVector&#41;
+    seen &#61; Set&#123;eltype&#40;A&#41;&#125;&#40;&#41;
+    out &#61; eltype&#40;A&#41;&#91;&#93;
     for x in A
         if x ∉ seen
-            push!(seen, x)
+            push&#33;&#40;seen, x&#41;
         else
-            push!(out, x)
+            push&#33;&#40;out, x&#41;
         end
     end
     out
@@ -157,7 +157,7 @@ end</code></pre>
 <div class="smallimage"><img src="http://steampiano.net/cormullionknot.gif?infographic" alt="cormullion signing off" /></div>
 <div class="page-foot">
   <div class="copyright">
-    &copy; cormullion. Last modified: August 17, 2020. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a>.
+    &copy; cormullion. Last modified: October 09, 2020. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a>.
   </div>
 </div>
 </div><!-- CONTENT ENDS HERE -->

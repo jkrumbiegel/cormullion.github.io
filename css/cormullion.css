@@ -1,6 +1,6 @@
 @font-face {
 	font-family: JuliaMono-Regular;
-	src: url("https://cdn.jsdelivr.net/gh/cormullion/juliamono/webfonts/JuliaMono-Regular.woff2");
+	src: url("https://cdn.jsdelivr.net/gh/cormullion/juliamono@latest/webfonts/JuliaMono-Regular.woff2");
 }
 
 body {
@@ -32,9 +32,9 @@ code.language-julia.hljs {
 .marginnote {
 	 float: right;
      clear: right;
-	 margin-right: -40%;
-     width: 30%;
-     margin-top: -3rem;
+	 margin-right: -30%;
+     width: 20%;
+     margin-top: -4rem;
      margin-bottom: 0;
      font-size: .8rem;
      line-height: 1.3;

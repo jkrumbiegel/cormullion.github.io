@@ -62,9 +62,9 @@
 <p>These can be plotted with a long-ish one-liner. I&#39;ve used Luxor&#39;s <code>prettypoly&#40;&#41;</code> function rather than <code>poly&#40;&#41;</code> here, to see the individual points. &#40;It applies a function at every vertex, using the <code>circle&#40;&#41;</code> function by default.&#41;</p>
 <pre><code class="language-julia">using Luxor
 @svg begin
-    prettypoly([Point(130sin(t) + 90sin(2t),
-                      130cos(t) - 90cos(2t))
-        for t in 0:0.05:2pi], :stroke, close=true)
+    prettypoly&#40;&#91;Point&#40;130sin&#40;t&#41; &#43; 90sin&#40;2t&#41;,
+                      130cos&#40;t&#41; - 90cos&#40;2t&#41;&#41;
+        for t in 0:0.05:2pi&#93;, :stroke, close&#61;true&#41;
 end</code></pre>
 <p><img src="/assets/images/string/one-liner.png" alt="simple one liner" /></p>
 <p>The same comprehension can be inserted into an interactive Jupyter notebook cell. This allows me to explore some of the basic geometrical possibilities.</p>
@@ -79,18 +79,18 @@ end</code></pre>
 <p>That right-hand end should be heading above the loop, the left-hand end below...</p>
 <pre><code class="language-julia">using Luxor
 @svg begin
-    background("silver")
-    translate(0, 25)
-    pts = [Point(100sin(t) + 150sin(2t),
-             100cos(t) - 150cos(2t))
-             for t in pi/6:0.0075:2pi - pi/6]
-    setline(0.75)
-    setopacity(0.8)
+    background&#40;&quot;silver&quot;&#41;
+    translate&#40;0, 25&#41;
+    pts &#61; &#91;Point&#40;100sin&#40;t&#41; &#43; 150sin&#40;2t&#41;,
+             100cos&#40;t&#41; - 150cos&#40;2t&#41;&#41;
+             for t in pi/6:0.0075:2pi - pi/6&#93;
+    setline&#40;0.75&#41;
+    setopacity&#40;0.8&#41;
     for t in pts
-        sethue("black")
-        circle(t, 50, :stroke)
-        sethue("ivory")
-        circle(t, 50, :fill)
+        sethue&#40;&quot;black&quot;&#41;
+        circle&#40;t, 50, :stroke&#41;
+        sethue&#40;&quot;ivory&quot;&#41;
+        circle&#40;t, 50, :fill&#41;
     end
 end</code></pre>
 <p>I tried to devise some algorithms to draw overlapping and underlapping paths automatically. For example, as you start to draw a path, remember the location of each line segment, then, when you have to go underneath an earlier segment, make a note of it, then later go back and erase it and redraw it.... Well, I didn’t manage to complete any of these thought algorithms, but I&#39;d love to know if anyone else has.</p>
@@ -105,13 +105,13 @@ end</code></pre>
 \end{array}\]
 <p>A quick modification uses the X and Y coordinates as before, and the Z coordinate determines the radius of the dots:</p>
 <pre><code class="language-julia">@svg begin
-    pts = [(130sin(t) + 90sin(2t),
-            130cos(t) - 90cos(2t),
-            -90sin(2t))
-           for t in 0:0.025:2pi]
+    pts &#61; &#91;&#40;130sin&#40;t&#41; &#43; 90sin&#40;2t&#41;,
+            130cos&#40;t&#41; - 90cos&#40;2t&#41;,
+            -90sin&#40;2t&#41;&#41;
+           for t in 0:0.025:2pi&#93;
 
     for t in pts
-        circle(Point(t[1], t[2]), abs(t[3]/25), :fill)
+        circle&#40;Point&#40;t&#91;1&#93;, t&#91;2&#93;&#41;, abs&#40;t&#91;3&#93;/25&#41;, :fill&#41;
     end
 end</code></pre>
 <p><img src="/assets/images/string/basic-three-d.png" alt="basic 3D image" /></p>
@@ -143,21 +143,21 @@ end</code></pre>
    perspective::Float64
 end</code></pre>
 <p>And I needed a function to convert a <code>Point3D</code> to a <code>Point</code> via a <code>Projection</code>, using some arithmetic:</p>
-<pre><code class="language-julia">function project(P::Point3D, proj::Projection)
-   r = proj.W.x * P.x + proj.W.y * P.y + proj.W.z * P.z - proj.we
-   if r < eps()
-       result = nothing # behind you!
+<pre><code class="language-julia">function project&#40;P::Point3D, proj::Projection&#41;
+   r &#61; proj.W.x * P.x &#43; proj.W.y * P.y &#43; proj.W.z * P.z - proj.we
+   if r &lt; eps&#40;&#41;
+       result &#61; nothing # behind you&#33;
    else
-       if proj.perspective == 1.0
-           depth = 1 # parallel projection
+       if proj.perspective &#61;&#61; 1.0
+           depth &#61; 1 # parallel projection
        else
-           depth = proj.perspective * (1/r)
+           depth &#61; proj.perspective * &#40;1/r&#41;
        end
-       uq = depth * (proj.U.x * P.x + proj.U.y * P.y +
-         proj.U.z * P.z - proj.ue)
-       vq = depth * (proj.V.x * P.x + proj.V.y * P.y +
-         proj.V.z * P.z - proj.ve)
-       result = Point(uq, -vq) # Y is down
+       uq &#61; depth * &#40;proj.U.x * P.x &#43; proj.U.y * P.y &#43;
+         proj.U.z * P.z - proj.ue&#41;
+       vq &#61; depth * &#40;proj.V.x * P.x &#43; proj.V.y * P.y &#43;
+         proj.V.z * P.z - proj.ve&#41;
+       result &#61; Point&#40;uq, -vq&#41; # Y is down
    end
    return result
 end</code></pre>
@@ -178,11 +178,11 @@ end</code></pre>
 <h3 id="sorted"><a href="#sorted">Sorted</a></h3>
 <p>Better still, let&#39;s generate all the points first, in <a href="http://grammarist.com/usage/one-fell-swoop/">one fell swoop</a>, then sort them by Z coordinate.</p>
 <pre><code class="language-julia">...
-points = Point3D[]
+points &#61; Point3D&#91;&#93;
 for t in 0:0.005:2pi
-    push!(points, pointonstring(t, 110, 180, 5, xy=2, z = 3))
+    push&#33;&#40;points, pointonstring&#40;t, 110, 180, 5, xy&#61;2, z &#61; 3&#41;&#41;
 end
-sort!(points, by = (a) -> a.z)
+sort&#33;&#40;points, by &#61; &#40;a&#41; -&gt; a.z&#41;
 ...</code></pre>
 <p><img src="/assets/images/string/3d-ribbons.png" alt="3d ribbon" /></p>
 <p>An animation shows how the points furthest from the eye are drawn first, then the nearer ones hide them in turn:</p>
@@ -225,17 +225,17 @@ sort!(points, by = (a) -> a.z)
 <p>Exploring asymmetry and randomness can be a useful technique because it immediately relaxes a constraint that, up to now, has been limiting the possibilities. If nothing else, you can get some ideas for further investigation.</p>
 <p>These are quite jaunty, if a bit formulaic:</p>
 <p><img src="/assets/images/string/vary-size-two.png" alt="vary size two" /></p>
-<pre><code class="language-julia">cs = juliacolorscheme
-pts = Point3D[]
+<pre><code class="language-julia">cs &#61; juliacolorscheme
+pts &#61; Point3D&#91;&#93;
 for t in 0:0.005:2pi
-    push!(pts, pointonstring(t, 50, 90, 2.5, xy=2, z = 3))
+    push&#33;&#40;pts, pointonstring&#40;t, 50, 90, 2.5, xy&#61;2, z &#61; 3&#41;&#41;
 end
-sort!(pts, by = (a) -> a.z)
-zmin, zmax = extrema(getfield.(pts, :z))
-for (n, pt) in enumerate(pts)
-    sethue(get(cs, rescale(n, 0, length(pts), 0, 1)))
-    d = rescale(pt.z, zmin, zmax, 0, 20)
-    circle(project(pt, projection), max(3.0, d), :fill)
+sort&#33;&#40;pts, by &#61; &#40;a&#41; -&gt; a.z&#41;
+zmin, zmax &#61; extrema&#40;getfield.&#40;pts, :z&#41;&#41;
+for &#40;n, pt&#41; in enumerate&#40;pts&#41;
+    sethue&#40;get&#40;cs, rescale&#40;n, 0, length&#40;pts&#41;, 0, 1&#41;&#41;&#41;
+    d &#61; rescale&#40;pt.z, zmin, zmax, 0, 20&#41;
+    circle&#40;project&#40;pt, projection&#41;, max&#40;3.0, d&#41;, :fill&#41;
 end</code></pre>
 <p>Here it is when depth sorted and animated:</p>
 <p><img src="/assets/images/string/paintingmovie.gif" alt="paintingmovie" /></p>
@@ -249,22 +249,22 @@ end</code></pre>
 <p>Gradients and colour blends aren&#39;t always ideal solutions; they&#39;re either <a href="https://www.ceros.com/originals/gradient-making-comeback/">coming into</a> or <a href="https://www.nngroup.com/articles/flat-design/">going out of</a> fashion. The quality can depend on the final output method, of course, such as when printed or when reproduced. But for a simple logo on a GitHub web page, the gradients probably aren&#39;t going to be a problem.</p>
 <p>This version doesn&#39;t have the depth-sorting, mainly because it didn&#39;t make much difference to the finished image. The top-level code that made it looks like this &#40;there are some other utility functions being called here, such as <code>project&#40;&#41;</code> and <code>newprojection&#40;&#41;</code>&#41;:</p>
 <pre><code class="language-julia">@svg begin
-    squircle(O, 125, 125, :clip, rt=0.15)
-    sethue("azure")
-    squircle(O, 125, 125, :fillpreserve, rt=0.15)
-    sethue("black")
-    strokepath()
-    eyepoint    = Point3D(5, 5, 1000)
-    centerpoint = Point3D(0, 0, 0)
-    uppoint     = Point3D(0, 0, 1)
-    projection  = newprojection(eyepoint, centerpoint, uppoint, 750)
-    translate(-10, 15)
-    cs = vcat(juliacolorscheme, reverse(juliacolorscheme))
+    squircle&#40;O, 125, 125, :clip, rt&#61;0.15&#41;
+    sethue&#40;&quot;azure&quot;&#41;
+    squircle&#40;O, 125, 125, :fillpreserve, rt&#61;0.15&#41;
+    sethue&#40;&quot;black&quot;&#41;
+    strokepath&#40;&#41;
+    eyepoint    &#61; Point3D&#40;5, 5, 1000&#41;
+    centerpoint &#61; Point3D&#40;0, 0, 0&#41;
+    uppoint     &#61; Point3D&#40;0, 0, 1&#41;
+    projection  &#61; newprojection&#40;eyepoint, centerpoint, uppoint, 750&#41;
+    translate&#40;-10, 15&#41;
+    cs &#61; vcat&#40;juliacolorscheme, reverse&#40;juliacolorscheme&#41;&#41;
     for t in 0:0.001:2pi
-        pt1 = pointonstring(t, 50, 90, .5, xy=4, z = 1)
-        sethue(get(cs, rescale(t, 0, 2pi, 0, 1)))
-        d = rescale(pt1.z, -100, 150, 0, 10)
-        circle(project(pt1, projection), max(1.0, d), :fill)
+        pt1 &#61; pointonstring&#40;t, 50, 90, .5, xy&#61;4, z &#61; 1&#41;
+        sethue&#40;get&#40;cs, rescale&#40;t, 0, 2pi, 0, 1&#41;&#41;&#41;
+        d &#61; rescale&#40;pt1.z, -100, 150, 0, 10&#41;
+        circle&#40;project&#40;pt1, projection&#41;, max&#40;1.0, d&#41;, :fill&#41;
     end
 end 256 256</code></pre>
 <h3 id="everyones_a_critic"><a href="#everyones_a_critic">Everyone&#39;s a critic</a></h3>
@@ -283,7 +283,7 @@ end 256 256</code></pre>
 <div class="smallimage"><img src="http://steampiano.net/cormullionknot.gif?string" alt="cormullion signing off" /></div>
 <div class="page-foot">
   <div class="copyright">
-    &copy; cormullion. Last modified: August 17, 2020. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a>.
+    &copy; cormullion. Last modified: October 09, 2020. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a>.
   </div>
 </div>
 </div><!-- CONTENT ENDS HERE -->

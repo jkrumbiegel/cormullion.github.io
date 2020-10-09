@@ -36,43 +36,43 @@
 <p>Out of interest, and as a sort of “Welcome to Julia&#33;”, I thought I’d have a go at interpreting his logo in Julia. It’s a great design. After sampling the colors, the code was straightforward.</p>
 <pre><code class="language-julia">using Luxor, Colors
 
-function drawstars(colors)
-    sethue(colors[1])
-    circle(O, 200, :fill)
-    sethue("white")
-    radii = [180, 200, 150]
-    rotations = [π/28, 0, 0]
-    for (n, r) in enumerate(radii)
-        sethue(colors[n + 1])
-        star(O, r, 28, 0.7, rotations[n], :fill)
+function drawstars&#40;colors&#41;
+    sethue&#40;colors&#91;1&#93;&#41;
+    circle&#40;O, 200, :fill&#41;
+    sethue&#40;&quot;white&quot;&#41;
+    radii &#61; &#91;180, 200, 150&#93;
+    rotations &#61; &#91;π/28, 0, 0&#93;
+    for &#40;n, r&#41; in enumerate&#40;radii&#41;
+        sethue&#40;colors&#91;n &#43; 1&#93;&#41;
+        star&#40;O, r, 28, 0.7, rotations&#91;n&#93;, :fill&#41;
     end
-    sethue("black")
-    star(O, 120, 28, 0.7, 0, :fill)
+    sethue&#40;&quot;black&quot;&#41;
+    star&#40;O, 120, 28, 0.7, 0, :fill&#41;
 end
 
-blues =  [
-    RGB(0.455,0.753,0.89), # main
-    RGB(0.322,0.557,0.639),
-    RGB(0.243,0.396,0.463),
-    RGB(0.133,0.298,0.357)]
-browns = [
-    RGB(0.549,0.384,0.224), # main
-    RGB(0.459,0.298,0.141),
-    RGB(0.376,0.22,0.075),
-    RGB(0.259,0.129,0.043)]
+blues &#61;  &#91;
+    RGB&#40;0.455,0.753,0.89&#41;, # main
+    RGB&#40;0.322,0.557,0.639&#41;,
+    RGB&#40;0.243,0.396,0.463&#41;,
+    RGB&#40;0.133,0.298,0.357&#41;&#93;
+browns &#61; &#91;
+    RGB&#40;0.549,0.384,0.224&#41;, # main
+    RGB&#40;0.459,0.298,0.141&#41;,
+    RGB&#40;0.376,0.22,0.075&#41;,
+    RGB&#40;0.259,0.129,0.043&#41;&#93;
 
 @draw begin
-    background("black")
+    background&#40;&quot;black&quot;&#41;
 
-    sector(O, 100, 200, π, 3π/2)
-    clip()
-    drawstars(browns)
-    clipreset()
+    sector&#40;O, 100, 200, π, 3π/2&#41;
+    clip&#40;&#41;
+    drawstars&#40;browns&#41;
+    clipreset&#40;&#41;
 
-    sector(O, 100, 200, 3π/2, π)
-    clip()
-    drawstars(blues)
-    clipreset()
+    sector&#40;O, 100, 200, 3π/2, π&#41;
+    clip&#40;&#41;
+    drawstars&#40;blues&#41;
+    clipreset&#40;&#41;
 end</code></pre>
 <p>giving</p>
 <p><img src="/assets/images/view/3b1b.png" alt="3b1b logo" /></p>
@@ -88,7 +88,7 @@ end</code></pre>
 <div class="smallimage"><img src="http://steampiano.net/cormullionknot.gif?view" alt="cormullion signing off" /></div>
 <div class="page-foot">
   <div class="copyright">
-    &copy; cormullion. Last modified: September 05, 2020. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a>.
+    &copy; cormullion. Last modified: October 09, 2020. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a>.
   </div>
 </div>
 </div><!-- CONTENT ENDS HERE -->

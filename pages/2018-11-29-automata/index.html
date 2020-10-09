@@ -53,167 +53,167 @@
 <p>To explore these simple automata, I started<sup id="fnref:1"><a href="#fndef:1" class="fnref">[1]</a></sup> by making a Julia structure:</p>
 <pre><code class="language-julia">mutable struct CA
     rule::Int64
-    cells::BitArray{1}
-    colorstops::Array{Float64, 1}
-    ruleset::BitArray{1}
+    cells::BitArray&#123;1&#125;
+    colorstops::Array&#123;Float64, 1&#125;
+    ruleset::BitArray&#123;1&#125;
     generation::Int64
-    function CA(rule, ncells = 100)
-        cells                    = falses(ncells)
-        colorstops               = zeros(Float64, ncells)
-        ruleset                  = binary_to_array(rule)
-        cells[length(cells) ÷ 2] = true
-        generation               = 1
-        new(rule, cells, colorstops, ruleset, generation)
+    function CA&#40;rule, ncells &#61; 100&#41;
+        cells                    &#61; falses&#40;ncells&#41;
+        colorstops               &#61; zeros&#40;Float64, ncells&#41;
+        ruleset                  &#61; binary_to_array&#40;rule&#41;
+        cells&#91;length&#40;cells&#41; ÷ 2&#93; &#61; true
+        generation               &#61; 1
+        new&#40;rule, cells, colorstops, ruleset, generation&#41;
     end
 end</code></pre>
 <p>The <code>cells</code> array can hold trues or falses. The <code>colorstops</code> array is eventually going to hold some color information. The middle cell is seeded with a single starter value.</p>
 <p>The <code>binary_to_array&#40;&#41;</code> function just converts a binary number to a bit array &#40;I suspect there&#39;s a quicker way&#41;.</p>
-<pre><code class="language-julia">function binary_to_array(n)
-    a = BitArray{1}()
+<pre><code class="language-julia">function binary_to_array&#40;n&#41;
+    a &#61; BitArray&#123;1&#125;&#40;&#41;
     for c in 7:-1:0
-        k = n >> c
-        push!(a, (k & 1 == 1 ? true : false))
+        k &#61; n &gt;&gt; c
+        push&#33;&#40;a, &#40;k &amp; 1 &#61;&#61; 1 ? true : false&#41;&#41;
     end
     return a
 end</code></pre>
 <p>The <code>rules&#40;&#41;</code> function takes the values of an individual and its neighbours and applies the rule that determines its state for the next generation:</p>
-<pre><code class="language-julia">function rules(ca::CA, a, b, c)
-    lng = length(ca.ruleset)
-    return ca.ruleset[mod1(lng - (4a + 2b + c), lng)]
+<pre><code class="language-julia">function rules&#40;ca::CA, a, b, c&#41;
+    lng &#61; length&#40;ca.ruleset&#41;
+    return ca.ruleset&#91;mod1&#40;lng - &#40;4a &#43; 2b &#43; c&#41;, lng&#41;&#93;
 end</code></pre>
 <p>And a <code>nextgeneration&#40;&#41;</code> function applies the rule to all the cells. I decided to make it wrap around, so that the final cell considers the first cell as one of its neighbours.</p>
-<pre><code class="language-julia">function nextgeneration(ca::CA)
-    l = length(ca.cells)
-    nextgen = falses(l)
+<pre><code class="language-julia">function nextgeneration&#40;ca::CA&#41;
+    l &#61; length&#40;ca.cells&#41;
+    nextgen &#61; falses&#40;l&#41;
     for i in 1:l
-        left   = ca.cells[mod1(i - 1, l)]
-        me     = ca.cells[mod1(i, l)]
-        right  = ca.cells[mod1(i + 1, l)]
-        nextgen[i] = rules(ca, left, me, right)
+        left   &#61; ca.cells&#91;mod1&#40;i - 1, l&#41;&#93;
+        me     &#61; ca.cells&#91;mod1&#40;i, l&#41;&#93;
+        right  &#61; ca.cells&#91;mod1&#40;i &#43; 1, l&#41;&#93;
+        nextgen&#91;i&#93; &#61; rules&#40;ca, left, me, right&#41;
     end
-    ca.cells = nextgen
-    ca.generation += 1
+    ca.cells &#61; nextgen
+    ca.generation &#43;&#61; 1
     return ca
 end</code></pre>
 <p>We&#39;ll also teach Julia how to show an automaton in the terminal:</p>
-<pre><code class="language-julia">Base.show(io::IO, ::MIME"text/plain", ca::CA) =
-    print(io, join([c ? "■" : " " for c in ca.cells]))</code></pre>
+<pre><code class="language-julia">Base.show&#40;io::IO, ::MIME&quot;text/plain&quot;, ca::CA&#41; &#61;
+    print&#40;io, join&#40;&#91;c ? &quot;■&quot; : &quot; &quot; for c in ca.cells&#93;&#41;&#41;</code></pre>
 <p>So now we can create a cellular automaton by providing a rule number &#40;using the default of 100 cells&#41;:</p>
-<pre><code class="language-julia">ca = CA(30)</code></pre>
+<pre><code class="language-julia">ca &#61; CA&#40;30&#41;</code></pre>
 <p>update the automaton like this:</p>
-<pre><code class="language-julia">nextgeneration(ca)</code></pre>
+<pre><code class="language-julia">nextgeneration&#40;ca&#41;</code></pre>
 <p>and show a historical diagram of its evolution:</p>
 <pre><code class="language-julia">for i in 1:30
-    display(nextgeneration(ca))
+    display&#40;nextgeneration&#40;ca&#41;&#41;
 end</code></pre>
 <p><img src="/assets/images/automata/terminal-output.png" alt="image label" /></p>
 <h3 id="some_graphics"><a href="#some_graphics">Some graphics</a></h3>
 <p>The REPL display is more or less functional, but I want to play with the graphic output, so &#40;you guessed&#41;:</p>
 <pre><code class="language-julia">using Luxor, Colors
 
-function draw(ca::CA, cellwidth=10)
-    lng = length(ca.cells)
+function draw&#40;ca::CA, cellwidth&#61;10&#41;
+    lng &#61; length&#40;ca.cells&#41;
     for i in 1:lng
-        if ca.cells[i] == true
-            pt = Point(-(lng ÷ 2) * cellwidth + i * cellwidth, 0)
-            box(pt, cellwidth, cellwidth, :fill)
+        if ca.cells&#91;i&#93; &#61;&#61; true
+            pt &#61; Point&#40;-&#40;lng ÷ 2&#41; * cellwidth &#43; i * cellwidth, 0&#41;
+            box&#40;pt, cellwidth, cellwidth, :fill&#41;
         end
     end
 end
 
 @png begin
-    ca = CA(30, 200)
-    sidelength = 4
+    ca &#61; CA&#40;30, 200&#41;
+    sidelength &#61; 4
     # start at the top
-    translate(boxtopcenter(BoundingBox()) + sidelength)
+    translate&#40;boxtopcenter&#40;BoundingBox&#40;&#41;&#41; &#43; sidelength&#41;
     for i in 1:200
-        draw(ca, sidelength)
-        nextgeneration(ca)
-        translate(Point(0, sidelength))
+        draw&#40;ca, sidelength&#41;
+        nextgeneration&#40;ca&#41;
+        translate&#40;Point&#40;0, sidelength&#41;&#41;
     end
-end 800 850 "../images/automata/simple-ca.png"</code></pre>
+end 800 850 &quot;../images/automata/simple-ca.png&quot;</code></pre>
 <p><img src="/assets/images/automata/simple-ca.png" alt="image label" /></p>
 <p>You can call <code>nextgeneration&#40;&#41;</code> without displaying the results, of course. This lets you jump into the future history of an automaton at warp speed.</p>
 <pre><code class="language-julia">@png begin
-    ca = CA(110, 200)
-    translate(boxtopcenter(BoundingBox()) + sidelength)
-    sidelength = 4
+    ca &#61; CA&#40;110, 200&#41;
+    translate&#40;boxtopcenter&#40;BoundingBox&#40;&#41;&#41; &#43; sidelength&#41;
+    sidelength &#61; 4
     # into the future
     for _ in 1:200_000
-        nextgeneration(ca)
+        nextgeneration&#40;ca&#41;
     end
     for _ in 1:195
-        draw(ca, sidelength)
-        nextgeneration(ca)
-        translate(Point(0, sidelength))
+        draw&#40;ca, sidelength&#41;
+        nextgeneration&#40;ca&#41;
+        translate&#40;Point&#40;0, sidelength&#41;&#41;
     end
-end 800 800 "../images/automata/simple-ca-future.png"</code></pre>
+end 800 800 &quot;../images/automata/simple-ca-future.png&quot;</code></pre>
 <p><img src="/assets/images/automata/simple-ca-future.png" alt="image label" /></p>
 <p>I found that sometimes drawing them from left to right looked better &#40;like videos recorded on phones...?&#41;:</p>
 <pre><code class="language-julia">@png begin
-    ca = CA(30)
-    translate(boxmiddleleft(BoundingBox()) + sidelength)
-    rotate(-π/2)
-    sidelength = 3.5
+    ca &#61; CA&#40;30&#41;
+    translate&#40;boxmiddleleft&#40;BoundingBox&#40;&#41;&#41; &#43; sidelength&#41;
+    rotate&#40;-π/2&#41;
+    sidelength &#61; 3.5
     for i in 1:320
-        draw(ca, sidelength)
-        nextgeneration(ca)
-        translate(Point(0, sidelength))
+        draw&#40;ca, sidelength&#41;
+        nextgeneration&#40;ca&#41;
+        translate&#40;Point&#40;0, sidelength&#41;&#41;
     end
-end 1000 400 "../images/automata/simple-landscape-ca.png"</code></pre>
+end 1000 400 &quot;../images/automata/simple-landscape-ca.png&quot;</code></pre>
 <p><img src="/assets/images/automata/simple-landscape-ca.png" alt="image label" /></p>
 <h3 id="and_now_in_color"><a href="#and_now_in_color">And now in color</a></h3>
 <p>So far I haven&#39;t used the color information that&#39;s stored.</p>
 <p>The <code>nextgeneration&#40;&#41;</code> function can be updated with instructions about how to modify the color of the next generation, based on the current set of three cells.</p>
-<pre><code class="language-julia">function nextgeneration(ca::CA)
-    l = length(ca.cells)
-    nextgen = falses(l)
+<pre><code class="language-julia">function nextgeneration&#40;ca::CA&#41;
+    l &#61; length&#40;ca.cells&#41;
+    nextgen &#61; falses&#40;l&#41;
     for i in 1:l
-        left   = ca.cells[mod1(i - 1, l)]
-        me     = ca.cells[mod1(i, l)]
-        right  = ca.cells[mod1(i + 1, l)]
-        nextgen[i] = rules(ca, left, me, right)
-        if me == 1
-            ca.colorstops[i] = mod(ca.colorstops[i] + 0.1, 1)
-        elseif left == 1 && right == 1
-            ca.colorstops[i] = mod(ca.colorstops[i] - 0.1, 1)
+        left   &#61; ca.cells&#91;mod1&#40;i - 1, l&#41;&#93;
+        me     &#61; ca.cells&#91;mod1&#40;i, l&#41;&#93;
+        right  &#61; ca.cells&#91;mod1&#40;i &#43; 1, l&#41;&#93;
+        nextgen&#91;i&#93; &#61; rules&#40;ca, left, me, right&#41;
+        if me &#61;&#61; 1
+            ca.colorstops&#91;i&#93; &#61; mod&#40;ca.colorstops&#91;i&#93; &#43; 0.1, 1&#41;
+        elseif left &#61;&#61; 1 &amp;&amp; right &#61;&#61; 1
+            ca.colorstops&#91;i&#93; &#61; mod&#40;ca.colorstops&#91;i&#93; - 0.1, 1&#41;
         else
-            ca.colorstops[i] = 0
+            ca.colorstops&#91;i&#93; &#61; 0
         end
     end
-    ca.cells = nextgen
-    ca.generation += 1
+    ca.cells &#61; nextgen
+    ca.generation &#43;&#61; 1
     return ca
 end</code></pre>
 <p>and the <code>draw&#40;&#41;</code> function can be adapted to make use of the color information. I decided to avoid tackling RGB color value transformations for a first pass, so the single value between 0 and 1 is used to select a color from a color map.</p>
 <pre><code class="language-julia">using ColorSchemes
 
-function drawcolor(ca::CA, cellwidth=10;
-        scheme=ColorSchemes.leonardo)
-    lng = length(ca.cells)
+function drawcolor&#40;ca::CA, cellwidth&#61;10;
+        scheme&#61;ColorSchemes.leonardo&#41;
+    lng &#61; length&#40;ca.cells&#41;
     for i in 1:lng
-        if ca.cells[i] == true
-            sethue(get(scheme, ca.colorstops[i]))
-            pt = Point(-(lng ÷ 2) * cellwidth + (i * cellwidth), 0)
-            box(pt, cellwidth, cellwidth, :fill)
+        if ca.cells&#91;i&#93; &#61;&#61; true
+            sethue&#40;get&#40;scheme, ca.colorstops&#91;i&#93;&#41;&#41;
+            pt &#61; Point&#40;-&#40;lng ÷ 2&#41; * cellwidth &#43; &#40;i * cellwidth&#41;, 0&#41;
+            box&#40;pt, cellwidth, cellwidth, :fill&#41;
         end
     end
 end
 
 @svg begin
-    background("darkorchid4")
-    ca = CA(135, 65)
+    background&#40;&quot;darkorchid4&quot;&#41;
+    ca &#61; CA&#40;135, 65&#41;
     # randomize start state
-    ca.cells = rand(Bool, length(ca.cells))
-    sidelength = 5
-    translate(boxmiddleleft(BoundingBox()) + sidelength)
-    rotate(-π/2)
+    ca.cells &#61; rand&#40;Bool, length&#40;ca.cells&#41;&#41;
+    sidelength &#61; 5
+    translate&#40;boxmiddleleft&#40;BoundingBox&#40;&#41;&#41; &#43; sidelength&#41;
+    rotate&#40;-π/2&#41;
     for i in 1:195
-        drawcolor(ca, sidelength, scheme=ColorSchemes.cubehelix)
-        nextgeneration(ca)
-        translate(Point(0, sidelength))
+        drawcolor&#40;ca, sidelength, scheme&#61;ColorSchemes.cubehelix&#41;
+        nextgeneration&#40;ca&#41;
+        translate&#40;Point&#40;0, sidelength&#41;&#41;
     end
-end 1000 400 "../images/automata/simple-color-ca.svg"</code></pre>
+end 1000 400 &quot;../images/automata/simple-color-ca.svg&quot;</code></pre>
 <p><img src="/assets/images/automata/simple-color-ca.svg" alt="image label" /></p>
 <p>This could lead to hours of entertainment &#40;depending on your definition of fun, of course&#41;. I uploaded a few experiments that didn&#39;t turn out too badly <a href="https://www.flickr.com/photos/153311384@N03/">on Flickr</a>. The current rules show a kind of literal winning streak, as a cell that remains occupied for many generations ends up being brightly illuminated.</p>
 <p>I think these images look quite good when scaled up. It only takes about a second to draw these, but would take much longer to stick them on the wall:</p>
@@ -221,85 +221,85 @@ end 1000 400 "../images/automata/simple-color-ca.svg"</code></pre>
 <p><img src="/assets/images/automata/office-layout-2.png" alt="image label" /></p>
 <p>The rules for specifying a change in color could do with some kind of systematic definition, perhaps, such that, say, &quot;rule C81&quot; means &quot;increase colorstop by amount if previous parent is 1, decrease it if previous uncle-aunt is 1&quot;, and so on. Then you could pass a set of color rules to the drawing function. &#40;<em>uncle-aunt</em>? I couldn&#39;t find a word for something that is either an uncle or an aunt, but not a parent...&#41;</p>
 <p>Instead of drawing simple squares, it&#39;s possible to draw other shapes. I&#39;m quite fond of the squircle — you can change the <code>rt</code> parameter to get different shapes:</p>
-<pre><code class="language-julia">function drawcolorsquircle(ca::CA, cellwidth=10;
-        scheme=ColorSchemes.leonardo)
-    lng = length(ca.cells)
+<pre><code class="language-julia">function drawcolorsquircle&#40;ca::CA, cellwidth&#61;10;
+        scheme&#61;ColorSchemes.leonardo&#41;
+    lng &#61; length&#40;ca.cells&#41;
     for i in 1:lng
-        if ca.cells[i] == true
-            sethue(get(scheme, ca.colorstops[i]))
-            pt = Point(-(lng ÷ 2) * cellwidth + (i * cellwidth), 0)
-            squircle(pt, cellwidth, cellwidth, rt=6.0, :fill)
+        if ca.cells&#91;i&#93; &#61;&#61; true
+            sethue&#40;get&#40;scheme, ca.colorstops&#91;i&#93;&#41;&#41;
+            pt &#61; Point&#40;-&#40;lng ÷ 2&#41; * cellwidth &#43; &#40;i * cellwidth&#41;, 0&#41;
+            squircle&#40;pt, cellwidth, cellwidth, rt&#61;6.0, :fill&#41;
         end
     end
 end
 
 @svg begin
-    background("navyblue")
-    ca = CA(110, 30)
+    background&#40;&quot;navyblue&quot;&#41;
+    ca &#61; CA&#40;110, 30&#41;
     # randomize start state
-    ca.cells = rand(Bool, length(ca.cells))
-    translate(boxmiddleleft(BoundingBox()) + sidelength)
-    rotate(-π/2)
-    sidelength = 10
+    ca.cells &#61; rand&#40;Bool, length&#40;ca.cells&#41;&#41;
+    translate&#40;boxmiddleleft&#40;BoundingBox&#40;&#41;&#41; &#43; sidelength&#41;
+    rotate&#40;-π/2&#41;
+    sidelength &#61; 10
     for i in 1:100
-        drawcolorsquircle(ca, sidelength, scheme=ColorSchemes.Dark2_8)
-        nextgeneration(ca)
-        translate(Point(0, sidelength))
+        drawcolorsquircle&#40;ca, sidelength, scheme&#61;ColorSchemes.Dark2_8&#41;
+        nextgeneration&#40;ca&#41;
+        translate&#40;Point&#40;0, sidelength&#41;&#41;
     end
-end 1000 400 "../images/automata/simple-color-ca-squircle.svg"</code></pre>
+end 1000 400 &quot;../images/automata/simple-color-ca-squircle.svg&quot;</code></pre>
 <p><img src="/assets/images/automata/simple-color-ca-squircle.svg" alt="image label" /></p>
 <p>&#40;This SVG is quite big, and won&#39;t display in Juno. But it should load in a browser.&#41;</p>
 <h3 id="getting_around_to_it"><a href="#getting_around_to_it">Getting around to it</a></h3>
 <p>It occurred to me that you could take a rectangular array and wrap it into a circle.</p>
-<pre><code class="language-julia">function drawsector(ca::CA, cellwidth=10;
-        scheme=ColorSchemes.leonardo,
-        centralradius = 10)
-    lng = length(ca.cells)
-    width = lng * cellwidth
-    angulargap = 2π/lng
+<pre><code class="language-julia">function drawsector&#40;ca::CA, cellwidth&#61;10;
+        scheme&#61;ColorSchemes.leonardo,
+        centralradius &#61; 10&#41;
+    lng &#61; length&#40;ca.cells&#41;
+    width &#61; lng * cellwidth
+    angulargap &#61; 2π/lng
     for i in 1:lng
-        sethue(get(scheme, ca.colorstops[i]))
-        innerradius = centralradius
-        outerradius = centralradius + cellwidth
-        startang    = rescale(i, 1, lng, 0, 2π)
-        endang      = startang + angulargap
-        if ca.cells[i] == true
-            sector(O, innerradius, outerradius, startang, endang, :fillstroke)
+        sethue&#40;get&#40;scheme, ca.colorstops&#91;i&#93;&#41;&#41;
+        innerradius &#61; centralradius
+        outerradius &#61; centralradius &#43; cellwidth
+        startang    &#61; rescale&#40;i, 1, lng, 0, 2π&#41;
+        endang      &#61; startang &#43; angulargap
+        if ca.cells&#91;i&#93; &#61;&#61; true
+            sector&#40;O, innerradius, outerradius, startang, endang, :fillstroke&#41;
         end
     end
 end
 
-function drawrule(rulenumber, pos)
+function drawrule&#40;rulenumber, pos&#41;
     @layer begin
-        translate(pos)
-        sethue("black")
-        text(string(rulenumber), halign=:center, valign=:middle)
-        rotate(-π/2)
-        ca = CA(rulenumber, 50)
+        translate&#40;pos&#41;
+        sethue&#40;&quot;black&quot;&#41;
+        text&#40;string&#40;rulenumber&#41;, halign&#61;:center, valign&#61;:middle&#41;
+        rotate&#40;-π/2&#41;
+        ca &#61; CA&#40;rulenumber, 50&#41;
         # randomize start state
-        # ca.cells = rand(Bool, length(ca.cells))
-        sidelength = 2
-        setline(0.0)
+        # ca.cells &#61; rand&#40;Bool, length&#40;ca.cells&#41;&#41;
+        sidelength &#61; 2
+        setline&#40;0.0&#41;
         for n in 5:sidelength:30
-            drawsector(ca, sidelength,
-            scheme=ColorSchemes.klimt,
-            centralradius = n)
-            nextgeneration(ca)
+            drawsector&#40;ca, sidelength,
+            scheme&#61;ColorSchemes.klimt,
+            centralradius &#61; n&#41;
+            nextgeneration&#40;ca&#41;
         end
     end
 end</code></pre>
 <p>This shows all the rules in this circular form.</p>
 <pre><code class="language-julia">let
     # best in SVG or PDF, but PNG is faster
-    Drawing(1200, 1200, "../images/automata/color-sector-assembly.svg")
-    origin()
-    background("azure")
-    fontsize(8)
-    for (pos, n) in Tiler(1200, 1200, 16, 16)
-        drawrule(n-1, pos)
+    Drawing&#40;1200, 1200, &quot;../images/automata/color-sector-assembly.svg&quot;&#41;
+    origin&#40;&#41;
+    background&#40;&quot;azure&quot;&#41;
+    fontsize&#40;8&#41;
+    for &#40;pos, n&#41; in Tiler&#40;1200, 1200, 16, 16&#41;
+        drawrule&#40;n-1, pos&#41;
     end
-    finish()
-    preview()
+    finish&#40;&#41;
+    preview&#40;&#41;
 end</code></pre>
 <p><img src="/assets/images/automata/color-sector-assembly.svg" alt="image label" /></p>
 <p>&#40;Again, this image is quite demanding for SVG and can take a while to load, even though it doesn&#39;t take long to generate.&#41;</p>
@@ -320,58 +320,58 @@ The values to left and right are One.
 
 <p>And yet this simple rule has been the subject of an astonishing amount of analysis, such as <a href="http://uncomp.uwe.ac.uk/genaro/Papers/Papers_on_CA_files/MARTINEZ.pdf">this in-depth paper by Martinez et al</a> published in the wonderfully-named <em>International Journal of Unconventional Computing</em>. <a href="https://arxiv.org/pdf/0906.3248v1.pdf">Matthew Cook&#39;s famous paper</a> proved that Rule 110 is capable of emulating the activity of a Turing machine.</p>
 <p>I understood very little of those wonderful papers, but they did make me want to at least see Rule 110 in action, just in case I could spot all those <em>cyclic tags</em>, <em>meta-gliders</em>, and <em>pseudo-solitons</em>.</p>
-<pre><code class="language-julia">function frame(scene, framenumber, ca, cahistory, sidelength;
-            smoothscrolling=10)
-    background(colorant"navy")
-    fontsize(12)
-    sethue(colorant"azure")
-    text(string(ca.generation), boxtopright(BoundingBox()) + (-30, 20),
-        halign=:right)
-    setline(0.1)
+<pre><code class="language-julia">function frame&#40;scene, framenumber, ca, cahistory, sidelength;
+            smoothscrolling&#61;10&#41;
+    background&#40;colorant&quot;navy&quot;&#41;
+    fontsize&#40;12&#41;
+    sethue&#40;colorant&quot;azure&quot;&#41;
+    text&#40;string&#40;ca.generation&#41;, boxtopright&#40;BoundingBox&#40;&#41;&#41; &#43; &#40;-30, 20&#41;,
+        halign&#61;:right&#41;
+    setline&#40;0.1&#41;
 
     # get in position for the first row
-    translate(boxmiddleleft(BoundingBox()))
-    rotate(-π/2)
+    translate&#40;boxmiddleleft&#40;BoundingBox&#40;&#41;&#41;&#41;
+    rotate&#40;-π/2&#41;
 
     # for smooth scrolling
-    translate(0, -(mod1(framenumber, smoothscrolling))
-        * sidelength/smoothscrolling)
+    translate&#40;0, -&#40;mod1&#40;framenumber, smoothscrolling&#41;&#41;
+        * sidelength/smoothscrolling&#41;
 
-    lng = length(ca.cells)
+    lng &#61; length&#40;ca.cells&#41;
     for gen in cahistory
-        for (n, cell) in enumerate(gen)
-            if cell == true
-                pt = Point(-(lng / 2) * sidelength + (n * sidelength), 0)
-                box(pt, sidelength - 2, sidelength - 2, :fill)
+        for &#40;n, cell&#41; in enumerate&#40;gen&#41;
+            if cell &#61;&#61; true
+                pt &#61; Point&#40;-&#40;lng / 2&#41; * sidelength &#43; &#40;n * sidelength&#41;, 0&#41;
+                box&#40;pt, sidelength - 2, sidelength - 2, :fill&#41;
             end
         end
-        translate(Point(0, sidelength))
+        translate&#40;Point&#40;0, sidelength&#41;&#41;
     end
-    # "beautiful buttery scrolling"
-    if framenumber % smoothscrolling == 0
+    # &quot;beautiful buttery scrolling&quot;
+    if framenumber &#37; smoothscrolling &#61;&#61; 0
         # drop oldest, add a new generation
-        popfirst!(cahistory)
-        nextgeneration(ca)
-        push!(cahistory, ca.cells)
+        popfirst&#33;&#40;cahistory&#41;
+        nextgeneration&#40;ca&#41;
+        push&#33;&#40;cahistory, ca.cells&#41;
     end
 end
 
-function makeanimation(rule, filename)
-    width, height = (1920, 1080)
-    sidelength = 6
-    cellularmovie = Movie(width, height, "cellularmovie")
-    ca = CA(rule, convert(Int, height÷sidelength))
-    cahistory = []
+function makeanimation&#40;rule, filename&#41;
+    width, height &#61; &#40;1920, 1080&#41;
+    sidelength &#61; 6
+    cellularmovie &#61; Movie&#40;width, height, &quot;cellularmovie&quot;&#41;
+    ca &#61; CA&#40;rule, convert&#40;Int, height÷sidelength&#41;&#41;
+    cahistory &#61; &#91;&#93;
     # initial
     for _ in 1:width÷sidelength
-        push!(cahistory, ca.cells)
-        nextgeneration(ca)
+        push&#33;&#40;cahistory, ca.cells&#41;
+        nextgeneration&#40;ca&#41;
     end
-    animate(cellularmovie,
-        [Scene(cellularmovie, (s, f) ->
-            frame(s, f, ca, cahistory, sidelength, smoothscrolling=4),
-                1:500)],
-    pathname="$(filename)")
+    animate&#40;cellularmovie,
+        &#91;Scene&#40;cellularmovie, &#40;s, f&#41; -&gt;
+            frame&#40;s, f, ca, cahistory, sidelength, smoothscrolling&#61;4&#41;,
+                1:500&#41;&#93;,
+    pathname&#61;&quot;&#36;&#40;filename&#41;&quot;&#41;
 end</code></pre>
 <p>makeanimation&#40;110, &quot;../images/automata/animated-cellular-automaton.gif&quot;&#41;</p>
 <p><img src="/assets/images/automata/animated-cellular-automaton.gif" alt="image label" /></p>
@@ -381,35 +381,35 @@ end</code></pre>
 <h3 id="solid_work"><a href="#solid_work">Solid work</a></h3>
 <p>If you want to do more than just look at pictures on the screen—perhaps you&#39;re building your own railway station?—here are some tips for exporting the graphics to your favourite 3D modeller.</p>
 <p>First, place a box or shape around the outside of the design, and use the <code>:path</code> action rather than <code>:fill</code> or <code>:stroke</code>. Then, to draw what are now the &#39;holes&#39;, use <code>newsubpath&#40;&#41;</code> before drawing each hole, and make sure to draw the holes with reversed paths &#40;using the <code>reversepath</code> keyword, for example&#41;.</p>
-<pre><code class="language-julia">function drawaspath(ca::CA;
-        cellwidth=10)
-    lng = length(ca.cells)
+<pre><code class="language-julia">function drawaspath&#40;ca::CA;
+        cellwidth&#61;10&#41;
+    lng &#61; length&#40;ca.cells&#41;
     for i in 1:lng
-        if ca.cells[i] == true
-            newsubpath()
-            pt = Point(-(lng ÷ 2) * cellwidth + (i * cellwidth), 0)
-            poly(box(pt, cellwidth - 2, cellwidth - 2, vertices=true),
-                :path, reversepath=true, close=true)
+        if ca.cells&#91;i&#93; &#61;&#61; true
+            newsubpath&#40;&#41;
+            pt &#61; Point&#40;-&#40;lng ÷ 2&#41; * cellwidth &#43; &#40;i * cellwidth&#41;, 0&#41;
+            poly&#40;box&#40;pt, cellwidth - 2, cellwidth - 2, vertices&#61;true&#41;,
+                :path, reversepath&#61;true, close&#61;true&#41;
         end
     end
 end
 
 @svg begin
-    background("black")
-    ca = CA(110, 40)
-    ca.cells = rand(Bool, length(ca.cells))
-    cellwidth = 7
-    bxw = boxwidth(BoundingBox() * 0.98)/2
-    squircle(O, bxw, bxw, rt=0.1, :path)
-    translate(boxtopcenter(BoundingBox()) + (-5, 7))
+    background&#40;&quot;black&quot;&#41;
+    ca &#61; CA&#40;110, 40&#41;
+    ca.cells &#61; rand&#40;Bool, length&#40;ca.cells&#41;&#41;
+    cellwidth &#61; 7
+    bxw &#61; boxwidth&#40;BoundingBox&#40;&#41; * 0.98&#41;/2
+    squircle&#40;O, bxw, bxw, rt&#61;0.1, :path&#41;
+    translate&#40;boxtopcenter&#40;BoundingBox&#40;&#41;&#41; &#43; &#40;-5, 7&#41;&#41;
     for i in 1:40
-        translate(0, cellwidth)
-        drawaspath(ca, cellwidth=cellwidth)
-        nextgeneration(ca)
+        translate&#40;0, cellwidth&#41;
+        drawaspath&#40;ca, cellwidth&#61;cellwidth&#41;
+        nextgeneration&#40;ca&#41;
     end
-    sethue("grey80")
-    fillpath()
-end 300 300 "../images/automata/ca-as-path.svg"</code></pre>
+    sethue&#40;&quot;grey80&quot;&#41;
+    fillpath&#40;&#41;
+end 300 300 &quot;../images/automata/ca-as-path.svg&quot;</code></pre>
 <p><img src="/assets/images/automata/ca-as-path.svg" alt="image label" /></p>
 <p>So this is a single path, and the holes are reversed subpaths. When you import this single path into a 3D modelling program, you <em>should</em> be able to extrude it into a solid without problems. Here&#39;s one modelled as a thin gold reflective sheet.</p>
 <p><img src="/assets/images/automata/ca-3d-render-1.png" alt="image label" /></p>
@@ -430,7 +430,7 @@ end 300 300 "../images/automata/ca-as-path.svg"</code></pre>
 <p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p>
 <div class="page-foot">
   <div class="copyright">
-    &copy; cormullion. Last modified: August 17, 2020. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a>.
+    &copy; cormullion. Last modified: October 09, 2020. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a>.
   </div>
 </div>
 </div><!-- CONTENT ENDS HERE -->

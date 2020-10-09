@@ -35,18 +35,18 @@
 <p>It’s always a good idea to avoid graphical clichés, but it was difficult to resist using a world map or globe of some sort for a world-wide global event. I remembered I had some old shapefile-reading code, long since abandoned &#40;because it was more complicated than I thought&#41;, so I loaded up Shapefile.jl and trusty old Luxor.jl, and threw some shapes onto the canvas.</p>
 <pre><code class="language-julia">using Shapefile, Luxor
 
-include(joinpath(dirname(pathof(Luxor)), "readshapefiles.jl"))
+include&#40;joinpath&#40;dirname&#40;pathof&#40;Luxor&#41;&#41;, &quot;readshapefiles.jl&quot;&#41;&#41;
 
-countries = open(worldshapefile) do f
-    read(f, Shapefile.Handle)
+countries &#61; open&#40;worldshapefile&#41; do f
+    read&#40;f, Shapefile.Handle&#41;
 end
 
 ...
 for shape in countries.shapes
-    randomhue()
-    pgons, bbox = convert(Array{Luxor.Point, 1}, shape)
+    randomhue&#40;&#41;
+    pgons, bbox &#61; convert&#40;Array&#123;Luxor.Point, 1&#125;, shape&#41;
     for pgon in pgons
-        poly(pgon, :fill)
+        poly&#40;pgon, :fill&#41;
     end
 end
 ...</code></pre>
@@ -56,15 +56,15 @@ end
 <p><img src="/assets/images/world/juliacon2020-map-800.png" alt=" " /></p>
 <p>&#40;The code for that circular logo itself is just:</p>
 <pre><code class="language-julia">...
-cols = [Luxor.julia_green, Luxor.julia_red,Luxor.julia_purple, Luxor.julia_blue]
-for (n, θ) in enumerate(range(0, stop=2π, length=36))
-    sethue(cols[mod1(n, end)])
-    arrow(O - polar(230, θ), O + polar(230, θ), [50, 50],
-        decoration = 0.0,
-        decorate = () -> circle(O, 5, :fill),
-        linewidth = 2)
+cols &#61; &#91;Luxor.julia_green, Luxor.julia_red,Luxor.julia_purple, Luxor.julia_blue&#93;
+for &#40;n, θ&#41; in enumerate&#40;range&#40;0, stop&#61;2π, length&#61;36&#41;&#41;
+    sethue&#40;cols&#91;mod1&#40;n, end&#41;&#93;&#41;
+    arrow&#40;O - polar&#40;230, θ&#41;, O &#43; polar&#40;230, θ&#41;, &#91;50, 50&#93;,
+        decoration &#61; 0.0,
+        decorate &#61; &#40;&#41; -&gt; circle&#40;O, 5, :fill&#41;,
+        linewidth &#61; 2&#41;
 end
-drawjuliaconlogo(O, 0.5)
+drawjuliaconlogo&#40;O, 0.5&#41;
 ...</code></pre>
 <p>&#41;</p>
 <p>But it didn&#39;t click.</p>
@@ -84,12 +84,12 @@ drawjuliaconlogo(O, 0.5)
 <p>This uses characters with Unicode values <code>\U2800</code> to <code>\U28FF</code>. Make sure you’re using a monospaced font that includes them. There are a few floating around.</p>
 <p>But in the end I didn’t need to do much more to it, other than choose random Julia colors.</p>
 <pre><code class="language-julia">...
-tiles = Tiler(1200, 800, size(matrix)...)
-juliacolors = [Luxor.julia_purple, Luxor.julia_blue, Luxor.julia_red, Luxor.julia_green]
-for (pos, n) in tiles
-    if matrix[n] == 1
-        sethue(juliacolors[rand(1:end)])
-        box(pos, 3, 3, :fill)
+tiles &#61; Tiler&#40;1200, 800, size&#40;matrix&#41;...&#41;
+juliacolors &#61; &#91;Luxor.julia_purple, Luxor.julia_blue, Luxor.julia_red, Luxor.julia_green&#93;
+for &#40;pos, n&#41; in tiles
+    if matrix&#91;n&#93; &#61;&#61; 1
+        sethue&#40;juliacolors&#91;rand&#40;1:end&#41;&#93;&#41;
+        box&#40;pos, 3, 3, :fill&#41;
     end
 end
 ...</code></pre>
@@ -110,7 +110,7 @@ end
 <div class="smallimage"><img src="http://steampiano.net/cormullionknot.gif?world" alt="cormullion signing off" /></div>
 <div class="page-foot">
   <div class="copyright">
-    &copy; cormullion. Last modified: August 17, 2020. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a>.
+    &copy; cormullion. Last modified: October 09, 2020. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a>.
   </div>
 </div>
 </div><!-- CONTENT ENDS HERE -->

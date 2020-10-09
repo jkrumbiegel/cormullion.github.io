@@ -35,13 +35,13 @@
  <img src="/assets/images/guilloches/guilloches-background.png" /> 
 <p>There are many possible approaches, sometimes based on hypotrochoids, but often using simpler parametric equations. Mathematically they can be very straightforward; here&#39;s a simple example &#40;given suitable values for the <code>k</code> constants&#41;:</p>
 <pre><code class="language-julia">@svg begin
-    setline(0.5)
-    poly([
-        Point(e^(-k₁ * t) * (r * cos(k₃ * t + 1)) +
-              e^(-k₂ * t) * (r * cos(k₄ * t + 1)),
-              e^(-k₁ * t) * (r * sin(k₅ * t + 2)) +
-              e^(-k₂ * t) * (r * sin(k₆ * t + 1)))
-        for t in 0:0.05:500], :stroke)
+    setline&#40;0.5&#41;
+    poly&#40;&#91;
+        Point&#40;e^&#40;-k₁ * t&#41; * &#40;r * cos&#40;k₃ * t &#43; 1&#41;&#41; &#43;
+              e^&#40;-k₂ * t&#41; * &#40;r * cos&#40;k₄ * t &#43; 1&#41;&#41;,
+              e^&#40;-k₁ * t&#41; * &#40;r * sin&#40;k₅ * t &#43; 2&#41;&#41; &#43;
+              e^&#40;-k₂ * t&#41; * &#40;r * sin&#40;k₆ * t &#43; 1&#41;&#41;&#41;
+        for t in 0:0.05:500&#93;, :stroke&#41;
 end</code></pre>
  <img src="/assets/images/guilloches/simple.png" /> 
 <p>If you change the parameters slowly, they have the peculiar ability to look like they&#39;re rotating in 3D space:</p>
@@ -52,20 +52,20 @@ end</code></pre>
 <p>Some of these patterns could be hypotrochoids. I added a <code>hypotrochoid&#40;&#41;</code> function ages ago, but it&#39;s usually gathering dust: perhaps it would have been useful for this project.</p>
 <img src="/assets/images/guilloches/julia-hypotrochoid.png" />
 <pre><code class="language-julia">@svg begin
-   background("ivory")
-   translate(-200, -200)
-   scale(1.2)
-   julialogo(action=:clip)
-   setline(0.2)
+   background&#40;&quot;ivory&quot;&#41;
+   translate&#40;-200, -200&#41;
+   scale&#40;1.2&#41;
+   julialogo&#40;action&#61;:clip&#41;
+   setline&#40;0.2&#41;
    for i in 1:30
       @layer begin
-          randomhue()
-          translate(rand(-250:250), rand(-250:250))
-          hypotrochoid(250, 181, 153, :stroke)
+          randomhue&#40;&#41;
+          translate&#40;rand&#40;-250:250&#41;, rand&#40;-250:250&#41;&#41;
+          hypotrochoid&#40;250, 181, 153, :stroke&#41;
       end
    end
-   clipreset()
-end 500 500 "/tmp/s.svg"</code></pre>
+   clipreset&#40;&#41;
+end 500 500 &quot;/tmp/s.svg&quot;</code></pre>
 <p>The patterns also remind me of the results made by the Harmonograph, a old 19th century device, probably made of brass and mahogany, with two or more pendulums that trace out the interactions of the simple harmonic motions as the pendulums lose velocity. These devices became popular during the 19th century, and gentlemen and ladies would attend soirées and ‘conversaziones’, watching with delight as the images were slowly revealed. My SVG original image takes only a few seconds to generate, and a bit longer to open in a web browser: I like the quality of the SVG output, but the 70 MB files are a bit bulky.</p>
 <p>Anti-forging techniques have progressed a lot since the heyday of the guilloches, and I expect that there&#39;s a lot more going on in the field than reaches the public internet, for obvious reasons. <a href="https://www.snb.ch/en/mmr/reference/series8_brochure/source/series8_brochure.en.pdf">This old &#40;1999&#41; brochure</a> from the Swiss National Bank has a quick introduction to some of them, including the Kinegram, Optically Variable Ink, ultraviolet, intaglio, and watermarked digits, but—the less they tell you, the better the security.</p>
 <p>All of which doesn&#39;t—I hope—detract from the achievements of the winners of this year&#39;s Julia Community prize. Congratulations&#33;</p>
@@ -73,7 +73,7 @@ end 500 500 "/tmp/s.svg"</code></pre>
 <div class="smallimage"><img src="http://steampiano.net/cormullionknot.gif?guilloches" alt="cormullion signing off" /></div>
 <div class="page-foot">
   <div class="copyright">
-    &copy; cormullion. Last modified: August 17, 2020. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a>.
+    &copy; cormullion. Last modified: October 09, 2020. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a>.
   </div>
 </div>
 </div><!-- CONTENT ENDS HERE -->

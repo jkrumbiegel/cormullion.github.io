@@ -37,11 +37,11 @@
 <h3 id="day_1_circle_packing"><a href="#day_1_circle_packing">Day 1: Circle packing</a></h3>
 <p>Circle packing may be a well-trodden path, but it always looks neat, and it&#39;s a nice easy start. You maintain a list of circles &#40;center point and radius&#41;. Then you create a random circle, check it against all the other ones, draw it if it doesn&#39;t overlap, or reduce the radius and try again. It&#39;s not very efficient but you can set it going and go and make some coffee.</p>
 <p>To make the π shape appear, the code creates a path:</p>
-<pre><code class="language-julia">fontsize(480)
-textoutlines("π", O, :path, halign=:center, valign=:middle)
-πoutline = first(pathtopoly())</code></pre>
+<pre><code class="language-julia">fontsize&#40;480&#41;
+textoutlines&#40;&quot;π&quot;, O, :path, halign&#61;:center, valign&#61;:middle&#41;
+πoutline &#61; first&#40;pathtopoly&#40;&#41;&#41;</code></pre>
 <p>then checks whether each circle&#39;s centerpoint is inside or outside the outline of the π shape:</p>
-<pre><code class="language-julia">isinside(pt, πoutline)</code></pre>
+<pre><code class="language-julia">isinside&#40;pt, πoutline&#41;</code></pre>
 <p>and colors it accordingly.</p>
 <p><img src="/assets/images/piday/t-800.png" alt="image label" /></p>
 <h3 id="day_2_dry_and_wet"><a href="#day_2_dry_and_wet">Day 2: Dry and wet</a></h3>
@@ -54,42 +54,42 @@ textoutlines("π", O, :path, halign=:center, valign=:middle)
 <p>Combining concentric circles and rainbow colors, this image shows about 350 digits of π.</p>
 <p><img src="/assets/images/piday/digits-of-pi-avenir-800.png" alt="image label" /></p>
 <p>To generate the digits of π, I use this function:</p>
-<pre><code class="language-julia">function pidigits(n)
-    result = BigInt[]
-    k, a, b, a1, b1 = big.([2, 4, 1, 12, 4])
-    while n > 0
-        p, q, k = k^2, 2k + 1, k + 1
-        a, b, a1, b1 = a1, b1, p * a  +  q * a1, p * b  +  q * b1
-        d, d1 = a ÷ b, a1 ÷ b1
-        while d == d1
-            push!(result, d)
-            n -= 1
-            a, a1 = 10(a % b), 10(a1 % b1)
-            d, d1 = a ÷ b, a1 ÷ b1
+<pre><code class="language-julia">function pidigits&#40;n&#41;
+    result &#61; BigInt&#91;&#93;
+    k, a, b, a1, b1 &#61; big.&#40;&#91;2, 4, 1, 12, 4&#93;&#41;
+    while n &gt; 0
+        p, q, k &#61; k^2, 2k &#43; 1, k &#43; 1
+        a, b, a1, b1 &#61; a1, b1, p * a  &#43;  q * a1, p * b  &#43;  q * b1
+        d, d1 &#61; a ÷ b, a1 ÷ b1
+        while d &#61;&#61; d1
+            push&#33;&#40;result, d&#41;
+            n -&#61; 1
+            a, a1 &#61; 10&#40;a &#37; b&#41;, 10&#40;a1 &#37; b1&#41;
+            d, d1 &#61; a ÷ b, a1 ÷ b1
         end
     end
     return result
 end</code></pre>
 <p>It looks like witchcraft to me, but I understand that it&#39;s a &quot;spigot&quot; algorithm. I was hoping for a while that it was named after a Professor Spigot, but in fact it&#39;s describing the way the digits trickle out one by one like drops of water. It&#39;s quick enough for a thousand digits or so, but slows down a lot when you ask for 100_000 or more, probably due to the hard work that the big integer library has to do: even when you&#39;re just calculating the first 15 digits of π, the values of <code>a1</code> and <code>b1</code> are way over the limits of Int64s.</p>
-<pre><code class="language-julia">julia-1.1> @time pidigits(1000);
- 0.014522 seconds (44.90 k allocations: 9.425 MiB, 28.97% gc time)</code></pre>
+<pre><code class="language-julia">julia-1.1&gt; @time pidigits&#40;1000&#41;;
+ 0.014522 seconds &#40;44.90 k allocations: 9.425 MiB, 28.97&#37; gc time&#41;</code></pre>
 <p>The image might work better on white:</p>
 <p><img src="/assets/images/piday/digits-of-pi-avenir-on-white-800.png" alt="image label" /></p>
 <p>Sometimes I wanted to check where certain sequences of digits appeared. I couldn&#39;t find a built-in function that looked for a sequence of digits in an array, but this worked well enough for my purposes:</p>
-<pre><code class="language-julia">function findsubsequence(needle, haystack)
-    result = Int64[]
-    for k in 1:length(haystack) - length(needle)
-        if needle == view(haystack, k:k + length(needle) - 1)
-            push!(result, k)
+<pre><code class="language-julia">function findsubsequence&#40;needle, haystack&#41;
+    result &#61; Int64&#91;&#93;
+    for k in 1:length&#40;haystack&#41; - length&#40;needle&#41;
+        if needle &#61;&#61; view&#40;haystack, k:k &#43; length&#40;needle&#41; - 1&#41;
+            push&#33;&#40;result, k&#41;
         end
     end
     return result
 end
 
-findsubsequence(str::String, digits) =
-    findsubsequence(map(x -> parse(Int, x), split(str, "")), digits)
+findsubsequence&#40;str::String, digits&#41; &#61;
+    findsubsequence&#40;map&#40;x -&gt; parse&#40;Int, x&#41;, split&#40;str, &quot;&quot;&#41;&#41;, digits&#41;
 
-findsubsequence("999999", pidigits(2000)) # => [763]</code></pre>
+findsubsequence&#40;&quot;999999&quot;, pidigits&#40;2000&#41;&#41; # &#61;&gt; &#91;763&#93;</code></pre>
 <h3 id="day_5_low-fat"><a href="#day_5_low-fat">Day 5: Low-fat</a></h3>
 <p>A chunky typeface like the Avenir Heavy I used yesterday is good for masking and clipping. But I wondered how the narrowest typeface would look. I found Briem Akademi, designed by Gunnlaugur Briem at the Royal Academy of Fine Arts in Copenhagen. Adobe&#39;s description says:</p>
 <blockquote>
@@ -109,10 +109,10 @@ findsubsequence("999999", pidigits(2000)) # => [763]</code></pre>
 <p>Much to do with color depends on the viewer&#39;s perception, but I think it works well here. It starts at the top left, and works from left to right. &#40;That pesky decimal point defaults to using the previous color...&#41; You can spot the Feynman point &#40;<code>999999</code>&#41; halfway down on the left &#40;look for the six consecutive sandy brown squares&#41;, or the four purple sevens on the bottom row.</p>
 <p><img src="/assets/images/piday/pi-distinguishable_colors-800.png" alt="image label" /></p>
 <p>I remembered to try to choose the color for the small labels &#40;probably unreadable in the low-resolution PNG you see here&#41; so that they&#39;re either light on dark, or dark on light.</p>
-<pre><code class="language-julia">... r, g, b = color of square
-gamma = 2.2
-luminance = 0.2126 * r^gamma + 0.7152 * g^gamma + 0.0722 * b^gamma
-(luminance > 0.5^gamma) ? sethue("black") : sethue("white")</code></pre>
+<pre><code class="language-julia">... r, g, b &#61; color of square
+gamma &#61; 2.2
+luminance &#61; 0.2126 * r^gamma &#43; 0.7152 * g^gamma &#43; 0.0722 * b^gamma
+&#40;luminance &gt; 0.5^gamma&#41; ? sethue&#40;&quot;black&quot;&#41; : sethue&#40;&quot;white&quot;&#41;</code></pre>
 <h3 id="day_8_candy_crush_edition"><a href="#day_8_candy_crush_edition">Day 8 Candy crush edition</a></h3>
 <p><img src="/assets/images/piday/candy-crush.png" alt="image label" /></p>
 <p>I must have seen an advert for CandyCrush yesterday, or perhaps all that talk of gamma and LCHab spaces caused a reaction, but this sugar rush of an image was the result. The SVG version looks tasty but is too big for this web page.</p>
@@ -138,34 +138,34 @@ luminance = 0.2126 * r^gamma + 0.7152 * g^gamma + 0.0722 * b^gamma
 <p>And now of course I have to add a suitable audio soundtrack. Luckily I&#39;ve recently been playing with George Datseris&#39; <a href="https://github.com/JuliaMusic">MIDI interface for Julia</a>, so it was easy enough to make a musical version of the first 1000 digits of π, where the digits from 0 to 9 choose the appropriate note from a reasonably harmonious scale.</p>
 <pre><code class="language-julia">using MIDI
 
-function savetrack(track, notes)
-    file = MIDIFile()
-    addnotes!(track, notes)
-    addtrackname!(track, "a track")
-    push!(file.tracks, track)
-    writeMIDIFile("/tmp/sound-of-pi.mid", file)
+function savetrack&#40;track, notes&#41;
+    file &#61; MIDIFile&#40;&#41;
+    addnotes&#33;&#40;track, notes&#41;
+    addtrackname&#33;&#40;track, &quot;a track&quot;&#41;
+    push&#33;&#40;file.tracks, track&#41;
+    writeMIDIFile&#40;&quot;/tmp/sound-of-pi.mid&quot;, file&#41;
 end
 
-scales = [46, 48, 51, 53, 55, 57, 58, 60, 62, 65, 67]
+scales &#61; &#91;46, 48, 51, 53, 55, 57, 58, 60, 62, 65, 67&#93;
 
-function generatetune!(notes)
-    pos = 1
-    dur = 80
-    k = 1
-    manypidigits = pidigits(1000)
+function generatetune&#33;&#40;notes&#41;
+    pos &#61; 1
+    dur &#61; 80
+    k &#61; 1
+    manypidigits &#61; pidigits&#40;1000&#41;
     for i in manypidigits
-        dur = k * 960
-        pos += k * 960
-        n = scales[i + 1]
-        note = Note(n, 76, pos, dur)
-        push!(notes, note)
+        dur &#61; k * 960
+        pos &#43;&#61; k * 960
+        n &#61; scales&#91;i &#43; 1&#93;
+        note &#61; Note&#40;n, 76, pos, dur&#41;
+        push&#33;&#40;notes, note&#41;
     end
 end
 
-notes = Notes()
-track = MIDITrack()
-generatetune!(notes)
-savetrack(track, notes)</code></pre>
+notes &#61; Notes&#40;&#41;
+track &#61; MIDITrack&#40;&#41;
+generatetune&#33;&#40;notes&#41;
+savetrack&#40;track, notes&#41;</code></pre>
 <p><img src="/assets/images/piday/music-credits.png" alt="image label" /></p>
 <p>This &quot;sonification&quot; &#40;or &quot;audification&quot;&#41; is just for fun. For a more convincing critique of these sonifications than I can provide, watch the always entertaining <a href="https://www.youtube.com/watch?v&#61;Ocq3NeudsVk">Tantacrul</a>&#39;s presentation on YouTube.</p>
 <p>And while you&#39;re on YouTube, the π video is on <a href="https://www.youtube.com/channel/UCfd52kTA5JpzOEItSqXLQxg">my YouTube channel</a>, and it&#39;s my entry for YouTube&#39;s Most Boring Video of 2019 competition, but I suspect it won&#39;t do very well—competition in this category is fierce, even if sometimes the contestants are unwilling participants.</p>
@@ -175,7 +175,7 @@ savetrack(track, notes)</code></pre>
 <p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p>
 <div class="page-foot">
   <div class="copyright">
-    &copy; cormullion. Last modified: August 17, 2020. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a>.
+    &copy; cormullion. Last modified: October 09, 2020. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a>.
   </div>
 </div>
 </div><!-- CONTENT ENDS HERE -->
