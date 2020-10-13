@@ -101,8 +101,10 @@ function lx_drawunicodestring(lxc, _)
     str = join(args)
 
     dir = lowercase(locvar("title"))
-    stamp = replace(string(Libc.time()), "." => "")
-    filename = "unicodestring-$(stamp).svg"
+
+    hashed = hash(str)
+
+    filename = "unicodestring-$(hashed).svg"
     pathname = "_assets/images/$(dir)/" * filename
 
     str = replace(str, "hash" => "#")
