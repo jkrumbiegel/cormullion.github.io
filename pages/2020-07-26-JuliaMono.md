@@ -65,10 +65,6 @@ And in [Emacs](https://www.gnu.org/software/emacs/):
 # Examples
 @@
 
-The following examples will be rendered in JuliaMono by your browser (if it’s successfully downloaded the web font versions), so I hope what you see here is close to what I made.
-
-The CSS markup applied to the following code uses two weights of the typeface, JuliaMono-Regular and JuliaMono-Medium, which is a smidgeon bolder:
-
 ```julia
 using Zygote: @adjoint
 function ignore(f)
@@ -87,7 +83,7 @@ There are different weights of JuliaMono, so you can control the amount of contr
 
 (There are also versions of two of the fonts with “Latin” in the name: these are stripped down versions supporting just the basic MacRoman/Windows1252 “Latin” character sets, intended for use as place-holders, of interest mainly if you want to have more control over font loading times in web browser-based applications.)
 
-In the hands of a virtuoso (such as Dr Zygmunt Szpak, the author of the following code fragment[^zscode]), the range of available Unicode characters can be quite expressive:
+In the hands of a virtuoso (such as Dr Zygmunt Szpak, the author of the following Julia code fragment[^zscode]), the range of available Unicode characters can be quite expressive:
 
 ```
 function T(𝛉::AbstractArray,
@@ -495,7 +491,7 @@ Terminal/console applications also vary a lot; on MacOS the **Terminal** and **i
 
 If the application allows, you should be able to switch the ``calt`` contextual ligatures off, particularly since quite a few people won’t like any of them in their code. For the following listing, I switch the **calt** set off using CSS (see [here](/faq/#how_do_i_control_features_in_css_in_juno_or_vs_code)), and then enable some of the alternative stylistic sets: compare characters such as the **0**, **g**, **a**, **j**, and **@** with the previous listing:
 
-@@code_ss_on
+@@jm_code_ss_on
 ```
 julialang = true # (!= 0)
 (x, y) -> (x + y)
@@ -1003,7 +999,7 @@ One day perhaps.
 
 [^zscode]: &nbsp; “maths in code” spotted [here](https://github.com/JuliaArrays/StaticArrays.jl/issues/537#issuecomment-439863841)
 
-[^languages]: &nbsp; “languages” Please open an issue on Github if there are any problems. I don’t speak most of these languages.
+[^languages]: &nbsp; “languages” Apologies for errors- I don’t speak most of these languages.
 
 [^linespacing]: &nbsp; “terminals and line spacing” Terminal applications usually provide the option to vary the line spacing.  For perfectly smooth Unicode plots, you can adjust this until the shaded glyphs are in tune. But for coding purposes you might want the line spacing increased (or decreased) from the default, depending on the trade-off between reading speed, font size, and how many lines of code you can cram in.
 
