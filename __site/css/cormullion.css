@@ -1,0 +1,171 @@
+@font-face {
+	font-family: JuliaMono-Regular;
+	src: url("https://cdn.jsdelivr.net/gh/cormullion/juliamono@latest/webfonts/JuliaMono-Regular.woff2");
+}
+
+body {
+	font-family: Georgia, serif;
+}
+
+pre, code {
+	font-family: JuliaMono-Regular;
+	margin: 0;
+	width: 110%;
+}
+
+code.language-julia.hljs {
+	font-size: 1em;
+	line-height: 1.5em;
+	overflow: auto;
+	page-break-inside: avoid;
+	text-wrap: unrestricted;
+	/* Mozilla, since 1999 */
+	/* Opera 7 */
+	/* Opera 4-6 */
+	white-space: pre-wrap;
+	/* css-3 */
+	word-wrap: break-word;
+	/* Internet Explorer 5.5+ */
+	border: none;
+}
+
+.marginnote {
+	 float: right;
+     clear: right;
+	 margin-right: -30%;
+     width: 20%;
+     margin-top: -4rem;
+     margin-bottom: 0;
+     font-size: .8rem;
+     line-height: 1.3;
+     vertical-align: baseline;
+     position: relative;
+	 hanging-punctuation: first;
+ }
+
+.smallimage img {
+	text-align: center;
+  	width: auto;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  grid-gap: 1rem;
+}
+
+.grid > p {
+  padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+  font-size: 0.9em;
+  font-family: Open Sans, sans-serif;
+  font-weight: 600;
+  line-height: 1.1rem;
+  border-radius: 5px;
+  border: 1px solid #BFBFBF;
+  background-color: white;
+  box-shadow: 1px 1px 5px #aaaaaa;
+  text-align:left;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.grid > p a {
+  display: block;
+  padding-bottom: 0.5em;
+}
+
+.fontsize2rem {
+	font-size: 2rem;
+	line-height: 2.5rem;
+}
+
+
+.fontsize3rem {
+	font-size: 3rem;
+}
+
+
+.language * {
+	color: inherit;
+	background-color: hsl(12, 21%, 13%);
+}
+
+.language-julia.hljs {
+	color: #ccf;
+}
+
+.language-julia {
+	background-color: #010;
+}
+
+.language-css {
+    background-color: #111;
+    color: #999;
+}
+
+.language-html {
+	background-color: #223;
+	color: #aaa;
+}
+
+.hljs-built_in {
+	color: #caa !important;
+}
+
+.hljs-keyword {
+	color: #cc8833;
+}
+
+.hljs-string {
+	color: #1cd;
+}
+
+.hljs-number {
+	color: #abc;
+}
+
+.hljs-literal {
+	color: #999;
+}
+
+.hljs-meta {
+	color: #897;
+}
+
+.hljs-variable {
+	color: #800;
+}
+
+.hljs-subst {
+	color: #999;
+}
+
+.hljs-built_in {
+	color: #acb;
+}
+
+.hljs-attribute {
+	color: #adf;
+}
+
+.hljs-selector-tag {
+	color: #c80;
+}
+
+.hljs-name {
+	color: #8f8;
+}
+
+.hljs-tag {
+	color: #88f;
+}
+
+
+.hljs-quote
+{
+	color: #998;
+}
+
+.language-xml.hljs{
+	color: #9aa;
+}
