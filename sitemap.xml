@@ -26,8 +26,14 @@
     <priority>0.5</priority>
 </url>
 <url>
+    <loc>https://cormullion.github.io/pages/2020-07-26-JuliaMono/index.html</loc>
+    <lastmod>2020-10-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
     <loc>https://cormullion.github.io/index.html</loc>
-    <lastmod>2020-10-09</lastmod>
+    <lastmod>2020-10-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
