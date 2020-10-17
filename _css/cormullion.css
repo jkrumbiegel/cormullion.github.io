@@ -49,7 +49,6 @@ pre {
 }
 
 code {
-	.language-julia.hljs  {
 		font-family: JuliaMono-Regular;
 		color: "white";
 		background-color: color: hsl(12, 5%, 5%);
