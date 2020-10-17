@@ -48,6 +48,26 @@ pre {
 	width: 110%;
 }
 
+code {
+	.language-julia.hljs  {
+		font-family: JuliaMono-Regular;
+		color: "white";
+		background-color: color: hsl(12, 5%, 5%);
+		font-size: 1em;
+		line-height: 1.5em;
+		overflow: auto;
+		page-break-inside: avoid;
+		text-wrap: unrestricted;
+		/* Mozilla, since 1999 */
+		/* Opera 7 */
+		/* Opera 4-6 */
+		white-space: pre-wrap;
+		/* css-3 */
+		word-wrap: break-word;
+		/* Internet Explorer 5.5+ */
+		border: none;
+	}
+
 .language-julia.hljs  {
 	font-family: JuliaMono-Regular;
 	color: "white";
