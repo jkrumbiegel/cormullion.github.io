@@ -89,22 +89,6 @@ jm_pre, jm_code {
 	margin:0;
 }
 
-jm_code.language-julia.hljs {
-	font-size: 1em;
-	line-height: 1.5em;
-	/* overflow: auto; */
-	page-break-inside: avoid;
-	text-wrap: unrestricted;
-	/* Mozilla, since 1999 */
-	/* Opera 7 */
-	/* Opera 4-6 */
-	white-space: pre-wrap;
-	/* css-3 */
-	word-wrap: break-word;
-	/* Internet Explorer 5.5+ */
-	border: none;
-}
-
 .jm_copyright {
 	margin: 10rem 2rem 2rem 2rem;
 	font-family: JuliaMono-Regular;
