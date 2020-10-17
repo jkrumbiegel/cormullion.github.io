@@ -42,14 +42,14 @@ body {
 	font-family: Georgia, serif;
 }
 
-pre, code {
-
+pre {
 	font-family: JuliaMono-Regular;
 	margin: 0;
 	width: 110%;
 }
 
-code.language-julia.hljs {
+.language-julia.hljs  {
+	font-family: JuliaMono-Regular;
 	color: "white";
 	background-color: color: hsl(12, 5%, 5%);
 	font-size: 1em;
