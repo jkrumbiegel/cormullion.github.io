@@ -65,7 +65,7 @@ code {
 		word-wrap: break-word;
 		/* Internet Explorer 5.5+ */
 		border: none;
-	}
+}
 
 .language-julia.hljs  {
 	font-family: JuliaMono-Regular;
