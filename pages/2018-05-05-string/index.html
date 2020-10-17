@@ -53,7 +53,7 @@
 <p><img src="/assets/images/string/pirates-code.gif" alt="stick to the code" /></p>
 <p>Let’s start again, with a fresh cup of coffee to hand.</p>
 <p>My initial idea of geometrical string led me to the parametric equations for a small piece of string joined at the ends in a loop, overlapping three times, known as a trefoil knot.</p>
-\[\begin{array}{c}
+\[\begin{array}{rcl}
   \begin{cases}
     x &= \sin(t)+2\sin(2t) \\
     y &= \cos(t)-2\cos(2t)
@@ -97,7 +97,7 @@ end</code></pre>
 <p>I tried to devise some algorithms to draw overlapping and underlapping paths automatically. For example, as you start to draw a path, remember the location of each line segment, then, when you have to go underneath an earlier segment, make a note of it, then later go back and erase it and redraw it.... Well, I didn’t manage to complete any of these thought algorithms, but I&#39;d love to know if anyone else has.</p>
 <h3 id="go_deeper"><a href="#go_deeper">Go deeper</a></h3>
 <p>The problem was literally asking for a more in-depth approach. I added Z-coordinates to the X and Y. The parametric equations are now:</p>
-\[\begin{array}{c}
+\[\begin{array}{rcl}
   \begin{cases}
     x &= \sin(t)+2\sin(2t) \\
     y &= \cos(t)-2\cos(2t) \\
