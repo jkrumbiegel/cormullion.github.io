@@ -1,45 +1,4 @@
-@font-face {
-	font-family: JuliaMono-Regular;
-	src: url("https://cdn.jsdelivr.net/gh/cormullion/juliamono@latest/webfonts/JuliaMono-Regular.woff2");
-}
 
-@font-face {
-	font-family: JuliaMono-Medium;
-	src: url("https://cdn.jsdelivr.net/gh/cormullion/juliamono@latest/webfonts/JuliaMono-Medium.woff2");
-	font-display: fallback;	/* allow 100 milliseconds then display fallback */
-	unicode-range: U+0020-00FF, U+2049-2050, U+2000-2020;
-}
-
-@font-face {
-	font-family: JuliaMono-Bold;
-	src: url("https://cdn.jsdelivr.net/gh/cormullion/juliamono@latest/webfonts/JuliaMono-Bold.woff2");
-	font-display: fallback;	/* allow 100 milliseconds then display fallback */
-	unicode-range: U+0020-00FF, U+2049-2050, U+2000-2020;
-}
-
-@font-face {
-	font-family: JuliaMono-ExtraBold;
-	font-display: fallback;	/* allow 100 milliseconds then display fallback */
-	src: url("https://cdn.jsdelivr.net/gh/cormullion/juliamono@latest/webfonts/JuliaMono-ExtraBold.woff2");
-	unicode-range: U+0020-00FF, U+2049-2050, U+2000-2020;
-}
-
-@font-face {
-	font-family: JuliaMono-Black;
-	font-display: fallback;	/* allow 100 milliseconds then display fallback */
-	src: url("https://cdn.jsdelivr.net/gh/cormullion/juliamono@latest/webfonts/JuliaMono-Black.woff2");
-	unicode-range: U+0020-00FF, U+2049-2050, U+2000-2020;
-}
-
-jm_a {
-	padding:0 0 0 0;
-    border-bottom-style: dotted;
-	text-decoration: none;
-}
-
-jm_a:hover {
-	 border-color: green;
-}
 
 .jm_franklin-content {
 	display: flex;
@@ -68,13 +27,13 @@ jm_a:hover {
 .jm_h1 {
 	font-size: 3rem;
 	font-family: JuliaMono-Black;
+	max-width: 50ch;
 	hanging-punctuation: first;
 	margin-bottom: 0.5rem;
 }
 
 .jm_h2, .jm_h3 {
 	font-size: 2.0rem;
-	line-height: 3rem;
 	font-family: JuliaMono-ExtraBold;
 	max-width: 50ch;
 	margin-bottom: 0.5rem;
@@ -102,7 +61,7 @@ jm_a:hover {
 }
 
 .jm_strong {
-	font-face: JuliaMono-Bold;
+	font-family: JuliaMono-Bold;
 }
 
 .jm_fndef, .jm_fndef-content, .jm_fndef-backref {
@@ -227,21 +186,4 @@ jm_code.language-julia.hljs {
 	background-color: hsl(238, 13%, 15%);
 	text-align: center;
   width: 25%;
-}
-
-.jm_hljs-keyword {
-	font-family: JuliaMono-Medium;
-}
-
-.jm_hljs-quote
-{
-	font-style: normal;
-}
-
-.jm_hljs-meta {
-	font-family: JuliaMono-Medium;
-}
-
-.jm_hljs-comment {
-	font-style: oblique 10deg;
 }

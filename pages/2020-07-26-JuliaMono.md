@@ -11,7 +11,7 @@
 
 # JuliaMono - a monospaced font for scientific and technical computing
 
-JuliaMono is a monospaced typeface designed for programming in the [Julia](https://julialang.org) Programming Language and in other text editing environments that require a wide range of specialist and technical Unicode characters. It was intended as a fun experiment to be presented at the 2020 JuliaCon conference in Lisbon, Portugal (which of course didn’t happen in Lisbon, but it was held online).
+JuliaMono is a monospaced typeface designed for programming in the [Julia](https://julialang.org) Programming Language and in other text editing environments that require a wide range of specialist and technical Unicode characters. It was intended as a fun experiment to be presented at the 2020 JuliaCon conference in Lisbon, Portugal (which of course didn’t physically happen in Lisbon, but online).
 
 JuliaMono is:
 
@@ -20,6 +20,8 @@ JuliaMono is:
 - suitable for scientific and technical programming as well as for general purpose hacking
 - available for MacOS, Unix, and Windows [^windows]
 - easy to use, simple, friendly, and approachable
+
+The original temporary website used JuliaMono everywhere, so let's try to make the rest of this page do the same.
 
 @@jm_h1
 # Contents
@@ -79,7 +81,7 @@ end
 end
 ```
 
-There are different weights of JuliaMono, so you can control the amount of contrast you have in your highlighted code: JuliaMono-Regular, ~~~<span style="font-family: JuliaMono-Medium;">JuliaMono-Medium</span>~~~, ~~~<span style="font-family: JuliaMono-Bold;">JuliaMono-Bold</span>~~~, ~~~<span style="font-family: JuliaMono-ExtraBold;">JuliaMono-ExtraBold</span>~~~, and ~~~<span style="font-family: JuliaMono-Black;">JuliaMono-Black</span>~~~. [^masters]
+There are different weights of JuliaMono, so you can control the amount of contrast you have in your highlighted code: ~~~<span style="font-family: JuliaMono-Light;">JuliaMono-Light</span>~~~, JuliaMono-Regular, ~~~<span style="font-family: JuliaMono-Medium;">JuliaMono-Medium</span>~~~, ~~~<span style="font-family: JuliaMono-Bold;">JuliaMono-Bold</span>~~~, ~~~<span style="font-family: JuliaMono-ExtraBold;">JuliaMono-ExtraBold</span>~~~, and ~~~<span style="font-family: JuliaMono-Black;">JuliaMono-Black</span>~~~. [^masters]
 
 (There are also versions of two of the fonts with “Latin” in the name: these are stripped down versions supporting just the basic MacRoman/Windows1252 “Latin” character sets, intended for use as place-holders, of interest mainly if you want to have more control over font loading times in web browser-based applications.)
 
@@ -263,7 +265,7 @@ Here are some samples of various languages[^languages] :
 # Unicode coverage
 @@
 
-One of the goals of JuliaMono is to include most of the characters that a Julia programmer would reasonably expect to find. (Except for all those emojis - they are best handled by the operating system.) Here’s a thousand or so chosen at random:
+One of the goals of JuliaMono is to include most of the characters that a typical programmer would reasonably expect to find. (Except for all those emojis - they are best handled by the operating system.) Here’s a thousand or so chosen at random:
 
 ~~~<img src="/assets/images/juliamono/unicode-sample.svg" width="100%" alt="Unicode sampler"> ~~~
 
@@ -329,7 +331,7 @@ I ❤ Julia
 ```
 
 @@jm_h1
-# Contextual and stylistic alternates
+# Contextual and stylistic alternates (and ‘ligatures’)
 @@
 
 JuliaMono is an [OpenType](https://en.wikipedia.org/wiki/OpenType) typeface. OpenType technology provides powerful text positioning, pattern matching, and glyph substitution features, which are essential for languages such as Arabic and Urdu. In English, OpenType features are often seen when letter pairs such as ~~~<span style="font-size: 1.5em;font-family: Georgia;font-variant-ligatures: no-common-ligatures; ">fi</span>~~~ in certain fonts are replaced by a single glyph such as ~~~<span style="font-size: 1.5em; font-family: Georgia;">ﬁ</span>~~~. These [ligatures](https://en.wikipedia.org/wiki/Orthographic_ligature) have been used ever since printing with moveable type was invented, replacing the occasional awkward character combination with a better-looking alternative.
@@ -489,7 +491,7 @@ Browser-based editors such as Juno and VS Code support many OpenType features in
 
 Terminal/console applications also vary a lot; on MacOS the **Terminal** and **iTerm** applications try to offer controls for OpenType features, with varying degrees of success. On Linux, some terminal applications such as [Kitty](https://sw.kovidgoyal.net/kitty/#font-control) offer quite good support, but others such as [Alacritty](https://github.com/alacritty/alacritty) offer little or none, as yet. [^terminal]
 
-If the application allows, you should be able to switch the ``calt`` contextual ligatures off, particularly since quite a few people won’t like any of them in their code. For the following listing, I switch the **calt** set off using CSS (see [here](/faq/#how_do_i_control_features_in_css_in_juno_or_vs_code)), and then enable some of the alternative stylistic sets: compare characters such as the **0**, **g**, **a**, **j**, and **@** with the previous listing:
+If the application allows, you should be able to switch the ``calt`` contextual ligatures off, particularly since quite a few people won’t like any of them in their code. For the following listing, I switch the **calt** set off using CSS (see [here](#how_do_i_control_features_in_css_in_atomjuno_or_vs_code)), and then enable some of the alternative stylistic sets: compare characters such as the **0**, **g**, **a**, **j**, and **@** with the previous listing:
 
 @@jm_code_ss_on
 ```
@@ -550,13 +552,17 @@ It’s usually possible to type Unicode values directly into text. This is a use
 # Download and install
 @@
 
+@@jm_h2
 ## Download
+@@
 
 You can find the font files at [https://github.com/cormullion/juliamono](https://github.com/cormullion/juliamono).
 
 For Arch Linux, there is also a [package in the AUR](https://aur.archlinux.org/packages/ttf-juliamono/).
 
+@@jm_h2
 ## Installation
+@@
 
 ### Mac
 
@@ -612,17 +618,23 @@ $ fc-list | grep "JuliaMono"
 # Frequently asked questions
 @@
 
+@@jm_h2
 ## ‘Why⁉’
+@@
 
 The typeface was introduced at the 2020 Julia Programming Language conference, JuliaCon, in Lisbon, Portugal, and it was (going to be) my contribution to the festivities. It was an experiment to see whether a font could be designed with a specific programming language in mind.
 
+@@jm_h2
 ## ‘What’s Julia-specific about it? How does it “work well with” Julia?’
+@@
 
 * it has all the glyphs used in the Unicode Input chapter of the Julia documentation (except for the emojis)
 * the glyphs were designed with the Julia programming language in mind
 * the font contains special features such as contextual alternates, stylistic sets, and “ligatures” to complement Julia syntax
 
+@@jm_h2
 ## ‘Where can I see it in action?’
+@@
 
 You can visit [this mirror of the Julia blog](https://julialangblogmirror.netlify.app/blog/). It hasn’t been updated for a while (it was useful during the development of [Franklin.jl](https://franklinjl.org)), but all the code examples use JuliaMono.
 
@@ -630,11 +642,15 @@ You can browse through [this local copy](/assets/images/juliamono/juliamanual/in
 
 As an example of using JuliaMono with [Documenter.jl](https://github.com/JuliaDocs/Documenter.jl)-generated documents, see the documentation for [Luxor.jl](https://github.com/JuliaGraphics/Luxor.jl).
 
+@@jm_h2
 ## ‘I don’t like it as much as ``$(my_favourite_font)``’
+@@
 
 **That’s not a question!** But I know what you mean. Choice of work environment (editor, font, colour scheme, background music, preferred beverage, etc.) is very much a personal thing, and over the hours, days, and weeks that you work with your particular setup, you’ll grow accustomed to it, and unfamiliar work environments will look unappealing or even ugly. You’d probably need to try any alternatives for a while before you get more accustomed to them. Fortunately, you don’t have to use [Comic Code](https://www.myfonts.com/fonts/tabular-type-foundry/comic-code/), the [Kakoune editor](http://kakoune.org), the music of [Autechre](http://autechre.ws/), [Durian tea](https://www.tealeaves.com/products/durian), or anything else that’s new and unfamiliar; just stick to your current favourites!
 
+@@jm_h2
 ## ‘How can I use the web fonts?’
+@@
 
 Find the relevant CSS file, and add a link to the WOFF2 stored on the server. For example:
 
@@ -649,7 +665,9 @@ This accesses the current version the Regular font using the jsDelivr CDN (Conte
 
 You may prefer to serve the WOFF/2 fonts from your own server. One problem you might encounter is related to [Cross-origin resource sharing](https://en.wikipedia.org/wiki/Cross-origin_resource_sharing), which on some browsers prevents one web page from downloading fonts from another.
 
+@@jm_h2
 ## ‘How do I control features in CSS, in Atom/Juno, or VS Code?’
+@@
 
 ### VS-Code
 
@@ -666,11 +684,11 @@ This uses the feature codes ([listed here](/#contextual_and_stylistic_alternates
 For example, if you want all the alternate stylistic sets, use:
 
 ```css
-"editor.fontLigatures": "'ss01', 'ss02', 'ss03',
-'ss04', 'ss05', 'ss06', 'zero', 'ss07'",
+"editor.fontLigatures": "'zero', 'ss01', 'ss02', 'ss03', 'ss04',
+    'ss05', 'ss06',  'ss07', 'ss08', 'ss09', 'ss10'",
 ```
 
-Or if you don’t like the contextual alternates, prefer the slashed zero, a simpler g, and a lighter asterisk, use this:
+Or if you just don’t like the contextual alternates, prefer the slashed zero, a simpler g, and a lighter asterisk, use this:
 
 ```css
 "editor.fontLigatures": "'calt' off, 'zero', 'ss01', 'ss05'",
@@ -728,7 +746,7 @@ atom-text-editor {
 
 <!--  force a paragraph  -->
 
-### ‘Can I use this font in a notebook?And how do I do it?’
+### ‘Can I use this font in a notebook? And how do I do it?’
 
 It’s a good question. Some browsers these days are reluctant to give even you access to things on your own local disk, “for security reasons”. But a local copy of the font may be available and accessible on your particular set-up.
 
@@ -769,7 +787,9 @@ which downloads the font once and is then available to applications.
 <img src="/assets/images/juliamono/jupyter-example.png" alt="screenshot of jupyter editor">
 ~~~
 
-## ‘How do I use the font in Plots.jl?’
+@@jm_h2
+## ‘How do I use the font for plotting, such as in Plots.jl?’
+@@
 
 Another great question. Are you sure you want a monospaced font on your plot? If you do, it should be easy enough to ask for the font when you plot. But it’s never as simple as you want it to be, as is usual in the world of fonts.
 
@@ -820,15 +840,17 @@ display(p)
 
 ![frequency counts](/assets/images/juliamono/julia-frequencies.svg)
 
-The top 9 characters - “etanirsol” - are a good match for the typical English frequency count e.g. “etarionsh”.
+The top 9 characters - “etanirsol” - are a good match for the typical English frequency count e.g. “etarionsh”. It's to be expected that parentheses make a very good showing, here.
 
-Although over 3600 unique characters occur in the Julia documentation, about 3000 of them appear just once. All of them, except the emojis which aren’t in JuliaMono, can be plotted, but the long tail isn’t very interesting .
+Although over 3600 unique characters occur in the Julia documentation, about 3000 of them appear just once. All of them, except the emojis which aren’t in JuliaMono, could be plotted, but the long tail isn’t very interesting visually.
 
 For plotting emoji characters, you’ll have to dive into the internals of the plots system...
 
 Notice that the y-axis labels are in DejaVu Sans, provided with matplotlib. That’s because the `:log10` scaling code does its own $ \LaTeX $-y business, ignoring the current font. However, at least I was able to insert the Julia logo successfully, since it’s part of the JuliaMono font.
 
+@@jm_h2
 ## ‘Can I use it in a $ \LaTeX $ document?’
+@@
 
 In a $ \LaTeX $ document, you should be able to define and use local fonts.
 
@@ -836,7 +858,7 @@ Robert Moss put together an excellent package to help negotiate the various font
 
 [A custom Julia language style for the LaTeX listings package, and Unicode support for the JuliaMono font in a lstlisting environment.](https://github.com/mossr/julia-mono-listings).
 
-Here’s an approach that worked for me.
+An earlier approach that worked for me is as follows:
 
 In your $ \LaTeX $ source file, define the font, using the local pathname:
 
@@ -859,17 +881,23 @@ Then you can use something like `minted` to format the code.
 
 (I used the lualatex engine.)
 
+@@jm_h2
 ## ‘Aren’t these font files too big?’
+@@
 
 It depends if you mean the web fonts or the ‘desktop’ fonts. Web fonts come in two flavours, `.WOFF` and `.WOFF2`, where the `2` indicates a more recent and slightly more compact format. `JuliaMono-Regular.woff` is 674KB, `JuliaMono-Regular.woff2` is 619KB - the size of a PNG image, perhaps.
 
-The `.OTF` desktop versions are more like 900Kb each. The `.TTF` are getting on for 1.8MB each. (See [Does it work on Windows]([this](#does_it_work_on_windows)).)
+The `.TTF` versions are getting on for 1.8MB each.
 
 For comparison, the Themes folder of `.CSS` files for the Julia manual (and for every manual built with Documenter.jl since v0.21) is about 700KB. So in that light the WOFF2 fonts aren’t that bad. Of course, the two Google fonts downloaded by every Julia document (Lato and Roboto) are tiny, at 14KB and 11KB, with 221 glyphs in each.
 
 So, if you’re building a website, or designing for mobile applications, the size of the WOFF2 file(s) will be an important factor to weigh against the advantages of having predictable character sets. Note that you can specify font subsets in the CSS using the **unicode-range** feature, which defines a restricted set of characters which you know are going to be used, so that users don’t download any that they won’t need.
 
+You could consider using the ‘-Latin’ variants to obviate the initial loading time.
+
+@@jm_h2
 ## ‘How is this different from any other Unicode font?’
+@@
 
 You’re right, of course, there are many coding fonts, all perfectly adequate for the task of programming in Julia and most other languages. Comparing two different fonts is a matter of how important small similarities and differences are. Perhaps with one font you’ll see the occasional empty box or odd replacement rather than the character you were hoping for. Or perhaps sometimes you won’t like a particular glyph.
 
@@ -877,19 +905,27 @@ More likely, though, the overall ‘feel’ of a new and unfamiliar font - too n
 
 Most people probably can’t tell the difference between Helvetica and Arial, and certainly aren’t going to be bothered about minor differences between JuliaMono and other coding fonts. But that’s fine. Just stick to your current favourites!
 
+@@jm_h2
 ## ‘Is it a package? Was it written in Julia? How will this contribute to the ecosystem of Julia language?’
+@@
 
-Unfortunately, in the world of typographical software, one programming language is currently ubiquitous (hint: one of the leading programmers in the typography realm is **Just van Rossum**, one of the van Rossum brothers) and it’s not Julia.
+In the world of typographical software, one programming language is currently ubiquitous (hint: one of the leading programmers in the typography realm is **Just van Rossum**, one of the van Rossum brothers) and it’s not Julia.
 
 The typeface isn’t a Julia package. It might be, soon! But although Julia wasn’t used to build the typeface, I did use Julia quite a lot while designing it; sometimes to generate glyphs, there being plenty of symmetrical designs that lend themselves to programmatic construction with a simple graphics program (e.g. [Luxor.jl](https://github.com/JuliaGraphics/Luxor.jl)). And also for producing glyph lists, charts, test output, and build scripts. And the various graphics you see here and in the specimen PDF were also made with Julia. So in that sense at least the font is a bit Julian.
 
 And how will JuliaMono contribute? It’s often in the nature of an experiment that the outcome is uncertain until it’s been carried out.
 
+@@jm_h2
 ## ‘Is it finished?’
+@@
 
-The first beta release, version 0.001, was released on July 27, 2020. Version 0.019 was released in October 2020. Always download the latest version if you want the typeface to perform as well as it can.
+The first β release, version 0.001, was released on July 27, 2020.
 
+The most recent β release, version 0.020, was released in October 2020. Always download the latest version if you want the typeface to perform as well as it can.
+
+@@jm_h2
 ## ‘Why don’t these accents/marks work properly?’
+@@
 
 Unicode (and Julia) allows you to combine characters. In the REPL, you can type a character and then modify it by adding a mark or diacritic. For example:
 
@@ -935,11 +971,15 @@ giving:
 julϊ̇a
 ```
 
+@@jm_h2
 ## ‘Does it work on macOS?’
+@@
 
 Yes.
 
+@@jm_h2
 ## ‘Does it work on Linux?’
+@@
 
 Yes.
 
@@ -956,7 +996,9 @@ Font management in Linux may require you to become familiar with the `fontconfig
 
 With some older terminal software the ligatures may cause problems (not that all terminals display ligatures properly, some are just confused by fonts that have them).
 
+@@jm_h2
 ## ‘Does it work on Windows?’
+@@
 
 The font works well on a good quality display, but will struggle to maintain quality when displayed on low-resolution displays.
 
@@ -966,7 +1008,9 @@ JuliaMono is an OTF/TTF-flavoured font that contains hinting instructions, so it
 
 Hinted fonts are larger as a consequence.
 
+@@jm_h2
 ## ‘Any love for nerdfonts?’
+@@
 
 [nerdfonts](https://www.nerdfonts.com) can add about four thousand extra glyphs to a font. It does this by creating a new font that combines an existing font’s glyphs with a bunch of new ones, using a FontForge Python script. This is quite cool, in a way.
 
@@ -976,11 +1020,15 @@ The nerdfonts project is a bit of a hack - glyphs are pushed into areas that are
 
 Perhaps the companies could contribute money to the Julia project in exchange for having their logos stored in the font...
 
+@@jm_h2
 ## ‘I prefer the glyphs in this other font...’
+@@
 
 Good to know!
 
+@@jm_h2
 ## ‘What about italics? How about JuliaSans?’
+@@
 
 One day perhaps.
 
@@ -991,7 +1039,7 @@ One day perhaps.
 @@jm_fndef
 [^licence]:  &nbsp; “licence” Although not MIT-licensed like Julia, JuliaMono is licensed using the [SIL Open Font licence](https://scripts.sil.org/OFL), which allows the fonts to be used, studied, modified, freely redistributed, and even sold, without affecting anything they’re bundled with.
 
-[^windows]:  &nbsp; “Windows” For more information about if and how it works on Windows, read [this](/faq/#does_it_work_on_windows), but I currently don't know enough about Windows font technology and how it differs from MacOS and Unix. Early reports said that the font didn't look good on Windows. This was because the format was CFF/PostScript OTF, which isn't hinted on Windows. A switch to TTF/TrueType OTF, which is hinted, was considered an improvement.
+[^windows]:  &nbsp; “Windows” For more information about if and how it works on Windows, read [this](#does_it_work_on_windows), but I currently don't know enough about Windows font technology and how it differs from MacOS and Unix. Early reports said that the font didn't look good on Windows. This was because the format was CFF/PostScript OTF, which isn't hinted on Windows. A switch to TTF/TrueType OTF, which is hinted, was considered an improvement.
 
 [^ohdear]: &nbsp; “downloading font problems” The problem might be something to do with the web security feature called [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS/Errors/CORSMissingAllowOrigin) which prevents a web page accessing the resources it needs.
 
@@ -999,13 +1047,13 @@ One day perhaps.
 
 [^zscode]: &nbsp; “maths in code” spotted [here](https://github.com/JuliaArrays/StaticArrays.jl/issues/537#issuecomment-439863841)
 
-[^languages]: &nbsp; “languages” Apologies for errors- I don’t speak most of these languages.
+[^languages]: &nbsp; “languages” Apologies for errors - I don’t speak most of these languages.
 
 [^linespacing]: &nbsp; “terminals and line spacing” Terminal applications usually provide the option to vary the line spacing.  For perfectly smooth Unicode plots, you can adjust this until the shaded glyphs are in tune. But for coding purposes you might want the line spacing increased (or decreased) from the default, depending on the trade-off between reading speed, font size, and how many lines of code you can cram in.
 
 [^greedy]: &nbsp; “greedy” referencing [this classic Julia blog post](https://julialang.org/blog/2012/02/why-we-created-julia/)
 
-[^otherfonts]: &nbsp; “better fonts...” Operator Mono and Fira are good typefaces... Try them! Also try IBM Plex Mono, Iosevka, Recursive, and Victor Mono, to name a few. Like programming languages, every typeface has its strengths and weaknesses.
+[^otherfonts]: &nbsp; “better fonts...” Operator Mono and Fira are excellent typefaces... Try them! Also try IBM Plex Mono, Iosevka, Recursive, and Victor Mono, to name a few of my favourites. Like programming languages, every typeface has its strengths and weaknesses. Perhaps keep JuliaMono for font fallback purposes... ;)
 
 [^nottheonlyone]: &nbsp; “not the only one” Matthew Butterick says [“hell no”](https://practicaltypography.com/ligatures-in-programming-fonts-hell-no.html) to them. He also uses the phrase “well-intentioned amateur ligaturists” which isn’t a label I want to have. But more seriously, he says: “my main concern is typography that faces other human beings. So if you’re preparing your code for others to read — whether on screen or on paper — skip the ligatures.”
 
@@ -1018,7 +1066,7 @@ One day perhaps.
 
 # Thanks!
 
-Thanks to: Thibaut Lienart for his [Franklin.jl](https://github.com/tlienart/Franklin.jl) web site builder; to Jérémie Knüsel who provided invaluable suggestions and advice; to Dr Zygmunt Szpak for his cool maths code; to Simeon Schaub for the issues and PRs, and to others in the Julia community for help and suggestions.
+Thanks to: Thibaut Lienart for his [Franklin.jl](https://github.com/tlienart/Franklin.jl) website builder; to Jérémie Knüsel who provided invaluable suggestions and advice; to Dr Zygmunt Szpak for his cool maths code; to Simeon Schaub for the issues and PRs, and to others in the Julia community for help and suggestions.
 
 
 @@

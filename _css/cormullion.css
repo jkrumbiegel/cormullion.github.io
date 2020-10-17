@@ -1,6 +1,41 @@
 @font-face {
+	font-family: JuliaMono-Light;
+	src: url("https://cdn.jsdelivr.net/gh/cormullion/juliamono@latest/webfonts/JuliaMono-Light.woff2");
+	font-display: fallback;	/* allow 100 milliseconds then display fallback */
+	unicode-range: U+0020-00FF, U+2049-2050, U+2000-2020;
+}
+
+@font-face {
 	font-family: JuliaMono-Regular;
 	src: url("https://cdn.jsdelivr.net/gh/cormullion/juliamono@latest/webfonts/JuliaMono-Regular.woff2");
+}
+
+@font-face {
+	font-family: JuliaMono-Medium;
+	src: url("https://cdn.jsdelivr.net/gh/cormullion/juliamono@latest/webfonts/JuliaMono-Medium.woff2");
+	font-display: fallback;	/* allow 100 milliseconds then display fallback */
+	unicode-range: U+0020-00FF, U+2049-2050, U+2000-2020;
+}
+
+@font-face {
+	font-family: JuliaMono-Bold;
+	src: url("https://cdn.jsdelivr.net/gh/cormullion/juliamono@latest/webfonts/JuliaMono-Bold.woff2");
+	font-display: fallback;	/* allow 100 milliseconds then display fallback */
+	unicode-range: U+0020-00FF, U+2049-2050, U+2000-2020;
+}
+
+@font-face {
+	font-family: JuliaMono-ExtraBold;
+	font-display: fallback;	/* allow 100 milliseconds then display fallback */
+	src: url("https://cdn.jsdelivr.net/gh/cormullion/juliamono@latest/webfonts/JuliaMono-ExtraBold.woff2");
+	unicode-range: U+0020-00FF, U+2049-2050, U+2000-2020;
+}
+
+@font-face {
+	font-family: JuliaMono-Black;
+	font-display: fallback;	/* allow 100 milliseconds then display fallback */
+	src: url("https://cdn.jsdelivr.net/gh/cormullion/juliamono@latest/webfonts/JuliaMono-Black.woff2");
+	unicode-range: U+0020-00FF, U+2049-2050, U+2000-2020;
 }
 
 body {
@@ -91,7 +126,7 @@ code.language-julia.hljs {
 }
 
 .language-julia.hljs {
-	color: #ccf;
+	color: #def;
 }
 
 .language-julia {
@@ -113,7 +148,8 @@ code.language-julia.hljs {
 }
 
 .hljs-keyword {
-	color: #cc8833;
+	font-family: JuliaMono-Medium;
+	color: #d46f0e;
 }
 
 .hljs-string {
@@ -129,7 +165,7 @@ code.language-julia.hljs {
 }
 
 .hljs-meta {
-	color: #897;
+	color: #aa7;
 }
 
 .hljs-variable {
@@ -168,4 +204,9 @@ code.language-julia.hljs {
 
 .language-xml.hljs{
 	color: #9aa;
+}
+
+
+header .blog-name {
+    font-family: JuliaMono-Bold, "Lucida Console", Monaco, monospace;
 }
