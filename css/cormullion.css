@@ -43,12 +43,15 @@ body {
 }
 
 pre, code {
+
 	font-family: JuliaMono-Regular;
 	margin: 0;
 	width: 110%;
 }
 
 code.language-julia.hljs {
+	color: "white";
+	background-color: color: hsl(12, 5%, 5%);
 	font-size: 1em;
 	line-height: 1.5em;
 	overflow: auto;
