@@ -6,5 +6,4 @@ images/.DS_Store
 old*/*
 franklin*
 package-lock.json
-__site
 Manifest.toml
