@@ -481,6 +481,12 @@ Here’s a list of the stylistic sets currently available in JuliaMono.
     <td class="jm_code_ss_on">r</td>
     <td><p>alternate r</p></td>
     </tr>
+    <tr>
+    <td>ss11</td>
+    <td class="jm_code_ss_off">`</td>
+    <td class="jm_code_ss_on">`</td>
+    <td><p>thinner grave</p></td>
+    </tr>
 
 </table>
 ~~~
@@ -921,7 +927,7 @@ And how will JuliaMono contribute? It’s often in the nature of an experiment t
 
 The first β release, version 0.001, was released on July 27, 2020.
 
-The most recent β release, version 0.020, was released in October 2020. Always download the latest version if you want the typeface to perform as well as it can.
+The most recent β release, version 0.023, was released in October 2020. Always download the latest version if you want the typeface to perform as well as it can.
 
 @@jm_h2
 ## ‘Why don’t these accents/marks work properly?’
@@ -975,7 +981,9 @@ julϊ̇a
 ## ‘Does it work on macOS?’
 @@
 
-Yes.
+Yes. JuliaMono works well, with most modern MacOS text editors, such as Atom/Juno, Visual Studio Code, Sublime Text, the excellent free CotEditor, Panic's new Nova editor, and TextEdit, among others. If these editors support OpenType features such as stylistic alternatives and ligatures (not all do), these features of JuliaMono should work well.
+
+With older applications, such as the old-school BBEdit text editor, you may experience a few glitches when using fonts such as FiraCode, IBMPlex Mono, JetBrains Mono, JuliaMono, Operator Mono, and Source Code Pro (to name the ones I checked). BBEdit doesn't support OpenType ligatures either.
 
 @@jm_h2
 ## ‘Does it work on Linux?’
